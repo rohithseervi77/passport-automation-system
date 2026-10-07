@@ -109,7 +109,7 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
     <main className="min-h-screen bg-slate-950 text-white pb-16">
       <Navbar
         role="OFFICER"
-        userName="Passport Officer"
+        userName={officer?.officerId ? `Officer (${officer.officerId})` : "Passport Officer"}
         badgeLabel={officer ? officer.branchLocation : "Regional Office"}
       />
 

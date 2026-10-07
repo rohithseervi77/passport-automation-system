@@ -27,6 +27,28 @@ async function runE2ETest() {
   console.log("✓ Found Officer:", officerUser.username, `(Role: ${officerUser.role})`);
   console.log("✓ Found Police:", policeUser.username, `(Role: ${policeUser.role})`);
 
+  // Test dynamic new user registration
+  console.log("\n[1.1] Testing Dynamic New User Registration & Data Persistence for All Roles...");
+  const testNewApplicantUsername = `user_test_${Date.now()}`;
+  const testHash = await bcrypt.hash("TestPass@123", 12);
+  
+  // Register new applicant
+  const newAppUser = db.prepare("INSERT INTO User (username, email, password, role) VALUES (?, ?, ?, 'APPLICANT')").run(testNewApplicantUsername, `${testNewApplicantUsername}@gov.in`, testHash);
+  const newAppRecord = db.prepare("INSERT INTO Applicant (applicantId, name, dob, address, userId) VALUES (?, ?, ?, ?, ?)").run(`APP-${Date.now()}`, "Aarav Sharma", new Date("1998-05-15").toISOString(), "Flat 402, Green Valley Apartments, New Delhi", newAppUser.lastInsertRowid);
+  console.log(`✓ Created new applicant user: ${testNewApplicantUsername} with stored profile and address`);
+
+  // Register new officer
+  const testNewOfficerUsername = `officer_test_${Date.now()}`;
+  const newOffUser = db.prepare("INSERT INTO User (username, email, password, role) VALUES (?, ?, ?, 'OFFICER')").run(testNewOfficerUsername, `${testNewOfficerUsername}@gov.in`, testHash);
+  db.prepare("INSERT INTO PassportOfficer (officerId, branchLocation, userId) VALUES (?, ?, ?)").run(`OFF-${Date.now().toString().slice(-4)}`, "RPO Regional Office Mumbai", newOffUser.lastInsertRowid);
+  console.log(`✓ Created new officer user: ${testNewOfficerUsername} with branch location`);
+
+  // Register new police
+  const testNewPoliceUsername = `police_test_${Date.now()}`;
+  const newPolUser = db.prepare("INSERT INTO User (username, email, password, role) VALUES (?, ?, ?, 'POLICE')").run(testNewPoliceUsername, `${testNewPoliceUsername}@gov.in`, testHash);
+  db.prepare("INSERT INTO Police (stationCode, badgeNumber, userId) VALUES ('PS-CENTRAL', ?, ?)").run(`POL-${Date.now().toString().slice(-4)}`, newPolUser.lastInsertRowid);
+  console.log(`✓ Created new police user: ${testNewPoliceUsername} with station code PS-CENTRAL`);
+
   // 2. Verify Password Hashing with bcrypt
   console.log("\n[2] Testing Authentication & Password Verification...");
   const applicantPassValid = await bcrypt.compare("Applicant@123", applicantUser.password);

@@ -136,7 +136,21 @@ export default function ApplicantPaymentPage() {
         )}
 
         {/* Payment Confirmation Receipt */}
-        {receipt ? (
+        {!applicationId ? (
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-12 text-center shadow-xl">
+            <p className="text-4xl mb-3">💳</p>
+            <h3 className="text-lg font-bold text-white">No active application found for fee payment</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+              Please submit your passport application form before proceeding to fee payment and receipt generation.
+            </p>
+            <Link
+              href="/applicant/application"
+              className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
+            >
+              Start Application Now →
+            </Link>
+          </div>
+        ) : receipt ? (
           <div className="rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-slate-900 via-emerald-950/20 to-slate-900 p-8 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-5">
               <div className="flex items-center gap-3">

@@ -36,7 +36,7 @@ export default function ApplicantApplicationPage() {
   const [emergencyContactName, setEmergencyContactName] = useState("Guardian / Kin");
   const [emergencyContactPhone, setEmergencyContactPhone] = useState("+91 98765 43210");
   const [agreeDeclaration, setAgreeDeclaration] = useState(true);
-
+  const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -51,6 +51,9 @@ export default function ApplicantApplicationPage() {
         const data = await res.json();
         if (data.applicant) {
           setApplicant(data.applicant);
+          if (data.applicant.address) {
+            setAddress(data.applicant.address);
+          }
         }
         if (data.application) {
           setApplication(data.application);
@@ -77,6 +80,7 @@ export default function ApplicantApplicationPage() {
         body: JSON.stringify({
           passportType,
           action,
+          address,
         }),
       });
 
@@ -474,14 +478,16 @@ export default function ApplicantApplicationPage() {
 
               <div className="grid gap-5 md:grid-cols-2 text-xs">
                 <div className="md:col-span-2">
-                  <label className="block font-medium text-slate-400 mb-1">
+                  <label className="block font-medium text-slate-300 mb-1">
                     Residential Address (For Police Site Enquiry & Speed Post Dispatch)
                   </label>
                   <textarea
-                    disabled
+                    disabled={isSubmitted}
                     rows={2}
-                    value={applicant?.address || ""}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950/60 px-3.5 py-2.5 text-xs text-slate-300 cursor-not-allowed resize-none"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Enter your complete residential address"
+                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:border-blue-500 outline-none resize-none"
                   />
                 </div>
 

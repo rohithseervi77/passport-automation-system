@@ -70,10 +70,17 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { passportType, action } = body;
+    const { passportType, action, address } = body;
 
     if (!passportType) {
       return NextResponse.json({ error: "Passport type is required" }, { status: 400 });
+    }
+
+    if (address && address.trim()) {
+      await prisma.applicant.update({
+        where: { id: applicant.id },
+        data: { address: address.trim() },
+      });
     }
 
     const isSubmit = action === "SUBMIT";

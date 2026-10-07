@@ -90,7 +90,7 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
     <main className="min-h-screen bg-slate-950 text-white pb-16">
       <Navbar
         role="POLICE"
-        userName="Police Authority"
+        userName={police?.badgeNumber ? `Officer (${police.badgeNumber})` : "Police Authority"}
         badgeLabel={`Station: ${police?.stationCode || "PS-CENTRAL"} • Badge: ${police?.badgeNumber || "POL-90210"}`}
       />
 

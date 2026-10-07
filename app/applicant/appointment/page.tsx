@@ -168,7 +168,21 @@ export default function ApplicantAppointmentPage() {
         )}
 
         {/* Current Active Appointment Card */}
-        {appointment ? (
+        {!applicationId ? (
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-12 text-center shadow-xl">
+            <p className="text-4xl mb-3">📅</p>
+            <h3 className="text-lg font-bold text-white">No active application found</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+              Please submit your passport application form before booking an in-person PSK slot.
+            </p>
+            <Link
+              href="/applicant/application"
+              className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
+            >
+              Start Application Now →
+            </Link>
+          </div>
+        ) : appointment ? (
           <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-slate-900 to-cyan-950/30 p-8 mb-8 shadow-xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-800/80 pb-6">
               <div>
