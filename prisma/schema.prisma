@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+
+// =====================================================
+// USER
+// =====================================================
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  email    String @unique
+
+  // Implementation detail used for role-based access control.
+  // UML represents Applicant, PassportOfficer and Police
+  // as specialized User classes.
+  role     String @default("APPLICANT")
+
+  applicant       Applicant?
+  passportOfficer PassportOfficer?
+  police          Police?
+}
+
+
+// =====================================================
+// APPLICANT
+// =====================================================
+
+model Applicant {
+  id          Int    @id @default(autoincrement())
+  applicantId String @unique
+  name        String
+  dob         DateTime
+  address     String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  applications Application[]
+}
+
+
+// =====================================================
+// PASSPORT OFFICER
+// =====================================================
+
+model PassportOfficer {
+  id             Int    @id @default(autoincrement())
+  officerId      String @unique
+  branchLocation String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  applications Application[]
+  passports   Passport[]
+}
+
+
+// =====================================================
+// POLICE
+// =====================================================
+
+model Police {
+  id          Int    @id @default(autoincrement())
+  stationCode String
+  badgeNumber String @unique
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  reports PoliceReport[]
+}
+
+
+// =====================================================
+// APPLICATION
+// =====================================================
+
+model Application {
+  id             Int      @id @default(autoincrement())
+  applicationId  String   @unique
+  passportType   String
+  status         String   @default("DRAFT")
+  submissionDate DateTime?
+
+  applicantId Int
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
+
+  // Officer assigned to process/verify this application.
+  officerId Int?
+  officer   PassportOfficer? @relation(fields: [officerId], references: [id])
+
+  // Composition: Documents belong to an Application.
+  documents Document[]
+
+  // One application can have zero or one appointment.
+  appointment Appointment?
+
+  policeReports PoliceReport[]
+
+  // One application can result in one passport.
+  passport Passport?
+}
+
+
+// =====================================================
+// DOCUMENT
+// =====================================================
+
+model Document {
+  id           Int    @id @default(autoincrement())
+  docId        String @unique
+  documentType String
+  fileStatus   String
+  fileUrl      String?
+
+    applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
+
+
+// =====================================================
+// APPOINTMENT
+// =====================================================
+
+model Appointment {
+  id            Int      @id @default(autoincrement())
+  appointmentId String   @unique
+  date          DateTime
+  timeSlot      String
+
+  applicationId Int         @unique
+  application   Application @relation(fields: [applicationId], references: [id])
+}
+
+
+// =====================================================
+// POLICE REPORT
+// =====================================================
+
+model PoliceReport {
+  id              Int    @id @default(autoincrement())
+  reportId        String @unique
+  clearanceStatus String
+  remarks         String?
+
+  applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  policeId Int
+  police   Police @relation(fields: [policeId], references: [id])
+}
+
+
+// =====================================================
+// PASSPORT
+// =====================================================
+
+model Passport {
+  id             Int      @id @default(autoincrement())
+  passportNumber String   @unique
+  issueDate      DateTime
+  expiryDate     DateTime
+  dispatchStatus String
+
+  applicationId Int         @unique
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  officerId Int?
+  officer   PassportOfficer? @relation(fields: [officerId], references: [id])
+}
