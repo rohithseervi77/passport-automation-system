@@ -36,7 +36,7 @@ export default function ApplicantStatusPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        <p className="text-slate-400">Loading tracking status...</p>
+        <p className="text-slate-400">Loading passport live tracking system...</p>
       </main>
     );
   }
@@ -66,27 +66,30 @@ export default function ApplicantStatusPage() {
         badgeLabel={application ? `App: ${application.applicationId}` : "PAS"}
       />
 
-      <div className="mx-auto max-w-4xl px-6 py-10">
-        <div className="flex items-center justify-between mb-8">
+      <div className="mx-auto max-w-5xl px-6 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8 print:hidden">
           <div>
             <Link
               href="/applicant/dashboard"
-              className="text-xs text-blue-400 hover:text-blue-300 mb-2 inline-block"
+              className="text-xs text-blue-400 hover:text-blue-300 mb-1.5 inline-block font-medium"
             >
               ← Back to Dashboard
             </Link>
-            <h2 className="text-3xl font-bold">Application Status & Tracking</h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Real-time progression through Passport Officer review, Police enquiry, and issuance.
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Real-time Passport Processing Tracker
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Live lifecycle synchronization with RPO Officer Console & District Police Authority.
             </p>
           </div>
 
           {application && (
             <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-2 text-right">
-              <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                Status Tracker
+              <span className="text-[9px] uppercase font-bold text-slate-500 block">
+                Current Stage
               </span>
-              <span className="font-mono text-sm font-semibold text-emerald-400">
+              <span className="font-mono text-xs font-bold text-emerald-400">
                 {currentStatus.replace(/_/g, " ")}
               </span>
             </div>
@@ -94,128 +97,153 @@ export default function ApplicantStatusPage() {
         </div>
 
         {!application ? (
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-12 text-center">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-12 text-center shadow-xl">
             <p className="text-4xl mb-3">📋</p>
-            <h3 className="text-xl font-bold">No active application found</h3>
-            <p className="text-sm text-slate-400 mt-2 max-w-md mx-auto">
-              You have not submitted a passport application yet. Please start by completing your application form.
+            <h3 className="text-lg font-bold text-white">No active application in system</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+              Please start by filling out your digital passport application form.
             </p>
             <Link
               href="/applicant/application"
-              className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold hover:bg-blue-700 transition"
+              className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
             >
-              Start Application Form
+              Start Application Form →
             </Link>
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Passport Card (Shown when passport is issued) */}
+            {/* Realistic Passport Booklet Card (When Passport is Generated/Issued) */}
             {application.passport && (
-              <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-slate-900 via-amber-950/20 to-slate-900 p-8 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl">
-                  🛂
-                </div>
-
-                <div className="flex items-center justify-between border-b border-slate-800/80 pb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
-                      PAS
+              <div className="rounded-3xl border border-amber-500/40 bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950/30 p-8 shadow-2xl relative overflow-hidden">
+                {/* Hologram & National Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-500/20 pb-5">
+                  <div className="flex items-center gap-3.5">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-500/40 text-2xl text-amber-300 shadow-inner">
+                      🇮🇳
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-amber-300">
-                        Republic of India • Official Passport
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400 block">
+                        Republic of India • e-Passport
+                      </span>
+                      <h3 className="text-lg font-extrabold text-white">
+                        Official Standard Passport Booklet
                       </h3>
-                      <p className="text-xs text-slate-400">
-                        Passport Automation System Digitized Document
+                      <p className="text-[11px] text-slate-400">
+                        ICAO 9303 Compliant Machine-Readable Travel Document
                       </p>
                     </div>
                   </div>
 
-                  <span className="rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-400">
+                  <span className="rounded-full bg-emerald-500/10 border border-emerald-500/40 px-3.5 py-1 text-xs font-bold text-emerald-300">
                     {application.passport.dispatchStatus}
                   </span>
                 </div>
 
-                <div className="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-4">
-                  <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+                {/* Passport Particulars Grid */}
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="rounded-2xl border border-slate-800/90 bg-slate-950/80 p-4">
                     <span className="text-[10px] uppercase font-bold text-slate-500 block">
                       Passport Number
                     </span>
-                    <span className="font-mono text-lg font-bold text-white mt-1 block">
+                    <span className="font-mono text-xl font-extrabold text-amber-300 mt-1 block tracking-wider">
                       {application.passport.passportNumber}
                     </span>
                   </div>
 
-                  <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+                  <div className="rounded-2xl border border-slate-800/90 bg-slate-950/80 p-4">
                     <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                      Holder Name
+                      Bearer / Holder Name
                     </span>
-                    <span className="text-sm font-semibold text-slate-200 mt-1 block">
+                    <span className="text-sm font-bold text-white mt-1 block">
                       {applicant.name}
                     </span>
                   </div>
 
-                  <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+                  <div className="rounded-2xl border border-slate-800/90 bg-slate-950/80 p-4">
                     <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                      Issue Date
+                      Date of Issue
                     </span>
                     <span className="text-sm font-semibold text-slate-200 mt-1 block">
                       {new Date(application.passport.issueDate).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <div className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-4">
+                  <div className="rounded-2xl border border-slate-800/90 bg-slate-950/80 p-4">
                     <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                      Expiry Date
+                      Date of Expiry (10 Yrs)
                     </span>
-                    <span className="text-sm font-semibold text-amber-400 mt-1 block">
+                    <span className="text-sm font-bold text-emerald-400 mt-1 block">
                       {new Date(application.passport.expiryDate).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
 
-                {/* Dispatch & Shipment Tracking */}
-                <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">📦</span>
-                    <div>
-                      <p className="text-xs font-semibold text-white">
-                        Carrier: Speed Post India (Consignment)
-                      </p>
-                      <p className="text-[11px] font-mono text-slate-400">
-                        AWB / Tracking No: IN{application.passport.passportNumber}SP
-                      </p>
+                {/* Simulated MRZ Zone */}
+                <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950 p-3.5 font-mono text-[11px] text-slate-400 tracking-widest overflow-x-auto select-none">
+                  <p>P&lt;IND{applicant.name.toUpperCase().replace(/\s+/g, "&lt;")}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</p>
+                  <p>{application.passport.passportNumber}&lt;9IND9805152M3605158&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;8</p>
+                </div>
+
+                {/* Speed Post Live Shipment Tracker */}
+                <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-5 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-900 pb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">📦</span>
+                      <div>
+                        <p className="text-xs font-bold text-white">
+                          Speed Post India • Consignment Tracking
+                        </p>
+                        <p className="text-[11px] font-mono text-cyan-300">
+                          Tracking AWB: IN{application.passport.passportNumber}SP
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs text-emerald-400 font-medium">
-                      Status: {application.passport.dispatchStatus}
-                    </span>
-                    <p className="text-[11px] text-slate-500">
+
+                    <span className="text-xs font-semibold text-emerald-400">
                       Destination: {applicant.address}
-                    </p>
+                    </span>
+                  </div>
+
+                  {/* Consignment Checkpoints */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-xs">
+                    <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-2.5">
+                      <span className="text-emerald-400 font-bold block text-[10px]">1. BOOKED</span>
+                      <span className="text-slate-300 text-[11px]">Central Security Press</span>
+                    </div>
+                    <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-2.5">
+                      <span className="text-emerald-400 font-bold block text-[10px]">2. DISPATCHED</span>
+                      <span className="text-slate-300 text-[11px]">National Sorting Hub</span>
+                    </div>
+                    <div className="rounded-xl border border-blue-500/30 bg-blue-950/20 p-2.5">
+                      <span className="text-blue-400 font-bold block text-[10px]">3. IN TRANSIT</span>
+                      <span className="text-slate-300 text-[11px]">Regional PSK Hub</span>
+                    </div>
+                    <div className="rounded-xl border border-slate-800 bg-slate-900 p-2.5">
+                      <span className="text-slate-400 font-bold block text-[10px]">4. DELIVERY</span>
+                      <span className="text-slate-500 text-[11px]">Resident Signature</span>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Rejection Alert */}
+            {/* Rejection Notice */}
             {isRejected && (
-              <div className="rounded-2xl border border-red-500/40 bg-red-950/30 p-6">
-                <div className="flex items-center gap-3 text-red-400 font-bold text-lg">
-                  <span>⚠️</span> Application Rejected
+              <div className="rounded-2xl border border-red-500/40 bg-red-950/30 p-6 shadow-xl">
+                <div className="flex items-center gap-3 text-red-400 font-bold text-base">
+                  <span>⚠️</span> Application Rejected During Scrutiny
                 </div>
-                <p className="text-xs text-red-200 mt-2">
-                  Your passport application was reviewed and rejected during official verification. Please contact the Regional Passport Office for clarification or submit a new application with rectified documentation.
+                <p className="text-xs text-red-200 mt-2 leading-relaxed">
+                  Your passport application was reviewed and rejected. Please review your submitted documents or report to the Regional Passport Office for clarification before filing a new application.
                 </p>
               </div>
             )}
 
             {/* Visual Workflow Timeline */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 md:p-8">
-              <h3 className="text-base font-semibold border-b border-slate-800 pb-4 mb-6 flex items-center justify-between">
-                <span>📍 Lifecycle Workflow Progression</span>
-                <span className="text-xs font-normal text-slate-400">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 md:p-8 shadow-2xl">
+              <h3 className="text-sm font-bold border-b border-slate-800 pb-4 mb-6 flex items-center justify-between text-white">
+                <span>📍 Lifecycle Workflow Progression Timeline</span>
+                <span className="text-[10px] font-mono text-slate-400">
                   Realization: Application realizes IStatusTracker
                 </span>
               </h3>
@@ -241,19 +269,19 @@ export default function ApplicantStatusPage() {
                         {isCompleted ? "✓" : idx + 1}
                       </div>
 
-                      <div className="flex-1 rounded-xl border border-slate-800/60 bg-slate-950/50 p-4">
+                      <div className="flex-1 rounded-xl border border-slate-800/70 bg-slate-950/70 p-4">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <h4
-                            className={`text-sm font-semibold ${
+                            className={`text-xs font-bold ${
                               isCompleted || isCurrent ? "text-white" : "text-slate-500"
                             }`}
                           >
                             {stg.label}
                           </h4>
                           <span
-                            className={`text-[10px] font-mono uppercase ${
+                            className={`text-[9px] font-mono uppercase font-bold ${
                               isCurrent
-                                ? "text-blue-400 font-bold"
+                                ? "text-blue-400"
                                 : isCompleted
                                 ? "text-emerald-400"
                                 : "text-slate-600"
@@ -264,16 +292,17 @@ export default function ApplicantStatusPage() {
                         </div>
                         <p className="text-xs text-slate-400 mt-1">{stg.desc}</p>
 
-                        {/* Additional contextual notes for specific stages */}
+                        {/* Additional contextual notes */}
                         {stg.key === "APPOINTMENT_SCHEDULED" && application.appointment && (
-                          <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/90 p-2.5 text-xs text-cyan-300">
-                            Slot: {new Date(application.appointment.date).toLocaleDateString()} at {application.appointment.timeSlot}
+                          <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/90 p-2.5 text-xs text-cyan-300 flex items-center justify-between">
+                            <span>Slot: {new Date(application.appointment.date).toLocaleDateString()} ({application.appointment.timeSlot})</span>
+                            <span className="text-[10px] font-mono">ARN: {application.appointment.appointmentId}</span>
                           </div>
                         )}
 
                         {stg.key === "POLICE_CLEARED" && application.policeReports?.length > 0 && (
                           <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/90 p-2.5 text-xs text-emerald-300">
-                            Clearance Status: {application.policeReports[0].clearanceStatus} • Remarks: {application.policeReports[0].remarks || "All background checks verified."}
+                            Clearance: {application.policeReports[0].clearanceStatus} • Remarks: {application.policeReports[0].remarks}
                           </div>
                         )}
                       </div>
@@ -281,21 +310,6 @@ export default function ApplicantStatusPage() {
                   );
                 })}
               </div>
-            </div>
-
-            {/* Quick summary box */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <p className="text-xs text-slate-400">Have questions about your application status?</p>
-                <p className="text-sm font-medium text-white">Passport Seva Helpline: 1800-258-1800 (Toll Free)</p>
-              </div>
-
-              <Link
-                href="/applicant/dashboard"
-                className="rounded-lg border border-slate-700 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition"
-              >
-                Back to Dashboard
-              </Link>
             </div>
           </div>
         )}

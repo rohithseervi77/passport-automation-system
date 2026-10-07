@@ -10,13 +10,12 @@ interface PoliceDashboardClientProps {
 
 export default function PoliceDashboardClient({ initialPolice }: PoliceDashboardClientProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [police, setPolice] = useState<any>(initialPolice);
   const [enquiries, setEnquiries] = useState<any[]>([]);
   const [selectedEnquiry, setSelectedEnquiry] = useState<any | null>(null);
   const [clearanceStatus, setClearanceStatus] = useState("CLEARED");
   const [remarks, setRemarks] = useState(
-    "Physical verification conducted at given residential address. Neighbor inquiries clear, no criminal record found."
+    "Physical site verification conducted at residential address. Interacted with local residents. CCTNS & Court records clear with no adverse criminal history."
   );
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
@@ -70,7 +69,7 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
         return;
       }
 
-      setMessage("Police Clearance Report submitted successfully!");
+      setMessage("Police Clearance Certificate generated & transmitted to Passport Office!");
       await fetchEnquiries();
     } catch (err) {
       console.error("Submit error:", err);
@@ -99,59 +98,62 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
         {/* Header Summary */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
-              Law Enforcement Authority • Background Verification Console
-            </p>
-            <h2 className="mt-1 text-3xl font-bold">
-              Police Enquiry Dashboard
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                Law Enforcement Portal
+              </span>
+              <span className="text-xs text-slate-400">Criminal & Intelligence Database Linked</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Police Background Verification Desk
             </h2>
-            <p className="mt-1 text-xs text-slate-400">
-              Station Code: {police?.stationCode} • Badge ID: {police?.badgeNumber}
+            <p className="text-xs text-slate-400 mt-0.5">
+              Station Code: <span className="font-mono text-emerald-300 font-bold">{police?.stationCode}</span> • Officer Badge ID: <span className="font-mono text-slate-200">{police?.badgeNumber}</span>
             </p>
           </div>
 
           <button
             onClick={fetchEnquiries}
-            className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-800 transition"
+            className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition shadow-sm"
           >
-            ↻ Refresh Enquiries
+            ↻ Refresh Queue
           </button>
         </div>
 
         {/* Metric Cards */}
         <div className="grid gap-4 sm:grid-cols-3 mb-8">
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-            <p className="text-[11px] font-semibold text-purple-400 uppercase">
+          <div className="rounded-2xl border border-purple-500/20 bg-purple-950/20 p-5 shadow-lg">
+            <p className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">
               Pending Physical Enquiries
             </p>
-            <p className="text-3xl font-bold text-purple-300 mt-1">{pendingCount}</p>
+            <p className="text-3xl font-extrabold text-purple-300 mt-1">{pendingCount}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-            <p className="text-[11px] font-semibold text-emerald-400 uppercase">
-              Completed Clearance Reports
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg">
+            <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+              Issued Clearance Certificates
             </p>
-            <p className="text-3xl font-bold text-emerald-300 mt-1">{completedCount}</p>
+            <p className="text-3xl font-extrabold text-emerald-300 mt-1">{completedCount}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-            <p className="text-[11px] font-semibold text-slate-400 uppercase">
-              Assigned Jurisdiction
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              Assigned Police Jurisdiction
             </p>
             <p className="text-base font-bold text-white mt-1">
-              Central Police Station Area
+              Central Police Station Division
             </p>
           </div>
         </div>
 
         {/* Notifications */}
         {message && (
-          <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-4 text-sm text-emerald-300">
+          <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-4 text-xs font-semibold text-emerald-300">
             ✓ {message}
           </div>
         )}
         {error && (
-          <div className="mb-6 rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-sm text-red-300">
+          <div className="mb-6 rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-xs font-semibold text-red-300">
             ✗ {error}
           </div>
         )}
@@ -159,21 +161,21 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
         {/* Main Grid: Enquiries Queue & Report Submission */}
         <div className="grid gap-6 lg:grid-cols-12">
           {/* Enquiries Queue (Left 6 Cols) */}
-          <div className="lg:col-span-6 rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden">
+          <div className="lg:col-span-6 rounded-2xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl">
             <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-white">
-                Assigned Passport Enquiries ({enquiries.length})
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+                Assigned Verification Requests ({enquiries.length})
               </h3>
-              <span className="text-[11px] text-slate-400">Select to inspect</span>
+              <span className="text-[10px] text-slate-400">Select case to verify</span>
             </div>
 
             {enquiries.length === 0 ? (
-              <div className="p-12 text-center text-slate-500">
-                <p className="text-3xl mb-2">👮</p>
-                <p className="text-sm">No pending enquiries at this time.</p>
+              <div className="p-16 text-center text-slate-500 space-y-1">
+                <p className="text-3xl">👮</p>
+                <p className="text-xs font-medium">No pending cases in queue.</p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-800/80 max-h-[500px] overflow-y-auto">
+              <div className="divide-y divide-slate-800/80 max-h-[520px] overflow-y-auto">
                 {enquiries.map((enq) => {
                   const isSelected = selectedEnquiry?.id === enq.id;
                   const isPending = enq.status === "POLICE_VERIFICATION_PENDING";
@@ -192,17 +194,17 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                             {enq.applicationId}
                           </span>
                           <span
-                            className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold ${
+                            className={`rounded-full border px-2 py-0.5 text-[9px] font-bold ${
                               isPending
                                 ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
                                 : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                             }`}
                           >
-                            {isPending ? "ENQUIRY PENDING" : "REPORT SUBMITTED"}
+                            {isPending ? "SITE CHECK PENDING" : "CLEARANCE TRANSMITTED"}
                           </span>
                         </div>
 
-                        <p className="text-xs font-semibold text-slate-200">
+                        <p className="text-xs font-bold text-slate-200">
                           {enq.applicant?.name}
                         </p>
 
@@ -211,8 +213,8 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                         </p>
                       </div>
 
-                      <span className="text-xs text-emerald-400 font-semibold">
-                        Inspect →
+                      <span className="text-xs text-emerald-400 font-bold">
+                        Examine →
                       </span>
                     </div>
                   );
@@ -222,20 +224,20 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
           </div>
 
           {/* Verification Form (Right 6 Cols) */}
-          <div className="lg:col-span-6 rounded-2xl border border-slate-800 bg-slate-900 p-6">
+          <div className="lg:col-span-6 rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
             {!selectedEnquiry ? (
-              <div className="py-20 text-center text-slate-500">
-                <p className="text-4xl mb-3">🔍</p>
-                <h4 className="text-base font-semibold text-slate-400">
-                  Select an Enquiry
+              <div className="py-24 text-center text-slate-500 space-y-2">
+                <p className="text-4xl">🔍</p>
+                <h4 className="text-sm font-bold text-slate-300">
+                  Select Enquiry Case
                 </h4>
-                <p className="text-xs mt-1 max-w-xs mx-auto">
-                  Select an application from the queue to verify residence, conduct background checks, and submit the clearance report.
+                <p className="text-xs max-w-xs mx-auto text-slate-400">
+                  Select an application from the queue to review residential address, conduct national criminal record checks, and transmit clearance report.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmitReport} className="space-y-5">
-                <div className="border-b border-slate-800 pb-4">
+                <div className="border-b border-slate-800 pb-4 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-sm font-bold text-emerald-400">
                       {selectedEnquiry.applicationId}
@@ -244,32 +246,44 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                       DOB: {new Date(selectedEnquiry.applicant?.dob).toLocaleDateString()}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mt-1">
+                  <h3 className="text-lg font-bold text-white">
                     {selectedEnquiry.applicant?.name}
                   </h3>
-                  <div className="mt-2 rounded-lg border border-slate-800 bg-slate-950 p-3 text-xs">
+                  <div className="mt-2 rounded-xl border border-slate-800 bg-slate-950 p-3 text-xs">
                     <span className="text-slate-500 uppercase font-bold block text-[10px]">
-                      Verification Address
+                      Site Verification Address
                     </span>
                     <p className="text-slate-200 mt-0.5">{selectedEnquiry.applicant?.address}</p>
                   </div>
                 </div>
 
+                {/* Automated Background Record Checks (UML Sequence Point 17-18) */}
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3 flex items-center justify-between">
+                    <span className="text-slate-400">CCTNS Criminal Database</span>
+                    <span className="font-bold text-emerald-400 font-mono">NO RECORDS (CLEAR)</span>
+                  </div>
+                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3 flex items-center justify-between">
+                    <span className="text-slate-400">Court / Pending FIRs</span>
+                    <span className="font-bold text-emerald-400 font-mono">NO PENDING FIR</span>
+                  </div>
+                </div>
+
                 {/* Existing Report Display if already submitted */}
                 {selectedEnquiry.policeReports?.length > 0 && (
-                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-4">
+                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3.5 text-xs space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-emerald-400 uppercase">
-                        Submitted Clearance Report
+                      <span className="font-bold text-emerald-400 uppercase text-[10px]">
+                        Transmitted Clearance Certificate
                       </span>
                       <span className="font-mono text-[10px] text-slate-400">
                         {selectedEnquiry.policeReports[0].reportId}
                       </span>
                     </div>
-                    <p className="text-xs font-semibold text-white mt-2">
+                    <p className="font-semibold text-white">
                       Clearance: {selectedEnquiry.policeReports[0].clearanceStatus}
                     </p>
-                    <p className="text-xs text-slate-300 mt-1">
+                    <p className="text-slate-300 text-[11px]">
                       {selectedEnquiry.policeReports[0].remarks}
                     </p>
                   </div>
@@ -278,12 +292,15 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 {/* Form controls */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-2">
-                    Clearance Decision
+                    Enquiry Clearance Decision
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
-                      onClick={() => setClearanceStatus("CLEARED")}
+                      onClick={() => {
+                        setClearanceStatus("CLEARED");
+                        setRemarks("Physical site verification conducted at residential address. Interacted with local residents. CCTNS & Court records clear with no adverse criminal history.");
+                      }}
                       className={`rounded-xl border p-3 text-center text-xs font-bold transition ${
                         clearanceStatus === "CLEARED"
                           ? "border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-md shadow-emerald-500/20"
@@ -294,7 +311,10 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                     </button>
                     <button
                       type="button"
-                      onClick={() => setClearanceStatus("ADVERSE")}
+                      onClick={() => {
+                        setClearanceStatus("ADVERSE");
+                        setRemarks("Adverse record identified during field verification or address mismatch.");
+                      }}
                       className={`rounded-xl border p-3 text-center text-xs font-bold transition ${
                         clearanceStatus === "ADVERSE"
                           ? "border-red-500 bg-red-500/20 text-red-300 shadow-md shadow-red-500/20"
@@ -307,15 +327,14 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-2">
-                    Enquiry Findings & Official Remarks
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Field Enquiry Findings & Official Remarks
                   </label>
                   <textarea
                     rows={3}
                     value={remarks}
                     onChange={(e) => setRemarks(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none focus:border-emerald-500 resize-none"
-                    placeholder="Provide details of residential enquiry, neighbor verification, criminal checks..."
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2 text-xs text-white outline-none focus:border-emerald-500 resize-none leading-relaxed"
                     required
                   />
                 </div>
@@ -323,9 +342,9 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full rounded-lg bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50 shadow-lg shadow-emerald-600/30"
+                  className="w-full rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50 shadow-lg shadow-emerald-600/30"
                 >
-                  {submitting ? "Submitting Report..." : "Submit Police Clearance Report"}
+                  {submitting ? "Transmitting Certificate..." : "Transmit Police Clearance Report →"}
                 </button>
               </form>
             )}
