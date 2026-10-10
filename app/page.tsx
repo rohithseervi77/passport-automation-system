@@ -14,7 +14,10 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white relative">
-      <GlowCursor color="#3b82f6" secondaryColor="#93c5fd" />
+      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full">
+        <GlowCursor color="#3b82f6" secondaryColor="#93c5fd" />
+      </div>
+      <div className="relative z-10">
       <Script
         id="schema-org"
         type="application/ld+json"
@@ -297,6 +300,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      </div>
     </main>
   );
 }
