@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { transitionApplicationStatus } from "@/lib/applicationService";
 
 export async function POST(req: Request) {
   try {
@@ -47,14 +48,14 @@ export async function POST(req: Request) {
     });
 
     // Update application status based on clearance
-    const nextStatus = clearanceStatus === "CLEARED" ? "POLICE_CLEARED" : "REJECTED";
+    const nextStatus = clearanceStatus === "CLEARED" ? "POLICE_VERIFICATION_COMPLETED" : "POLICE_VERIFICATION_FAILED";
 
-    const updatedApp = await prisma.application.update({
-      where: { id: application.id },
-      data: {
-        status: nextStatus,
-      },
-    });
+    let updatedApp;
+    try {
+      updatedApp = await transitionApplicationStatus(application.id, nextStatus, user.id, remarks || `Police verification ${clearanceStatus}`);
+    } catch (e: any) {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
 
     return NextResponse.json({
       message: "Police clearance report submitted successfully.",

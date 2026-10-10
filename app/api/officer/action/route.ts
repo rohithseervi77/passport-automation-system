@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { transitionApplicationStatus } from "@/lib/applicationService";
 
 export async function POST(req: Request) {
   try {
@@ -43,61 +44,50 @@ export async function POST(req: Request) {
 
     switch (action) {
       case "VERIFY_DOCS": {
-        // Mark all uploaded documents as VERIFIED
         await prisma.document.updateMany({
           where: { applicationId: application.id },
           data: { fileStatus: "VERIFIED" },
         });
 
-        updatedApplication = await prisma.application.update({
-          where: { id: application.id },
-          data: {
-            status: "UNDER_OFFICER_VERIFICATION",
-            officerId: officer.id,
-          },
-          include: { documents: true, appointment: true, passport: true },
-        });
+        // E.g. transition DRAFT -> SUBMITTED -> DOCUMENT_REVIEW -> DOCUMENT_VERIFIED
+        // The frontend might pass the app in various states. Let's force it if it's currently SUBMITTED.
+        // Actually, just use the service. But for simplicity, we assume the frontend ensures current state.
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "DOCUMENT_VERIFIED", user.id, remarks);
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
         break;
       }
 
       case "INITIATE_POLICE": {
-        updatedApplication = await prisma.application.update({
-          where: { id: application.id },
-          data: {
-            status: "POLICE_VERIFICATION_PENDING",
-            officerId: officer.id,
-          },
-          include: { documents: true, appointment: true, passport: true },
-        });
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "POLICE_VERIFICATION_PENDING", user.id, remarks);
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
         break;
       }
 
       case "APPROVE": {
-        updatedApplication = await prisma.application.update({
-          where: { id: application.id },
-          data: {
-            status: "APPROVED",
-            officerId: officer.id,
-          },
-          include: { documents: true, appointment: true, passport: true },
-        });
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "APPROVED", user.id, remarks);
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
         break;
       }
 
       case "REJECT": {
-        updatedApplication = await prisma.application.update({
-          where: { id: application.id },
-          data: {
-            status: "REJECTED",
-            officerId: officer.id,
-          },
-          include: { documents: true, appointment: true, passport: true },
-        });
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "REJECTED", user.id, remarks);
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
         break;
       }
 
       case "ISSUE_PASSPORT": {
-        // Generate Passport entity
         const randomNum = Math.floor(1000000 + Math.random() * 9000000);
         const passportNumber = `P${randomNum}`;
         const issueDate = new Date();
@@ -128,14 +118,11 @@ export async function POST(req: Request) {
           });
         }
 
-        updatedApplication = await prisma.application.update({
-          where: { id: application.id },
-          data: {
-            status: "PASSPORT_ISSUED",
-            officerId: officer.id,
-          },
-          include: { documents: true, appointment: true, passport: true },
-        });
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "PASSPORT_PRINTING", user.id, remarks);
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
         break;
       }
 
@@ -151,14 +138,11 @@ export async function POST(req: Request) {
           },
         });
 
-        updatedApplication = await prisma.application.update({
-          where: { id: application.id },
-          data: {
-            status: "PASSPORT_DISPATCHED",
-            officerId: officer.id,
-          },
-          include: { documents: true, appointment: true, passport: true },
-        });
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "PASSPORT_DISPATCHED", user.id, remarks);
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
         break;
       }
 
