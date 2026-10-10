@@ -1,8 +1,22 @@
 import Link from "next/link";
+import Script from "next/script";
 
 export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'GovernmentOrganization',
+    name: 'Passport Automation System',
+    url: process.env.NEXT_PUBLIC_BASE_URL || 'https://passport-automation-system.vercel.app',
+    description: 'Centralized, digitized Passport Seva Automation Platform.',
+  };
+
   return (
     <main className="min-h-screen bg-slate-950 text-white">
+      <Script
+        id="schema-org"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Navigation Bar */}
       <nav className="border-b border-slate-800 bg-slate-950/95 sticky top-0 z-50 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -13,7 +27,7 @@ export default function Home() {
             </div>
 
             <div>
-              <h1 className="font-bold text-base leading-tight">Passport Automation System</h1>
+              <span className="block font-bold text-base leading-tight">Passport Automation System</span>
               <p className="text-xs text-slate-400">
                 Government Digitized Processing Portal
               </p>
@@ -85,10 +99,10 @@ export default function Home() {
             <span>🇮🇳</span> Centralized Passport Seva Automation Platform
           </div>
 
-          <h2 className="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
             Passport processing,
             <span className="text-blue-500"> digitized & simplified.</span>
-          </h2>
+          </h1>
 
           <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400">
             Passport Automation System (PAS) digitizes the complete passport issuance lifecycle: online applicant registration, document verification, biometric appointment booking, statutory fee processing, police background enquiry, booklet printing, and Speed Post tracking.
