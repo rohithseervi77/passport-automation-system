@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Script from "next/script";
+import ShinyText from "@/components/ShinyText";
 
 export default function Home() {
   const jsonLd = {
@@ -101,7 +102,13 @@ export default function Home() {
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
             Passport processing,
-            <span className="text-blue-500"> digitized & simplified.</span>
+            <ShinyText
+              text=" digitized & simplified."
+              color="#3b82f6"
+              shineColor="#93c5fd"
+              speed={2.5}
+              className="ml-2 block sm:inline-block"
+            />
           </h1>
 
           <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400">
