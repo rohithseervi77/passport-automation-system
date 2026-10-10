@@ -4,30 +4,45 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
-
 // =====================================================
-// USER
+// USER & ROLES
 // =====================================================
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
-  email    String @unique
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  email     String   @unique
+  
+  // ROLES: APPLICANT, OFFICER, POLICE, ADMIN
+  role      String   @default("APPLICANT")
+  
+  // Security & State
+  isActive          Boolean  @default(true)
+  failedLoginAttempts Int      @default(0)
+  lockedUntil       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  // Implementation detail used for role-based access control.
-  // UML represents Applicant, PassportOfficer and Police
-  // as specialized User classes.
-  role     String @default("APPLICANT")
+  applicant         Applicant?
+  passportOfficer   PassportOfficer?
+  police            Police?
+  admin             Admin?
 
-  applicant       Applicant?
-  passportOfficer PassportOfficer?
-  police          Police?
+  notifications     Notification[]
+  auditLogs         AuditLog[]
+  resetTokens       PasswordResetToken[]
 }
 
+model Admin {
+  id          Int    @id @default(autoincrement())
+  adminCode   String @unique
+  userId      Int    @unique
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
 // =====================================================
 // APPLICANT
@@ -40,12 +55,11 @@ model Applicant {
   dob         DateTime
   address     String
 
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  userId      Int  @unique
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   applications Application[]
 }
-
 
 // =====================================================
 // PASSPORT OFFICER
@@ -56,13 +70,12 @@ model PassportOfficer {
   officerId      String @unique
   branchLocation String
 
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  userId         Int  @unique
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  applications Application[]
-  passports   Passport[]
+  assignedApplications Application[]
+  passports           Passport[]
 }
-
 
 // =====================================================
 // POLICE
@@ -73,15 +86,14 @@ model Police {
   stationCode String
   badgeNumber String @unique
 
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  userId      Int  @unique
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  reports PoliceReport[]
+  reports     PoliceReport[]
 }
 
-
 // =====================================================
-// APPLICATION
+// APPLICATION & FSM HISTORY
 // =====================================================
 
 model Application {
@@ -90,26 +102,35 @@ model Application {
   passportType   String
   status         String   @default("DRAFT")
   submissionDate DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  applicantId Int
-  applicant   Applicant @relation(fields: [applicantId], references: [id])
+  applicantId    Int
+  applicant      Applicant @relation(fields: [applicantId], references: [id])
 
-  // Officer assigned to process/verify this application.
-  officerId Int?
-  officer   PassportOfficer? @relation(fields: [officerId], references: [id])
+  officerId      Int?
+  officer        PassportOfficer? @relation(fields: [officerId], references: [id])
 
-  // Composition: Documents belong to an Application.
-  documents Document[]
-
-  // One application can have zero or one appointment.
-  appointment Appointment?
-
-  policeReports PoliceReport[]
-
-  // One application can result in one passport.
-  passport Passport?
+  documents      Document[]
+  appointment    Appointment?
+  policeReports  PoliceReport[]
+  passport       Passport?
+  
+  statusHistory  ApplicationStatusHistory[]
+  payments       Payment[]
 }
 
+model ApplicationStatusHistory {
+  id            Int      @id @default(autoincrement())
+  applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  
+  fromStatus    String
+  toStatus      String
+  remarks       String?
+  changedById   Int?
+  changedAt     DateTime @default(now())
+}
 
 // =====================================================
 // DOCUMENT
@@ -121,11 +142,11 @@ model Document {
   documentType String
   fileStatus   String
   fileUrl      String?
+  uploadedAt   DateTime @default(now())
 
-    applicationId Int
+  applicationId Int
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
-
 
 // =====================================================
 // APPOINTMENT
@@ -136,11 +157,28 @@ model Appointment {
   appointmentId String   @unique
   date          DateTime
   timeSlot      String
+  status        String   @default("AVAILABLE") // BOOKED, COMPLETED, CANCELLED, MISSED
 
-  applicationId Int         @unique
-  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId Int      @unique
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
 
+// =====================================================
+// PAYMENT
+// =====================================================
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  transactionId String   @unique
+  amount        Float
+  status        String   @default("PENDING") // PROCESSING, SUCCESS, FAILED, REFUNDED
+  paymentMethod String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
 
 // =====================================================
 // POLICE REPORT
@@ -149,16 +187,16 @@ model Appointment {
 model PoliceReport {
   id              Int    @id @default(autoincrement())
   reportId        String @unique
-  clearanceStatus String
+  clearanceStatus String // PENDING, APPROVED, REJECTED, CLARIFICATION_REQUIRED
   remarks         String?
+  createdAt       DateTime @default(now())
 
-  applicationId Int
-  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId   Int
+  application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
-  policeId Int
-  police   Police @relation(fields: [policeId], references: [id])
+  policeId        Int
+  police          Police @relation(fields: [policeId], references: [id])
 }
-
 
 // =====================================================
 // PASSPORT
@@ -169,11 +207,48 @@ model Passport {
   passportNumber String   @unique
   issueDate      DateTime
   expiryDate     DateTime
-  dispatchStatus String
+  dispatchStatus String   @default("PRINTING") // READY, DISPATCHED, DELIVERED
 
-  applicationId Int         @unique
-  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId  Int      @unique
+  application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
-  officerId Int?
-  officer   PassportOfficer? @relation(fields: [officerId], references: [id])
+  officerId      Int?
+  officer        PassportOfficer? @relation(fields: [officerId], references: [id])
+}
+
+// =====================================================
+// NOTIFICATIONS & AUDIT LOGS
+// =====================================================
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  type        String   @default("INFO")
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action      String   // LOGIN, APPLICATION_SUBMITTED, etc.
+  entityId    String?  // E.g., application ID or document ID
+  details     String?  // JSON stringified payload
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id          Int      @id @default(autoincrement())
+  token       String   @unique
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  isUsed      Boolean  @default(false)
+  createdAt   DateTime @default(now())
 }

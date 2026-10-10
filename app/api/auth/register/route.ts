@@ -161,6 +161,15 @@ export async function POST(request: Request) {
         },
       });
 
+      await prisma.auditLog.create({
+        data: {
+          userId: createdUser.id,
+          action: "REGISTER_SUCCESS",
+          details: JSON.stringify({ role: "APPLICANT" }),
+          ipAddress: request.headers.get("x-forwarded-for") || "unknown",
+        }
+      });
+
       return NextResponse.json(
         {
           message: "Applicant registration successful.",

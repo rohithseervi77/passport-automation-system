@@ -1230,6 +1230,7 @@ export type PoliceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Police.
    */
   data: Prisma.PoliceCreateManyInput | Prisma.PoliceCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1248,6 +1249,7 @@ export type PoliceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Police.
    */
   data: Prisma.PoliceCreateManyInput | Prisma.PoliceCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

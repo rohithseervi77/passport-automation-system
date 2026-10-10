@@ -52,14 +52,20 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Admin: 'Admin',
   Applicant: 'Applicant',
   PassportOfficer: 'PassportOfficer',
   Police: 'Police',
   Application: 'Application',
+  ApplicationStatusHistory: 'ApplicationStatusHistory',
   Document: 'Document',
   Appointment: 'Appointment',
+  Payment: 'Payment',
   PoliceReport: 'PoliceReport',
-  Passport: 'Passport'
+  Passport: 'Passport',
+  Notification: 'Notification',
+  AuditLog: 'AuditLog',
+  PasswordResetToken: 'PasswordResetToken'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -69,6 +75,9 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -80,10 +89,24 @@ export const UserScalarFieldEnum = {
   username: 'username',
   password: 'password',
   email: 'email',
-  role: 'role'
+  role: 'role',
+  isActive: 'isActive',
+  failedLoginAttempts: 'failedLoginAttempts',
+  lockedUntil: 'lockedUntil',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const AdminScalarFieldEnum = {
+  id: 'id',
+  adminCode: 'adminCode',
+  userId: 'userId'
+} as const
+
+export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
 export const ApplicantScalarFieldEnum = {
@@ -124,11 +147,26 @@ export const ApplicationScalarFieldEnum = {
   passportType: 'passportType',
   status: 'status',
   submissionDate: 'submissionDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   applicantId: 'applicantId',
   officerId: 'officerId'
 } as const
 
 export type ApplicationScalarFieldEnum = (typeof ApplicationScalarFieldEnum)[keyof typeof ApplicationScalarFieldEnum]
+
+
+export const ApplicationStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  remarks: 'remarks',
+  changedById: 'changedById',
+  changedAt: 'changedAt'
+} as const
+
+export type ApplicationStatusHistoryScalarFieldEnum = (typeof ApplicationStatusHistoryScalarFieldEnum)[keyof typeof ApplicationStatusHistoryScalarFieldEnum]
 
 
 export const DocumentScalarFieldEnum = {
@@ -137,6 +175,7 @@ export const DocumentScalarFieldEnum = {
   documentType: 'documentType',
   fileStatus: 'fileStatus',
   fileUrl: 'fileUrl',
+  uploadedAt: 'uploadedAt',
   applicationId: 'applicationId'
 } as const
 
@@ -148,10 +187,25 @@ export const AppointmentScalarFieldEnum = {
   appointmentId: 'appointmentId',
   date: 'date',
   timeSlot: 'timeSlot',
+  status: 'status',
   applicationId: 'applicationId'
 } as const
 
 export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  transactionId: 'transactionId',
+  amount: 'amount',
+  status: 'status',
+  paymentMethod: 'paymentMethod',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  applicationId: 'applicationId'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
 export const PoliceReportScalarFieldEnum = {
@@ -159,6 +213,7 @@ export const PoliceReportScalarFieldEnum = {
   reportId: 'reportId',
   clearanceStatus: 'clearanceStatus',
   remarks: 'remarks',
+  createdAt: 'createdAt',
   applicationId: 'applicationId',
   policeId: 'policeId'
 } as const
@@ -179,12 +234,59 @@ export const PassportScalarFieldEnum = {
 export type PassportScalarFieldEnum = (typeof PassportScalarFieldEnum)[keyof typeof PassportScalarFieldEnum]
 
 
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  type: 'type',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  entityId: 'entityId',
+  details: 'details',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  isUsed: 'isUsed',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
 export const NullsOrder = {

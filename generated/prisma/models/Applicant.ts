@@ -425,10 +425,6 @@ export type ApplicantUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicantUpdateToOneWithWhereWithoutUserInput, Prisma.ApplicantUpdateWithoutUserInput>, Prisma.ApplicantUncheckedUpdateWithoutUserInput>
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type ApplicantCreateNestedOneWithoutApplicationsInput = {
   create?: Prisma.XOR<Prisma.ApplicantCreateWithoutApplicationsInput, Prisma.ApplicantUncheckedCreateWithoutApplicationsInput>
   connectOrCreate?: Prisma.ApplicantCreateOrConnectWithoutApplicationsInput
@@ -1306,6 +1302,7 @@ export type ApplicantCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many Applicants.
    */
   data: Prisma.ApplicantCreateManyInput | Prisma.ApplicantCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1324,6 +1321,7 @@ export type ApplicantCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many Applicants.
    */
   data: Prisma.ApplicantCreateManyInput | Prisma.ApplicantCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

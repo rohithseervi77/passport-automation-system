@@ -41,6 +41,7 @@ export type AppointmentMinAggregateOutputType = {
   appointmentId: string | null
   date: Date | null
   timeSlot: string | null
+  status: string | null
   applicationId: number | null
 }
 
@@ -49,6 +50,7 @@ export type AppointmentMaxAggregateOutputType = {
   appointmentId: string | null
   date: Date | null
   timeSlot: string | null
+  status: string | null
   applicationId: number | null
 }
 
@@ -57,6 +59,7 @@ export type AppointmentCountAggregateOutputType = {
   appointmentId: number
   date: number
   timeSlot: number
+  status: number
   applicationId: number
   _all: number
 }
@@ -77,6 +80,7 @@ export type AppointmentMinAggregateInputType = {
   appointmentId?: true
   date?: true
   timeSlot?: true
+  status?: true
   applicationId?: true
 }
 
@@ -85,6 +89,7 @@ export type AppointmentMaxAggregateInputType = {
   appointmentId?: true
   date?: true
   timeSlot?: true
+  status?: true
   applicationId?: true
 }
 
@@ -93,6 +98,7 @@ export type AppointmentCountAggregateInputType = {
   appointmentId?: true
   date?: true
   timeSlot?: true
+  status?: true
   applicationId?: true
   _all?: true
 }
@@ -188,6 +194,7 @@ export type AppointmentGroupByOutputType = {
   appointmentId: string
   date: Date
   timeSlot: string
+  status: string
   applicationId: number
   _count: AppointmentCountAggregateOutputType | null
   _avg: AppointmentAvgAggregateOutputType | null
@@ -219,6 +226,7 @@ export type AppointmentWhereInput = {
   appointmentId?: Prisma.StringFilter<"Appointment"> | string
   date?: Prisma.DateTimeFilter<"Appointment"> | Date | string
   timeSlot?: Prisma.StringFilter<"Appointment"> | string
+  status?: Prisma.StringFilter<"Appointment"> | string
   applicationId?: Prisma.IntFilter<"Appointment"> | number
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
 }
@@ -228,6 +236,7 @@ export type AppointmentOrderByWithRelationInput = {
   appointmentId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
 }
@@ -241,6 +250,7 @@ export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   date?: Prisma.DateTimeFilter<"Appointment"> | Date | string
   timeSlot?: Prisma.StringFilter<"Appointment"> | string
+  status?: Prisma.StringFilter<"Appointment"> | string
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
 }, "id" | "appointmentId" | "applicationId">
 
@@ -249,6 +259,7 @@ export type AppointmentOrderByWithAggregationInput = {
   appointmentId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   _count?: Prisma.AppointmentCountOrderByAggregateInput
   _avg?: Prisma.AppointmentAvgOrderByAggregateInput
@@ -265,6 +276,7 @@ export type AppointmentScalarWhereWithAggregatesInput = {
   appointmentId?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
   date?: Prisma.DateTimeWithAggregatesFilter<"Appointment"> | Date | string
   timeSlot?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
+  status?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
   applicationId?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
 }
 
@@ -272,6 +284,7 @@ export type AppointmentCreateInput = {
   appointmentId: string
   date: Date | string
   timeSlot: string
+  status?: string
   application: Prisma.ApplicationCreateNestedOneWithoutAppointmentInput
 }
 
@@ -280,6 +293,7 @@ export type AppointmentUncheckedCreateInput = {
   appointmentId: string
   date: Date | string
   timeSlot: string
+  status?: string
   applicationId: number
 }
 
@@ -287,6 +301,7 @@ export type AppointmentUpdateInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   application?: Prisma.ApplicationUpdateOneRequiredWithoutAppointmentNestedInput
 }
 
@@ -295,6 +310,7 @@ export type AppointmentUncheckedUpdateInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -303,6 +319,7 @@ export type AppointmentCreateManyInput = {
   appointmentId: string
   date: Date | string
   timeSlot: string
+  status?: string
   applicationId: number
 }
 
@@ -310,6 +327,7 @@ export type AppointmentUpdateManyMutationInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AppointmentUncheckedUpdateManyInput = {
@@ -317,6 +335,7 @@ export type AppointmentUncheckedUpdateManyInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -330,6 +349,7 @@ export type AppointmentCountOrderByAggregateInput = {
   appointmentId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
@@ -343,6 +363,7 @@ export type AppointmentMaxOrderByAggregateInput = {
   appointmentId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
@@ -351,6 +372,7 @@ export type AppointmentMinOrderByAggregateInput = {
   appointmentId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
@@ -395,6 +417,7 @@ export type AppointmentCreateWithoutApplicationInput = {
   appointmentId: string
   date: Date | string
   timeSlot: string
+  status?: string
 }
 
 export type AppointmentUncheckedCreateWithoutApplicationInput = {
@@ -402,6 +425,7 @@ export type AppointmentUncheckedCreateWithoutApplicationInput = {
   appointmentId: string
   date: Date | string
   timeSlot: string
+  status?: string
 }
 
 export type AppointmentCreateOrConnectWithoutApplicationInput = {
@@ -424,6 +448,7 @@ export type AppointmentUpdateWithoutApplicationInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AppointmentUncheckedUpdateWithoutApplicationInput = {
@@ -431,6 +456,7 @@ export type AppointmentUncheckedUpdateWithoutApplicationInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -440,6 +466,7 @@ export type AppointmentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   appointmentId?: boolean
   date?: boolean
   timeSlot?: boolean
+  status?: boolean
   applicationId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
@@ -449,6 +476,7 @@ export type AppointmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   appointmentId?: boolean
   date?: boolean
   timeSlot?: boolean
+  status?: boolean
   applicationId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
@@ -458,6 +486,7 @@ export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   appointmentId?: boolean
   date?: boolean
   timeSlot?: boolean
+  status?: boolean
   applicationId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
@@ -467,10 +496,11 @@ export type AppointmentSelectScalar = {
   appointmentId?: boolean
   date?: boolean
   timeSlot?: boolean
+  status?: boolean
   applicationId?: boolean
 }
 
-export type AppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "appointmentId" | "date" | "timeSlot" | "applicationId", ExtArgs["result"]["appointment"]>
+export type AppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "appointmentId" | "date" | "timeSlot" | "status" | "applicationId", ExtArgs["result"]["appointment"]>
 export type AppointmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }
@@ -491,6 +521,7 @@ export type $AppointmentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     appointmentId: string
     date: Date
     timeSlot: string
+    status: string
     applicationId: number
   }, ExtArgs["result"]["appointment"]>
   composites: {}
@@ -920,6 +951,7 @@ export interface AppointmentFieldRefs {
   readonly appointmentId: Prisma.FieldRef<"Appointment", 'String'>
   readonly date: Prisma.FieldRef<"Appointment", 'DateTime'>
   readonly timeSlot: Prisma.FieldRef<"Appointment", 'String'>
+  readonly status: Prisma.FieldRef<"Appointment", 'String'>
   readonly applicationId: Prisma.FieldRef<"Appointment", 'Int'>
 }
     
@@ -1155,6 +1187,7 @@ export type AppointmentCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many Appointments.
    */
   data: Prisma.AppointmentCreateManyInput | Prisma.AppointmentCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1173,6 +1206,7 @@ export type AppointmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many Appointments.
    */
   data: Prisma.AppointmentCreateManyInput | Prisma.AppointmentCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

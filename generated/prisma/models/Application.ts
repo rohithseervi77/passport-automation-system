@@ -44,6 +44,8 @@ export type ApplicationMinAggregateOutputType = {
   passportType: string | null
   status: string | null
   submissionDate: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
   applicantId: number | null
   officerId: number | null
 }
@@ -54,6 +56,8 @@ export type ApplicationMaxAggregateOutputType = {
   passportType: string | null
   status: string | null
   submissionDate: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
   applicantId: number | null
   officerId: number | null
 }
@@ -64,6 +68,8 @@ export type ApplicationCountAggregateOutputType = {
   passportType: number
   status: number
   submissionDate: number
+  createdAt: number
+  updatedAt: number
   applicantId: number
   officerId: number
   _all: number
@@ -88,6 +94,8 @@ export type ApplicationMinAggregateInputType = {
   passportType?: true
   status?: true
   submissionDate?: true
+  createdAt?: true
+  updatedAt?: true
   applicantId?: true
   officerId?: true
 }
@@ -98,6 +106,8 @@ export type ApplicationMaxAggregateInputType = {
   passportType?: true
   status?: true
   submissionDate?: true
+  createdAt?: true
+  updatedAt?: true
   applicantId?: true
   officerId?: true
 }
@@ -108,6 +118,8 @@ export type ApplicationCountAggregateInputType = {
   passportType?: true
   status?: true
   submissionDate?: true
+  createdAt?: true
+  updatedAt?: true
   applicantId?: true
   officerId?: true
   _all?: true
@@ -205,6 +217,8 @@ export type ApplicationGroupByOutputType = {
   passportType: string
   status: string
   submissionDate: Date | null
+  createdAt: Date
+  updatedAt: Date
   applicantId: number
   officerId: number | null
   _count: ApplicationCountAggregateOutputType | null
@@ -238,6 +252,8 @@ export type ApplicationWhereInput = {
   passportType?: Prisma.StringFilter<"Application"> | string
   status?: Prisma.StringFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   applicantId?: Prisma.IntFilter<"Application"> | number
   officerId?: Prisma.IntNullableFilter<"Application"> | number | null
   applicant?: Prisma.XOR<Prisma.ApplicantScalarRelationFilter, Prisma.ApplicantWhereInput>
@@ -246,6 +262,8 @@ export type ApplicationWhereInput = {
   appointment?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
   policeReports?: Prisma.PoliceReportListRelationFilter
   passport?: Prisma.XOR<Prisma.PassportNullableScalarRelationFilter, Prisma.PassportWhereInput> | null
+  statusHistory?: Prisma.ApplicationStatusHistoryListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type ApplicationOrderByWithRelationInput = {
@@ -254,6 +272,8 @@ export type ApplicationOrderByWithRelationInput = {
   passportType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrderInput | Prisma.SortOrder
   applicant?: Prisma.ApplicantOrderByWithRelationInput
@@ -262,6 +282,8 @@ export type ApplicationOrderByWithRelationInput = {
   appointment?: Prisma.AppointmentOrderByWithRelationInput
   policeReports?: Prisma.PoliceReportOrderByRelationAggregateInput
   passport?: Prisma.PassportOrderByWithRelationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -273,6 +295,8 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   passportType?: Prisma.StringFilter<"Application"> | string
   status?: Prisma.StringFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   applicantId?: Prisma.IntFilter<"Application"> | number
   officerId?: Prisma.IntNullableFilter<"Application"> | number | null
   applicant?: Prisma.XOR<Prisma.ApplicantScalarRelationFilter, Prisma.ApplicantWhereInput>
@@ -281,6 +305,8 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   appointment?: Prisma.XOR<Prisma.AppointmentNullableScalarRelationFilter, Prisma.AppointmentWhereInput> | null
   policeReports?: Prisma.PoliceReportListRelationFilter
   passport?: Prisma.XOR<Prisma.PassportNullableScalarRelationFilter, Prisma.PassportWhereInput> | null
+  statusHistory?: Prisma.ApplicationStatusHistoryListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "applicationId">
 
 export type ApplicationOrderByWithAggregationInput = {
@@ -289,6 +315,8 @@ export type ApplicationOrderByWithAggregationInput = {
   passportType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ApplicationCountOrderByAggregateInput
@@ -307,6 +335,8 @@ export type ApplicationScalarWhereWithAggregatesInput = {
   passportType?: Prisma.StringWithAggregatesFilter<"Application"> | string
   status?: Prisma.StringWithAggregatesFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Application"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Application"> | Date | string
   applicantId?: Prisma.IntWithAggregatesFilter<"Application"> | number
   officerId?: Prisma.IntNullableWithAggregatesFilter<"Application"> | number | null
 }
@@ -316,12 +346,16 @@ export type ApplicationCreateInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
-  officer?: Prisma.PassportOfficerCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateInput = {
@@ -330,12 +364,16 @@ export type ApplicationUncheckedCreateInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUpdateInput = {
@@ -343,12 +381,16 @@ export type ApplicationUpdateInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
-  officer?: Prisma.PassportOfficerUpdateOneWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateInput = {
@@ -357,12 +399,16 @@ export type ApplicationUncheckedUpdateInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateManyInput = {
@@ -371,6 +417,8 @@ export type ApplicationCreateManyInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   officerId?: number | null
 }
@@ -380,6 +428,8 @@ export type ApplicationUpdateManyMutationInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ApplicationUncheckedUpdateManyInput = {
@@ -388,6 +438,8 @@ export type ApplicationUncheckedUpdateManyInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -408,6 +460,8 @@ export type ApplicationCountOrderByAggregateInput = {
   passportType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -424,6 +478,8 @@ export type ApplicationMaxOrderByAggregateInput = {
   passportType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -434,6 +490,8 @@ export type ApplicationMinOrderByAggregateInput = {
   passportType?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -533,16 +591,26 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerNestedInput = {
   deleteMany?: Prisma.ApplicationScalarWhereInput | Prisma.ApplicationScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type ApplicationCreateNestedOneWithoutStatusHistoryInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutStatusHistoryInput, Prisma.ApplicationUncheckedCreateWithoutStatusHistoryInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutStatusHistoryInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneRequiredWithoutStatusHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutStatusHistoryInput, Prisma.ApplicationUncheckedCreateWithoutStatusHistoryInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutStatusHistoryInput
+  upsert?: Prisma.ApplicationUpsertWithoutStatusHistoryInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutStatusHistoryInput, Prisma.ApplicationUpdateWithoutStatusHistoryInput>, Prisma.ApplicationUncheckedUpdateWithoutStatusHistoryInput>
 }
 
 export type ApplicationCreateNestedOneWithoutDocumentsInput = {
@@ -571,6 +639,20 @@ export type ApplicationUpdateOneRequiredWithoutAppointmentNestedInput = {
   upsert?: Prisma.ApplicationUpsertWithoutAppointmentInput
   connect?: Prisma.ApplicationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutAppointmentInput, Prisma.ApplicationUpdateWithoutAppointmentInput>, Prisma.ApplicationUncheckedUpdateWithoutAppointmentInput>
+}
+
+export type ApplicationCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutPaymentsInput, Prisma.ApplicationUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutPaymentsInput, Prisma.ApplicationUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.ApplicationUpsertWithoutPaymentsInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutPaymentsInput, Prisma.ApplicationUpdateWithoutPaymentsInput>, Prisma.ApplicationUncheckedUpdateWithoutPaymentsInput>
 }
 
 export type ApplicationCreateNestedOneWithoutPoliceReportsInput = {
@@ -606,11 +688,15 @@ export type ApplicationCreateWithoutApplicantInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
-  officer?: Prisma.PassportOfficerCreateNestedOneWithoutApplicationsInput
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutApplicantInput = {
@@ -619,11 +705,15 @@ export type ApplicationUncheckedCreateWithoutApplicantInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutApplicantInput = {
@@ -633,6 +723,7 @@ export type ApplicationCreateOrConnectWithoutApplicantInput = {
 
 export type ApplicationCreateManyApplicantInputEnvelope = {
   data: Prisma.ApplicationCreateManyApplicantInput | Prisma.ApplicationCreateManyApplicantInput[]
+  skipDuplicates?: boolean
 }
 
 export type ApplicationUpsertWithWhereUniqueWithoutApplicantInput = {
@@ -660,6 +751,8 @@ export type ApplicationScalarWhereInput = {
   passportType?: Prisma.StringFilter<"Application"> | string
   status?: Prisma.StringFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   applicantId?: Prisma.IntFilter<"Application"> | number
   officerId?: Prisma.IntNullableFilter<"Application"> | number | null
 }
@@ -669,11 +762,15 @@ export type ApplicationCreateWithoutOfficerInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutOfficerInput = {
@@ -682,11 +779,15 @@ export type ApplicationUncheckedCreateWithoutOfficerInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutOfficerInput = {
@@ -696,6 +797,7 @@ export type ApplicationCreateOrConnectWithoutOfficerInput = {
 
 export type ApplicationCreateManyOfficerInputEnvelope = {
   data: Prisma.ApplicationCreateManyOfficerInput | Prisma.ApplicationCreateManyOfficerInput[]
+  skipDuplicates?: boolean
 }
 
 export type ApplicationUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -714,16 +816,102 @@ export type ApplicationUpdateManyWithWhereWithoutOfficerInput = {
   data: Prisma.XOR<Prisma.ApplicationUpdateManyMutationInput, Prisma.ApplicationUncheckedUpdateManyWithoutOfficerInput>
 }
 
+export type ApplicationCreateWithoutStatusHistoryInput = {
+  applicationId: string
+  passportType: string
+  status?: string
+  submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
+  appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
+  policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
+  passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutStatusHistoryInput = {
+  id?: number
+  applicationId: string
+  passportType: string
+  status?: string
+  submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applicantId: number
+  officerId?: number | null
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
+  appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
+  policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
+  passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutStatusHistoryInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutStatusHistoryInput, Prisma.ApplicationUncheckedCreateWithoutStatusHistoryInput>
+}
+
+export type ApplicationUpsertWithoutStatusHistoryInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutStatusHistoryInput, Prisma.ApplicationUncheckedUpdateWithoutStatusHistoryInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutStatusHistoryInput, Prisma.ApplicationUncheckedCreateWithoutStatusHistoryInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutStatusHistoryInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutStatusHistoryInput, Prisma.ApplicationUncheckedUpdateWithoutStatusHistoryInput>
+}
+
+export type ApplicationUpdateWithoutStatusHistoryInput = {
+  applicationId?: Prisma.StringFieldUpdateOperationsInput | string
+  passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
+  appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
+  policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
+  passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutStatusHistoryInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  applicationId?: Prisma.StringFieldUpdateOperationsInput | string
+  passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applicantId?: Prisma.IntFieldUpdateOperationsInput | number
+  officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
+  appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
+  policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
+  passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
 export type ApplicationCreateWithoutDocumentsInput = {
   applicationId: string
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
-  officer?: Prisma.PassportOfficerCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutDocumentsInput = {
@@ -732,11 +920,15 @@ export type ApplicationUncheckedCreateWithoutDocumentsInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   officerId?: number | null
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutDocumentsInput = {
@@ -760,11 +952,15 @@ export type ApplicationUpdateWithoutDocumentsInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
-  officer?: Prisma.PassportOfficerUpdateOneWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutDocumentsInput = {
@@ -773,11 +969,15 @@ export type ApplicationUncheckedUpdateWithoutDocumentsInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutAppointmentInput = {
@@ -785,11 +985,15 @@ export type ApplicationCreateWithoutAppointmentInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
-  officer?: Prisma.PassportOfficerCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutAppointmentInput = {
@@ -798,11 +1002,15 @@ export type ApplicationUncheckedCreateWithoutAppointmentInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
   passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutAppointmentInput = {
@@ -826,11 +1034,15 @@ export type ApplicationUpdateWithoutAppointmentInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
-  officer?: Prisma.PassportOfficerUpdateOneWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutAppointmentInput = {
@@ -839,11 +1051,97 @@ export type ApplicationUncheckedUpdateWithoutAppointmentInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutPaymentsInput = {
+  applicationId: string
+  passportType: string
+  status?: string
+  submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
+  appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
+  policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
+  passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutPaymentsInput = {
+  id?: number
+  applicationId: string
+  passportType: string
+  status?: string
+  submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  applicantId: number
+  officerId?: number | null
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
+  appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
+  policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
+  passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutPaymentsInput, Prisma.ApplicationUncheckedCreateWithoutPaymentsInput>
+}
+
+export type ApplicationUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutPaymentsInput, Prisma.ApplicationUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutPaymentsInput, Prisma.ApplicationUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutPaymentsInput, Prisma.ApplicationUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type ApplicationUpdateWithoutPaymentsInput = {
+  applicationId?: Prisma.StringFieldUpdateOperationsInput | string
+  passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
+  appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
+  policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
+  passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  applicationId?: Prisma.StringFieldUpdateOperationsInput | string
+  passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  applicantId?: Prisma.IntFieldUpdateOperationsInput | number
+  officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
+  appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
+  policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
+  passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutPoliceReportsInput = {
@@ -851,11 +1149,15 @@ export type ApplicationCreateWithoutPoliceReportsInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
-  officer?: Prisma.PassportOfficerCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
   passport?: Prisma.PassportCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutPoliceReportsInput = {
@@ -864,11 +1166,15 @@ export type ApplicationUncheckedCreateWithoutPoliceReportsInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
   passport?: Prisma.PassportUncheckedCreateNestedOneWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutPoliceReportsInput = {
@@ -892,11 +1198,15 @@ export type ApplicationUpdateWithoutPoliceReportsInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
-  officer?: Prisma.PassportOfficerUpdateOneWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
   passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutPoliceReportsInput = {
@@ -905,11 +1215,15 @@ export type ApplicationUncheckedUpdateWithoutPoliceReportsInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
   passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutPassportInput = {
@@ -917,11 +1231,15 @@ export type ApplicationCreateWithoutPassportInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
-  officer?: Prisma.PassportOfficerCreateNestedOneWithoutApplicationsInput
+  officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportCreateNestedManyWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutPassportInput = {
@@ -930,11 +1248,15 @@ export type ApplicationUncheckedCreateWithoutPassportInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
   policeReports?: Prisma.PoliceReportUncheckedCreateNestedManyWithoutApplicationInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutPassportInput = {
@@ -958,11 +1280,15 @@ export type ApplicationUpdateWithoutPassportInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
-  officer?: Prisma.PassportOfficerUpdateOneWithoutApplicationsNestedInput
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutPassportInput = {
@@ -971,11 +1297,15 @@ export type ApplicationUncheckedUpdateWithoutPassportInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateManyApplicantInput = {
@@ -984,6 +1314,8 @@ export type ApplicationCreateManyApplicantInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   officerId?: number | null
 }
 
@@ -992,11 +1324,15 @@ export type ApplicationUpdateWithoutApplicantInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  officer?: Prisma.PassportOfficerUpdateOneWithoutApplicationsNestedInput
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutApplicantInput = {
@@ -1005,11 +1341,15 @@ export type ApplicationUncheckedUpdateWithoutApplicantInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
@@ -1018,6 +1358,8 @@ export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
@@ -1027,6 +1369,8 @@ export type ApplicationCreateManyOfficerInput = {
   passportType: string
   status?: string
   submissionDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   applicantId: number
 }
 
@@ -1035,11 +1379,15 @@ export type ApplicationUpdateWithoutOfficerInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutOfficerInput = {
@@ -1048,11 +1396,15 @@ export type ApplicationUncheckedUpdateWithoutOfficerInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
   policeReports?: Prisma.PoliceReportUncheckedUpdateManyWithoutApplicationNestedInput
   passport?: Prisma.PassportUncheckedUpdateOneWithoutApplicationNestedInput
+  statusHistory?: Prisma.ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateManyWithoutOfficerInput = {
@@ -1061,6 +1413,8 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerInput = {
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -1072,11 +1426,15 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerInput = {
 export type ApplicationCountOutputType = {
   documents: number
   policeReports: number
+  statusHistory: number
+  payments: number
 }
 
 export type ApplicationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | ApplicationCountOutputTypeCountDocumentsArgs
   policeReports?: boolean | ApplicationCountOutputTypeCountPoliceReportsArgs
+  statusHistory?: boolean | ApplicationCountOutputTypeCountStatusHistoryArgs
+  payments?: boolean | ApplicationCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -1103,6 +1461,20 @@ export type ApplicationCountOutputTypeCountPoliceReportsArgs<ExtArgs extends run
   where?: Prisma.PoliceReportWhereInput
 }
 
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountStatusHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApplicationStatusHistoryWhereInput
+}
+
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1110,6 +1482,8 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   passportType?: boolean
   status?: boolean
   submissionDate?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   applicantId?: boolean
   officerId?: boolean
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
@@ -1118,6 +1492,8 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   appointment?: boolean | Prisma.Application$appointmentArgs<ExtArgs>
   policeReports?: boolean | Prisma.Application$policeReportsArgs<ExtArgs>
   passport?: boolean | Prisma.Application$passportArgs<ExtArgs>
+  statusHistory?: boolean | Prisma.Application$statusHistoryArgs<ExtArgs>
+  payments?: boolean | Prisma.Application$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.ApplicationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["application"]>
 
@@ -1127,6 +1503,8 @@ export type ApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   passportType?: boolean
   status?: boolean
   submissionDate?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   applicantId?: boolean
   officerId?: boolean
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
@@ -1139,6 +1517,8 @@ export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   passportType?: boolean
   status?: boolean
   submissionDate?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   applicantId?: boolean
   officerId?: boolean
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
@@ -1151,11 +1531,13 @@ export type ApplicationSelectScalar = {
   passportType?: boolean
   status?: boolean
   submissionDate?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   applicantId?: boolean
   officerId?: boolean
 }
 
-export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "passportType" | "status" | "submissionDate" | "applicantId" | "officerId", ExtArgs["result"]["application"]>
+export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "passportType" | "status" | "submissionDate" | "createdAt" | "updatedAt" | "applicantId" | "officerId", ExtArgs["result"]["application"]>
 export type ApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
   officer?: boolean | Prisma.Application$officerArgs<ExtArgs>
@@ -1163,6 +1545,8 @@ export type ApplicationInclude<ExtArgs extends runtime.Types.Extensions.Internal
   appointment?: boolean | Prisma.Application$appointmentArgs<ExtArgs>
   policeReports?: boolean | Prisma.Application$policeReportsArgs<ExtArgs>
   passport?: boolean | Prisma.Application$passportArgs<ExtArgs>
+  statusHistory?: boolean | Prisma.Application$statusHistoryArgs<ExtArgs>
+  payments?: boolean | Prisma.Application$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.ApplicationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ApplicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1183,6 +1567,8 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     appointment: Prisma.$AppointmentPayload<ExtArgs> | null
     policeReports: Prisma.$PoliceReportPayload<ExtArgs>[]
     passport: Prisma.$PassportPayload<ExtArgs> | null
+    statusHistory: Prisma.$ApplicationStatusHistoryPayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1190,6 +1576,8 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     passportType: string
     status: string
     submissionDate: Date | null
+    createdAt: Date
+    updatedAt: Date
     applicantId: number
     officerId: number | null
   }, ExtArgs["result"]["application"]>
@@ -1592,6 +1980,8 @@ export interface Prisma__ApplicationClient<T, Null = never, ExtArgs extends runt
   appointment<T extends Prisma.Application$appointmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$appointmentArgs<ExtArgs>>): Prisma.Prisma__AppointmentClient<runtime.Types.Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   policeReports<T extends Prisma.Application$policeReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$policeReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PoliceReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passport<T extends Prisma.Application$passportArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$passportArgs<ExtArgs>>): Prisma.Prisma__PassportClient<runtime.Types.Result.GetResult<Prisma.$PassportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  statusHistory<T extends Prisma.Application$statusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$statusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.Application$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1626,6 +2016,8 @@ export interface ApplicationFieldRefs {
   readonly passportType: Prisma.FieldRef<"Application", 'String'>
   readonly status: Prisma.FieldRef<"Application", 'String'>
   readonly submissionDate: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly createdAt: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Application", 'DateTime'>
   readonly applicantId: Prisma.FieldRef<"Application", 'Int'>
   readonly officerId: Prisma.FieldRef<"Application", 'Int'>
 }
@@ -1862,6 +2254,7 @@ export type ApplicationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many Applications.
    */
   data: Prisma.ApplicationCreateManyInput | Prisma.ApplicationCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1880,6 +2273,7 @@ export type ApplicationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many Applications.
    */
   data: Prisma.ApplicationCreateManyInput | Prisma.ApplicationCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
@@ -2129,6 +2523,54 @@ export type Application$passportArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.PassportInclude<ExtArgs> | null
   where?: Prisma.PassportWhereInput
+}
+
+/**
+ * Application.statusHistory
+ */
+export type Application$statusHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApplicationStatusHistory
+   */
+  select?: Prisma.ApplicationStatusHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApplicationStatusHistory
+   */
+  omit?: Prisma.ApplicationStatusHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApplicationStatusHistoryInclude<ExtArgs> | null
+  where?: Prisma.ApplicationStatusHistoryWhereInput
+  orderBy?: Prisma.ApplicationStatusHistoryOrderByWithRelationInput | Prisma.ApplicationStatusHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.ApplicationStatusHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApplicationStatusHistoryScalarFieldEnum | Prisma.ApplicationStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * Application.payments
+ */
+export type Application$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

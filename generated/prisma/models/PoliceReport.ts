@@ -43,6 +43,7 @@ export type PoliceReportMinAggregateOutputType = {
   reportId: string | null
   clearanceStatus: string | null
   remarks: string | null
+  createdAt: Date | null
   applicationId: number | null
   policeId: number | null
 }
@@ -52,6 +53,7 @@ export type PoliceReportMaxAggregateOutputType = {
   reportId: string | null
   clearanceStatus: string | null
   remarks: string | null
+  createdAt: Date | null
   applicationId: number | null
   policeId: number | null
 }
@@ -61,6 +63,7 @@ export type PoliceReportCountAggregateOutputType = {
   reportId: number
   clearanceStatus: number
   remarks: number
+  createdAt: number
   applicationId: number
   policeId: number
   _all: number
@@ -84,6 +87,7 @@ export type PoliceReportMinAggregateInputType = {
   reportId?: true
   clearanceStatus?: true
   remarks?: true
+  createdAt?: true
   applicationId?: true
   policeId?: true
 }
@@ -93,6 +97,7 @@ export type PoliceReportMaxAggregateInputType = {
   reportId?: true
   clearanceStatus?: true
   remarks?: true
+  createdAt?: true
   applicationId?: true
   policeId?: true
 }
@@ -102,6 +107,7 @@ export type PoliceReportCountAggregateInputType = {
   reportId?: true
   clearanceStatus?: true
   remarks?: true
+  createdAt?: true
   applicationId?: true
   policeId?: true
   _all?: true
@@ -198,6 +204,7 @@ export type PoliceReportGroupByOutputType = {
   reportId: string
   clearanceStatus: string
   remarks: string | null
+  createdAt: Date
   applicationId: number
   policeId: number
   _count: PoliceReportCountAggregateOutputType | null
@@ -230,6 +237,7 @@ export type PoliceReportWhereInput = {
   reportId?: Prisma.StringFilter<"PoliceReport"> | string
   clearanceStatus?: Prisma.StringFilter<"PoliceReport"> | string
   remarks?: Prisma.StringNullableFilter<"PoliceReport"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"PoliceReport"> | Date | string
   applicationId?: Prisma.IntFilter<"PoliceReport"> | number
   policeId?: Prisma.IntFilter<"PoliceReport"> | number
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
@@ -241,6 +249,7 @@ export type PoliceReportOrderByWithRelationInput = {
   reportId?: Prisma.SortOrder
   clearanceStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   policeId?: Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
@@ -255,6 +264,7 @@ export type PoliceReportWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PoliceReportWhereInput | Prisma.PoliceReportWhereInput[]
   clearanceStatus?: Prisma.StringFilter<"PoliceReport"> | string
   remarks?: Prisma.StringNullableFilter<"PoliceReport"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"PoliceReport"> | Date | string
   applicationId?: Prisma.IntFilter<"PoliceReport"> | number
   policeId?: Prisma.IntFilter<"PoliceReport"> | number
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
@@ -266,6 +276,7 @@ export type PoliceReportOrderByWithAggregationInput = {
   reportId?: Prisma.SortOrder
   clearanceStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   policeId?: Prisma.SortOrder
   _count?: Prisma.PoliceReportCountOrderByAggregateInput
@@ -283,6 +294,7 @@ export type PoliceReportScalarWhereWithAggregatesInput = {
   reportId?: Prisma.StringWithAggregatesFilter<"PoliceReport"> | string
   clearanceStatus?: Prisma.StringWithAggregatesFilter<"PoliceReport"> | string
   remarks?: Prisma.StringNullableWithAggregatesFilter<"PoliceReport"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"PoliceReport"> | Date | string
   applicationId?: Prisma.IntWithAggregatesFilter<"PoliceReport"> | number
   policeId?: Prisma.IntWithAggregatesFilter<"PoliceReport"> | number
 }
@@ -291,6 +303,7 @@ export type PoliceReportCreateInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   application: Prisma.ApplicationCreateNestedOneWithoutPoliceReportsInput
   police: Prisma.PoliceCreateNestedOneWithoutReportsInput
 }
@@ -300,6 +313,7 @@ export type PoliceReportUncheckedCreateInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   applicationId: number
   policeId: number
 }
@@ -308,6 +322,7 @@ export type PoliceReportUpdateInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   application?: Prisma.ApplicationUpdateOneRequiredWithoutPoliceReportsNestedInput
   police?: Prisma.PoliceUpdateOneRequiredWithoutReportsNestedInput
 }
@@ -317,6 +332,7 @@ export type PoliceReportUncheckedUpdateInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
   policeId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -326,6 +342,7 @@ export type PoliceReportCreateManyInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   applicationId: number
   policeId: number
 }
@@ -334,6 +351,7 @@ export type PoliceReportUpdateManyMutationInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PoliceReportUncheckedUpdateManyInput = {
@@ -341,6 +359,7 @@ export type PoliceReportUncheckedUpdateManyInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
   policeId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -360,6 +379,7 @@ export type PoliceReportCountOrderByAggregateInput = {
   reportId?: Prisma.SortOrder
   clearanceStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   policeId?: Prisma.SortOrder
 }
@@ -375,6 +395,7 @@ export type PoliceReportMaxOrderByAggregateInput = {
   reportId?: Prisma.SortOrder
   clearanceStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   policeId?: Prisma.SortOrder
 }
@@ -384,6 +405,7 @@ export type PoliceReportMinOrderByAggregateInput = {
   reportId?: Prisma.SortOrder
   clearanceStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   policeId?: Prisma.SortOrder
 }
@@ -482,6 +504,7 @@ export type PoliceReportCreateWithoutPoliceInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   application: Prisma.ApplicationCreateNestedOneWithoutPoliceReportsInput
 }
 
@@ -490,6 +513,7 @@ export type PoliceReportUncheckedCreateWithoutPoliceInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   applicationId: number
 }
 
@@ -500,6 +524,7 @@ export type PoliceReportCreateOrConnectWithoutPoliceInput = {
 
 export type PoliceReportCreateManyPoliceInputEnvelope = {
   data: Prisma.PoliceReportCreateManyPoliceInput | Prisma.PoliceReportCreateManyPoliceInput[]
+  skipDuplicates?: boolean
 }
 
 export type PoliceReportUpsertWithWhereUniqueWithoutPoliceInput = {
@@ -526,6 +551,7 @@ export type PoliceReportScalarWhereInput = {
   reportId?: Prisma.StringFilter<"PoliceReport"> | string
   clearanceStatus?: Prisma.StringFilter<"PoliceReport"> | string
   remarks?: Prisma.StringNullableFilter<"PoliceReport"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"PoliceReport"> | Date | string
   applicationId?: Prisma.IntFilter<"PoliceReport"> | number
   policeId?: Prisma.IntFilter<"PoliceReport"> | number
 }
@@ -534,6 +560,7 @@ export type PoliceReportCreateWithoutApplicationInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   police: Prisma.PoliceCreateNestedOneWithoutReportsInput
 }
 
@@ -542,6 +569,7 @@ export type PoliceReportUncheckedCreateWithoutApplicationInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   policeId: number
 }
 
@@ -552,6 +580,7 @@ export type PoliceReportCreateOrConnectWithoutApplicationInput = {
 
 export type PoliceReportCreateManyApplicationInputEnvelope = {
   data: Prisma.PoliceReportCreateManyApplicationInput | Prisma.PoliceReportCreateManyApplicationInput[]
+  skipDuplicates?: boolean
 }
 
 export type PoliceReportUpsertWithWhereUniqueWithoutApplicationInput = {
@@ -575,6 +604,7 @@ export type PoliceReportCreateManyPoliceInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   applicationId: number
 }
 
@@ -582,6 +612,7 @@ export type PoliceReportUpdateWithoutPoliceInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   application?: Prisma.ApplicationUpdateOneRequiredWithoutPoliceReportsNestedInput
 }
 
@@ -590,6 +621,7 @@ export type PoliceReportUncheckedUpdateWithoutPoliceInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -598,6 +630,7 @@ export type PoliceReportUncheckedUpdateManyWithoutPoliceInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -606,6 +639,7 @@ export type PoliceReportCreateManyApplicationInput = {
   reportId: string
   clearanceStatus: string
   remarks?: string | null
+  createdAt?: Date | string
   policeId: number
 }
 
@@ -613,6 +647,7 @@ export type PoliceReportUpdateWithoutApplicationInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   police?: Prisma.PoliceUpdateOneRequiredWithoutReportsNestedInput
 }
 
@@ -621,6 +656,7 @@ export type PoliceReportUncheckedUpdateWithoutApplicationInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   policeId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -629,6 +665,7 @@ export type PoliceReportUncheckedUpdateManyWithoutApplicationInput = {
   reportId?: Prisma.StringFieldUpdateOperationsInput | string
   clearanceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   policeId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -639,6 +676,7 @@ export type PoliceReportSelect<ExtArgs extends runtime.Types.Extensions.Internal
   reportId?: boolean
   clearanceStatus?: boolean
   remarks?: boolean
+  createdAt?: boolean
   applicationId?: boolean
   policeId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -650,6 +688,7 @@ export type PoliceReportSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   reportId?: boolean
   clearanceStatus?: boolean
   remarks?: boolean
+  createdAt?: boolean
   applicationId?: boolean
   policeId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -661,6 +700,7 @@ export type PoliceReportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   reportId?: boolean
   clearanceStatus?: boolean
   remarks?: boolean
+  createdAt?: boolean
   applicationId?: boolean
   policeId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -672,11 +712,12 @@ export type PoliceReportSelectScalar = {
   reportId?: boolean
   clearanceStatus?: boolean
   remarks?: boolean
+  createdAt?: boolean
   applicationId?: boolean
   policeId?: boolean
 }
 
-export type PoliceReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "reportId" | "clearanceStatus" | "remarks" | "applicationId" | "policeId", ExtArgs["result"]["policeReport"]>
+export type PoliceReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "reportId" | "clearanceStatus" | "remarks" | "createdAt" | "applicationId" | "policeId", ExtArgs["result"]["policeReport"]>
 export type PoliceReportInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
   police?: boolean | Prisma.PoliceDefaultArgs<ExtArgs>
@@ -701,6 +742,7 @@ export type $PoliceReportPayload<ExtArgs extends runtime.Types.Extensions.Intern
     reportId: string
     clearanceStatus: string
     remarks: string | null
+    createdAt: Date
     applicationId: number
     policeId: number
   }, ExtArgs["result"]["policeReport"]>
@@ -1132,6 +1174,7 @@ export interface PoliceReportFieldRefs {
   readonly reportId: Prisma.FieldRef<"PoliceReport", 'String'>
   readonly clearanceStatus: Prisma.FieldRef<"PoliceReport", 'String'>
   readonly remarks: Prisma.FieldRef<"PoliceReport", 'String'>
+  readonly createdAt: Prisma.FieldRef<"PoliceReport", 'DateTime'>
   readonly applicationId: Prisma.FieldRef<"PoliceReport", 'Int'>
   readonly policeId: Prisma.FieldRef<"PoliceReport", 'Int'>
 }
@@ -1368,6 +1411,7 @@ export type PoliceReportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many PoliceReports.
    */
   data: Prisma.PoliceReportCreateManyInput | Prisma.PoliceReportCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1386,6 +1430,7 @@ export type PoliceReportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many PoliceReports.
    */
   data: Prisma.PoliceReportCreateManyInput | Prisma.PoliceReportCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

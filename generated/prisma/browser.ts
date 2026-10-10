@@ -23,6 +23,11 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Admin
+ * 
+ */
+export type Admin = Prisma.AdminModel
+/**
  * Model Applicant
  * 
  */
@@ -43,6 +48,11 @@ export type Police = Prisma.PoliceModel
  */
 export type Application = Prisma.ApplicationModel
 /**
+ * Model ApplicationStatusHistory
+ * 
+ */
+export type ApplicationStatusHistory = Prisma.ApplicationStatusHistoryModel
+/**
  * Model Document
  * 
  */
@@ -53,6 +63,11 @@ export type Document = Prisma.DocumentModel
  */
 export type Appointment = Prisma.AppointmentModel
 /**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
  * Model PoliceReport
  * 
  */
@@ -62,3 +77,18 @@ export type PoliceReport = Prisma.PoliceReportModel
  * 
  */
 export type Passport = Prisma.PassportModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel

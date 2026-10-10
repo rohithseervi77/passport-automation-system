@@ -213,7 +213,7 @@ export type PassportOfficerWhereInput = {
   branchLocation?: Prisma.StringFilter<"PassportOfficer"> | string
   userId?: Prisma.IntFilter<"PassportOfficer"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  applications?: Prisma.ApplicationListRelationFilter
+  assignedApplications?: Prisma.ApplicationListRelationFilter
   passports?: Prisma.PassportListRelationFilter
 }
 
@@ -223,7 +223,7 @@ export type PassportOfficerOrderByWithRelationInput = {
   branchLocation?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  applications?: Prisma.ApplicationOrderByRelationAggregateInput
+  assignedApplications?: Prisma.ApplicationOrderByRelationAggregateInput
   passports?: Prisma.PassportOrderByRelationAggregateInput
 }
 
@@ -236,7 +236,7 @@ export type PassportOfficerWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PassportOfficerWhereInput | Prisma.PassportOfficerWhereInput[]
   branchLocation?: Prisma.StringFilter<"PassportOfficer"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  applications?: Prisma.ApplicationListRelationFilter
+  assignedApplications?: Prisma.ApplicationListRelationFilter
   passports?: Prisma.PassportListRelationFilter
 }, "id" | "officerId" | "userId">
 
@@ -266,7 +266,7 @@ export type PassportOfficerCreateInput = {
   officerId: string
   branchLocation: string
   user: Prisma.UserCreateNestedOneWithoutPassportOfficerInput
-  applications?: Prisma.ApplicationCreateNestedManyWithoutOfficerInput
+  assignedApplications?: Prisma.ApplicationCreateNestedManyWithoutOfficerInput
   passports?: Prisma.PassportCreateNestedManyWithoutOfficerInput
 }
 
@@ -275,7 +275,7 @@ export type PassportOfficerUncheckedCreateInput = {
   officerId: string
   branchLocation: string
   userId: number
-  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutOfficerInput
+  assignedApplications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutOfficerInput
   passports?: Prisma.PassportUncheckedCreateNestedManyWithoutOfficerInput
 }
 
@@ -283,7 +283,7 @@ export type PassportOfficerUpdateInput = {
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutPassportOfficerNestedInput
-  applications?: Prisma.ApplicationUpdateManyWithoutOfficerNestedInput
+  assignedApplications?: Prisma.ApplicationUpdateManyWithoutOfficerNestedInput
   passports?: Prisma.PassportUpdateManyWithoutOfficerNestedInput
 }
 
@@ -292,7 +292,7 @@ export type PassportOfficerUncheckedUpdateInput = {
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutOfficerNestedInput
+  assignedApplications?: Prisma.ApplicationUncheckedUpdateManyWithoutOfficerNestedInput
   passports?: Prisma.PassportUncheckedUpdateManyWithoutOfficerNestedInput
 }
 
@@ -383,20 +383,20 @@ export type PassportOfficerUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PassportOfficerUpdateToOneWithWhereWithoutUserInput, Prisma.PassportOfficerUpdateWithoutUserInput>, Prisma.PassportOfficerUncheckedUpdateWithoutUserInput>
 }
 
-export type PassportOfficerCreateNestedOneWithoutApplicationsInput = {
-  create?: Prisma.XOR<Prisma.PassportOfficerCreateWithoutApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutApplicationsInput>
-  connectOrCreate?: Prisma.PassportOfficerCreateOrConnectWithoutApplicationsInput
+export type PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput = {
+  create?: Prisma.XOR<Prisma.PassportOfficerCreateWithoutAssignedApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutAssignedApplicationsInput>
+  connectOrCreate?: Prisma.PassportOfficerCreateOrConnectWithoutAssignedApplicationsInput
   connect?: Prisma.PassportOfficerWhereUniqueInput
 }
 
-export type PassportOfficerUpdateOneWithoutApplicationsNestedInput = {
-  create?: Prisma.XOR<Prisma.PassportOfficerCreateWithoutApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutApplicationsInput>
-  connectOrCreate?: Prisma.PassportOfficerCreateOrConnectWithoutApplicationsInput
-  upsert?: Prisma.PassportOfficerUpsertWithoutApplicationsInput
+export type PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.PassportOfficerCreateWithoutAssignedApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutAssignedApplicationsInput>
+  connectOrCreate?: Prisma.PassportOfficerCreateOrConnectWithoutAssignedApplicationsInput
+  upsert?: Prisma.PassportOfficerUpsertWithoutAssignedApplicationsInput
   disconnect?: Prisma.PassportOfficerWhereInput | boolean
   delete?: Prisma.PassportOfficerWhereInput | boolean
   connect?: Prisma.PassportOfficerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PassportOfficerUpdateToOneWithWhereWithoutApplicationsInput, Prisma.PassportOfficerUpdateWithoutApplicationsInput>, Prisma.PassportOfficerUncheckedUpdateWithoutApplicationsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PassportOfficerUpdateToOneWithWhereWithoutAssignedApplicationsInput, Prisma.PassportOfficerUpdateWithoutAssignedApplicationsInput>, Prisma.PassportOfficerUncheckedUpdateWithoutAssignedApplicationsInput>
 }
 
 export type PassportOfficerCreateNestedOneWithoutPassportsInput = {
@@ -418,7 +418,7 @@ export type PassportOfficerUpdateOneWithoutPassportsNestedInput = {
 export type PassportOfficerCreateWithoutUserInput = {
   officerId: string
   branchLocation: string
-  applications?: Prisma.ApplicationCreateNestedManyWithoutOfficerInput
+  assignedApplications?: Prisma.ApplicationCreateNestedManyWithoutOfficerInput
   passports?: Prisma.PassportCreateNestedManyWithoutOfficerInput
 }
 
@@ -426,7 +426,7 @@ export type PassportOfficerUncheckedCreateWithoutUserInput = {
   id?: number
   officerId: string
   branchLocation: string
-  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutOfficerInput
+  assignedApplications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutOfficerInput
   passports?: Prisma.PassportUncheckedCreateNestedManyWithoutOfficerInput
 }
 
@@ -449,7 +449,7 @@ export type PassportOfficerUpdateToOneWithWhereWithoutUserInput = {
 export type PassportOfficerUpdateWithoutUserInput = {
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
-  applications?: Prisma.ApplicationUpdateManyWithoutOfficerNestedInput
+  assignedApplications?: Prisma.ApplicationUpdateManyWithoutOfficerNestedInput
   passports?: Prisma.PassportUpdateManyWithoutOfficerNestedInput
 }
 
@@ -457,18 +457,18 @@ export type PassportOfficerUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
-  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutOfficerNestedInput
+  assignedApplications?: Prisma.ApplicationUncheckedUpdateManyWithoutOfficerNestedInput
   passports?: Prisma.PassportUncheckedUpdateManyWithoutOfficerNestedInput
 }
 
-export type PassportOfficerCreateWithoutApplicationsInput = {
+export type PassportOfficerCreateWithoutAssignedApplicationsInput = {
   officerId: string
   branchLocation: string
   user: Prisma.UserCreateNestedOneWithoutPassportOfficerInput
   passports?: Prisma.PassportCreateNestedManyWithoutOfficerInput
 }
 
-export type PassportOfficerUncheckedCreateWithoutApplicationsInput = {
+export type PassportOfficerUncheckedCreateWithoutAssignedApplicationsInput = {
   id?: number
   officerId: string
   branchLocation: string
@@ -476,30 +476,30 @@ export type PassportOfficerUncheckedCreateWithoutApplicationsInput = {
   passports?: Prisma.PassportUncheckedCreateNestedManyWithoutOfficerInput
 }
 
-export type PassportOfficerCreateOrConnectWithoutApplicationsInput = {
+export type PassportOfficerCreateOrConnectWithoutAssignedApplicationsInput = {
   where: Prisma.PassportOfficerWhereUniqueInput
-  create: Prisma.XOR<Prisma.PassportOfficerCreateWithoutApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutApplicationsInput>
+  create: Prisma.XOR<Prisma.PassportOfficerCreateWithoutAssignedApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutAssignedApplicationsInput>
 }
 
-export type PassportOfficerUpsertWithoutApplicationsInput = {
-  update: Prisma.XOR<Prisma.PassportOfficerUpdateWithoutApplicationsInput, Prisma.PassportOfficerUncheckedUpdateWithoutApplicationsInput>
-  create: Prisma.XOR<Prisma.PassportOfficerCreateWithoutApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutApplicationsInput>
+export type PassportOfficerUpsertWithoutAssignedApplicationsInput = {
+  update: Prisma.XOR<Prisma.PassportOfficerUpdateWithoutAssignedApplicationsInput, Prisma.PassportOfficerUncheckedUpdateWithoutAssignedApplicationsInput>
+  create: Prisma.XOR<Prisma.PassportOfficerCreateWithoutAssignedApplicationsInput, Prisma.PassportOfficerUncheckedCreateWithoutAssignedApplicationsInput>
   where?: Prisma.PassportOfficerWhereInput
 }
 
-export type PassportOfficerUpdateToOneWithWhereWithoutApplicationsInput = {
+export type PassportOfficerUpdateToOneWithWhereWithoutAssignedApplicationsInput = {
   where?: Prisma.PassportOfficerWhereInput
-  data: Prisma.XOR<Prisma.PassportOfficerUpdateWithoutApplicationsInput, Prisma.PassportOfficerUncheckedUpdateWithoutApplicationsInput>
+  data: Prisma.XOR<Prisma.PassportOfficerUpdateWithoutAssignedApplicationsInput, Prisma.PassportOfficerUncheckedUpdateWithoutAssignedApplicationsInput>
 }
 
-export type PassportOfficerUpdateWithoutApplicationsInput = {
+export type PassportOfficerUpdateWithoutAssignedApplicationsInput = {
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutPassportOfficerNestedInput
   passports?: Prisma.PassportUpdateManyWithoutOfficerNestedInput
 }
 
-export type PassportOfficerUncheckedUpdateWithoutApplicationsInput = {
+export type PassportOfficerUncheckedUpdateWithoutAssignedApplicationsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
@@ -511,7 +511,7 @@ export type PassportOfficerCreateWithoutPassportsInput = {
   officerId: string
   branchLocation: string
   user: Prisma.UserCreateNestedOneWithoutPassportOfficerInput
-  applications?: Prisma.ApplicationCreateNestedManyWithoutOfficerInput
+  assignedApplications?: Prisma.ApplicationCreateNestedManyWithoutOfficerInput
 }
 
 export type PassportOfficerUncheckedCreateWithoutPassportsInput = {
@@ -519,7 +519,7 @@ export type PassportOfficerUncheckedCreateWithoutPassportsInput = {
   officerId: string
   branchLocation: string
   userId: number
-  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutOfficerInput
+  assignedApplications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutOfficerInput
 }
 
 export type PassportOfficerCreateOrConnectWithoutPassportsInput = {
@@ -542,7 +542,7 @@ export type PassportOfficerUpdateWithoutPassportsInput = {
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutPassportOfficerNestedInput
-  applications?: Prisma.ApplicationUpdateManyWithoutOfficerNestedInput
+  assignedApplications?: Prisma.ApplicationUpdateManyWithoutOfficerNestedInput
 }
 
 export type PassportOfficerUncheckedUpdateWithoutPassportsInput = {
@@ -550,7 +550,7 @@ export type PassportOfficerUncheckedUpdateWithoutPassportsInput = {
   officerId?: Prisma.StringFieldUpdateOperationsInput | string
   branchLocation?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutOfficerNestedInput
+  assignedApplications?: Prisma.ApplicationUncheckedUpdateManyWithoutOfficerNestedInput
 }
 
 
@@ -559,12 +559,12 @@ export type PassportOfficerUncheckedUpdateWithoutPassportsInput = {
  */
 
 export type PassportOfficerCountOutputType = {
-  applications: number
+  assignedApplications: number
   passports: number
 }
 
 export type PassportOfficerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  applications?: boolean | PassportOfficerCountOutputTypeCountApplicationsArgs
+  assignedApplications?: boolean | PassportOfficerCountOutputTypeCountAssignedApplicationsArgs
   passports?: boolean | PassportOfficerCountOutputTypeCountPassportsArgs
 }
 
@@ -581,7 +581,7 @@ export type PassportOfficerCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
 /**
  * PassportOfficerCountOutputType without action
  */
-export type PassportOfficerCountOutputTypeCountApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type PassportOfficerCountOutputTypeCountAssignedApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ApplicationWhereInput
 }
 
@@ -599,7 +599,7 @@ export type PassportOfficerSelect<ExtArgs extends runtime.Types.Extensions.Inter
   branchLocation?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  applications?: boolean | Prisma.PassportOfficer$applicationsArgs<ExtArgs>
+  assignedApplications?: boolean | Prisma.PassportOfficer$assignedApplicationsArgs<ExtArgs>
   passports?: boolean | Prisma.PassportOfficer$passportsArgs<ExtArgs>
   _count?: boolean | Prisma.PassportOfficerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["passportOfficer"]>
@@ -630,7 +630,7 @@ export type PassportOfficerSelectScalar = {
 export type PassportOfficerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "officerId" | "branchLocation" | "userId", ExtArgs["result"]["passportOfficer"]>
 export type PassportOfficerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  applications?: boolean | Prisma.PassportOfficer$applicationsArgs<ExtArgs>
+  assignedApplications?: boolean | Prisma.PassportOfficer$assignedApplicationsArgs<ExtArgs>
   passports?: boolean | Prisma.PassportOfficer$passportsArgs<ExtArgs>
   _count?: boolean | Prisma.PassportOfficerCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -645,7 +645,7 @@ export type $PassportOfficerPayload<ExtArgs extends runtime.Types.Extensions.Int
   name: "PassportOfficer"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    applications: Prisma.$ApplicationPayload<ExtArgs>[]
+    assignedApplications: Prisma.$ApplicationPayload<ExtArgs>[]
     passports: Prisma.$PassportPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1048,7 +1048,7 @@ readonly fields: PassportOfficerFieldRefs;
 export interface Prisma__PassportOfficerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  applications<T extends Prisma.PassportOfficer$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PassportOfficer$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedApplications<T extends Prisma.PassportOfficer$assignedApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PassportOfficer$assignedApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passports<T extends Prisma.PassportOfficer$passportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PassportOfficer$passportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PassportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1317,6 +1317,7 @@ export type PassportOfficerCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many PassportOfficers.
    */
   data: Prisma.PassportOfficerCreateManyInput | Prisma.PassportOfficerCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1335,6 +1336,7 @@ export type PassportOfficerCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many PassportOfficers.
    */
   data: Prisma.PassportOfficerCreateManyInput | Prisma.PassportOfficerCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
@@ -1482,9 +1484,9 @@ export type PassportOfficerDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * PassportOfficer.applications
+ * PassportOfficer.assignedApplications
  */
-export type PassportOfficer$applicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type PassportOfficer$assignedApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Application
    */

@@ -37,21 +37,84 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Compare entered password with hashed password
+    // 4. Check if account is locked
+    if (!user.isActive) {
+      return NextResponse.json(
+        { error: "Account has been suspended. Please contact administration." },
+        { status: 403 },
+      );
+    }
+
+    if (user.lockedUntil && user.lockedUntil > new Date()) {
+      return NextResponse.json(
+        { error: `Account locked due to too many failed attempts. Try again after ${user.lockedUntil.toLocaleTimeString()}.` },
+        { status: 403 },
+      );
+    }
+
+    // 5. Compare entered password with hashed password
     const passwordMatches = await bcrypt.compare(password, user.password);
 
-    // 5. Reject incorrect password
+    // 6. Reject incorrect password and handle lockouts
     if (!passwordMatches) {
+      const newFailedAttempts = user.failedLoginAttempts + 1;
+      let lockedUntil = null;
+
+      if (newFailedAttempts >= 5) {
+        // Lock for 15 minutes
+        lockedUntil = new Date(Date.now() + 15 * 60 * 1000);
+      }
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          failedLoginAttempts: newFailedAttempts,
+          lockedUntil,
+        },
+      });
+
+      // Audit Log for failed login
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: "LOGIN_FAILED",
+          details: JSON.stringify({ reason: "Invalid password", attempt: newFailedAttempts }),
+          ipAddress: request.headers.get("x-forwarded-for") || "unknown",
+          userAgent: request.headers.get("user-agent") || "unknown",
+        }
+      });
+
       return NextResponse.json(
-        { error: "Invalid username or password." },
+        { error: lockedUntil ? "Too many failed attempts. Account locked for 15 minutes." : "Invalid username or password." },
         { status: 401 },
       );
     }
 
-    // 6. Create login session
+    // 7. Reset failed login attempts on success
+    if (user.failedLoginAttempts > 0 || user.lockedUntil) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          failedLoginAttempts: 0,
+          lockedUntil: null,
+        },
+      });
+    }
+
+    // 8. Create login session
     const sessionToken = await createSessionToken(user.id);
 
-    // 7. Create response
+    // Audit Log for successful login
+    await prisma.auditLog.create({
+      data: {
+        userId: user.id,
+        action: "LOGIN_SUCCESS",
+        ipAddress: request.headers.get("x-forwarded-for") || "unknown",
+        userAgent: request.headers.get("user-agent") || "unknown",
+      }
+    });
+
+    // 9. Create response
     const response = NextResponse.json(
       {
         message: "Login successful.",
@@ -68,7 +131,7 @@ export async function POST(request: Request) {
       { status: 200 },
     );
 
-    // 8. Store session token in an HTTP-only cookie
+    // 10. Store session token in an HTTP-only cookie
     response.cookies.set("pas_session", sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

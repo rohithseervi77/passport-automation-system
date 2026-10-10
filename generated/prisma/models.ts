@@ -9,12 +9,18 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Admin'
 export type * from './models/Applicant'
 export type * from './models/PassportOfficer'
 export type * from './models/Police'
 export type * from './models/Application'
+export type * from './models/ApplicationStatusHistory'
 export type * from './models/Document'
 export type * from './models/Appointment'
+export type * from './models/Payment'
 export type * from './models/PoliceReport'
 export type * from './models/Passport'
+export type * from './models/Notification'
+export type * from './models/AuditLog'
+export type * from './models/PasswordResetToken'
 export type * from './commonInputTypes'

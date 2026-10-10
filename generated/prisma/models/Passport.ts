@@ -303,7 +303,7 @@ export type PassportCreateInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   application: Prisma.ApplicationCreateNestedOneWithoutPassportInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutPassportsInput
 }
@@ -313,7 +313,7 @@ export type PassportUncheckedCreateInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   applicationId: number
   officerId?: number | null
 }
@@ -342,7 +342,7 @@ export type PassportCreateManyInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   applicationId: number
   officerId?: number | null
 }
@@ -499,7 +499,7 @@ export type PassportCreateWithoutOfficerInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   application: Prisma.ApplicationCreateNestedOneWithoutPassportInput
 }
 
@@ -508,7 +508,7 @@ export type PassportUncheckedCreateWithoutOfficerInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   applicationId: number
 }
 
@@ -519,6 +519,7 @@ export type PassportCreateOrConnectWithoutOfficerInput = {
 
 export type PassportCreateManyOfficerInputEnvelope = {
   data: Prisma.PassportCreateManyOfficerInput | Prisma.PassportCreateManyOfficerInput[]
+  skipDuplicates?: boolean
 }
 
 export type PassportUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -554,7 +555,7 @@ export type PassportCreateWithoutApplicationInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutPassportsInput
 }
 
@@ -563,7 +564,7 @@ export type PassportUncheckedCreateWithoutApplicationInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   officerId?: number | null
 }
 
@@ -605,7 +606,7 @@ export type PassportCreateManyOfficerInput = {
   passportNumber: string
   issueDate: Date | string
   expiryDate: Date | string
-  dispatchStatus: string
+  dispatchStatus?: string
   applicationId: number
 }
 
@@ -1377,6 +1378,7 @@ export type PassportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many Passports.
    */
   data: Prisma.PassportCreateManyInput | Prisma.PassportCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1395,6 +1397,7 @@ export type PassportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many Passports.
    */
   data: Prisma.PassportCreateManyInput | Prisma.PassportCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
