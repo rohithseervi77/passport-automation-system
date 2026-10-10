@@ -21,6 +21,8 @@ export default function ApplicantPaymentPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchPaymentDetails() {
       try {
@@ -34,6 +36,7 @@ export default function ApplicantPaymentPage() {
         if (data.applicationId) setApplicationId(data.applicationId);
         if (data.passportType) setPassportType(data.passportType);
         if (data.feeAmount !== undefined) setFeeAmount(data.feeAmount);
+        if (data.status) setApplicationStatus(data.status);
       } catch (err) {
         console.error("Payment load error:", err);
       } finally {
@@ -70,6 +73,7 @@ export default function ApplicantPaymentPage() {
       }
 
       setReceipt(data.transaction);
+      setApplicationStatus("PAYMENT_COMPLETED");
       setMessage("Fee payment processed successfully! Transaction confirmed.");
     } catch (err) {
       console.error("Payment error:", err);
@@ -214,12 +218,32 @@ export default function ApplicantPaymentPage() {
               </button>
 
               <Link
-                href="/applicant/appointment"
+                href={
+                  ["PAYMENT_COMPLETED", "APPOINTMENT_PENDING"].includes(applicationStatus || "")
+                    ? "/applicant/appointment"
+                    : "/applicant/dashboard"
+                }
                 className="rounded-lg bg-blue-600 px-6 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition"
               >
-                Continue to Appointment Scheduling →
+                {["PAYMENT_COMPLETED", "APPOINTMENT_PENDING"].includes(applicationStatus || "")
+                  ? "Continue to Appointment Scheduling →"
+                  : "Return to Dashboard →"}
               </Link>
             </div>
+          </div>
+        ) : applicationStatus && !["DRAFT", "SUBMITTED", "PAYMENT_PENDING", "PAYMENT_FAILED"].includes(applicationStatus) ? (
+          <div className="rounded-2xl border border-emerald-500/40 bg-slate-900/80 p-12 text-center shadow-xl">
+            <p className="text-4xl mb-3">✅</p>
+            <h3 className="text-lg font-bold text-white">Payment Already Processed</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+              Your application fee has already been paid and verified by the system.
+            </p>
+            <Link
+              href="/applicant/dashboard"
+              className="mt-6 inline-block rounded-xl bg-slate-800 border border-slate-700 px-6 py-2.5 text-xs font-bold text-white hover:bg-slate-700 transition shadow-lg shadow-slate-900/30"
+            >
+              Return to Dashboard
+            </Link>
           </div>
         ) : (
           /* Payment Processing Form */
