@@ -119,7 +119,7 @@ export async function POST(req: Request) {
     }
 
     let payment;
-    import { transitionApplicationStatus } from "@/lib/applicationService";
+    const { transitionApplicationStatus } = await import("@/lib/applicationService");
     
     try {
       payment = await prisma.payment.create({

@@ -97,7 +97,7 @@ export async function POST(req: Request) {
 
     // Unhappy Path: If the officer rejected documents and asked for correction,
     // re-uploading should push it back to DOCUMENT_REVIEW via the FSM.
-    import { transitionApplicationStatus } from "@/lib/applicationService";
+    const { transitionApplicationStatus } = await import("@/lib/applicationService");
     let updatedStatus = application.status;
     if (application.status === "DOCUMENT_CORRECTION_REQUIRED") {
       try {
