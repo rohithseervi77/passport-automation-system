@@ -175,16 +175,8 @@ export default function Home() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Feature 1 */}
-            <InView
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-              }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 h-full">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
               <div className="mb-4 text-3xl">📝</div>
-            </InView>
               <h3 className="text-lg font-semibold">1. Online Application Form</h3>
               <p className="mt-2 text-xs leading-6 text-slate-400">
                 Fresh & renewal passport applications with booklet choices (36/60 pages, Tatkaal) and draft auto-saving.
@@ -192,16 +184,8 @@ export default function Home() {
             </div>
 
             {/* Feature 2 */}
-            <InView
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-              }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 h-full">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
               <div className="mb-4 text-3xl">📄</div>
-            </InView>
               <h3 className="text-lg font-semibold">2. Document Repository</h3>
               <p className="mt-2 text-xs leading-6 text-slate-400">
                 Upload Identity, Address, and DOB proof documents with authenticity review by Passport Officers.
@@ -209,16 +193,8 @@ export default function Home() {
             </div>
 
             {/* Feature 3 */}
-            <InView
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-              }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 h-full">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
               <div className="mb-4 text-3xl">📅</div>
-            </InView>
               <h3 className="text-lg font-semibold">3. Appointment Scheduler</h3>
               <p className="mt-2 text-xs leading-6 text-slate-400">
                 Book physical biometric slots at Regional Passport Seva Kendra (PSK) with printable appointment acknowledgment slips.
@@ -226,16 +202,8 @@ export default function Home() {
             </div>
 
             {/* Feature 4 */}
-            <InView
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-              }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 h-full">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
               <div className="mb-4 text-3xl">💳</div>
-            </InView>
               <h3 className="text-lg font-semibold">4. Payment Gateway</h3>
               <p className="mt-2 text-xs leading-6 text-slate-400">
                 Online fee processing (Card, UPI, NetBanking) with instant transaction ID and printable GST receipts.
@@ -243,16 +211,8 @@ export default function Home() {
             </div>
 
             {/* Feature 5 */}
-            <InView
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-              }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 h-full">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
               <div className="mb-4 text-3xl">👮</div>
-            </InView>
               <h3 className="text-lg font-semibold">5. Police Verification Enquiry</h3>
               <p className="mt-2 text-xs leading-6 text-slate-400">
                 Police personnel console for conducting residential checks, criminal records check, and issuing clearance certificates.
@@ -260,16 +220,8 @@ export default function Home() {
             </div>
 
             {/* Feature 6 */}
-            <InView
-              variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-              }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 h-full">
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
               <div className="mb-4 text-3xl">📦</div>
-            </InView>
               <h3 className="text-lg font-semibold">6. Passport Issuance & Dispatch</h3>
               <p className="mt-2 text-xs leading-6 text-slate-400">
                 Quality control, booklet printing, unique passport number assignment, and Speed Post consignment tracking.
@@ -293,16 +245,8 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {/* Applicant */}
-          <InView
-            variants={{
-              hidden: { opacity: 0, scale: 0.95, filter: 'blur(4px)' },
-              visible: { opacity: 1, scale: 1, filter: 'blur(0px)' },
-            }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7 h-full">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7">
             <div className="text-4xl">👤</div>
-          </InView>
             <h3 className="mt-4 text-lg font-bold">Applicant Persona</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-400">
               Submit application, upload verification docs, schedule PSK appointments, pay fees, and track live status.
@@ -316,16 +260,8 @@ export default function Home() {
           </div>
 
           {/* Passport Officer */}
-          <InView
-            variants={{
-              hidden: { opacity: 0, scale: 0.95, filter: 'blur(4px)' },
-              visible: { opacity: 1, scale: 1, filter: 'blur(0px)' },
-            }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7 h-full">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7">
             <div className="text-4xl">🧑‍💼</div>
-          </InView>
             <h3 className="mt-4 text-lg font-bold">Passport Officer Persona</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-400">
               Document verification, biometric validation, forward to police, approve/reject, generate passport, and dispatch.
@@ -339,16 +275,8 @@ export default function Home() {
           </div>
 
           {/* Police */}
-          <InView
-            variants={{
-              hidden: { opacity: 0, scale: 0.95, filter: 'blur(4px)' },
-              visible: { opacity: 1, scale: 1, filter: 'blur(0px)' },
-            }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7 h-full">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7">
             <div className="text-4xl">👮</div>
-          </InView>
             <h3 className="mt-4 text-lg font-bold">Police Authority Persona</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-400">
               Inspect residential address, perform criminal background and court record checks, and submit clearance reports.
