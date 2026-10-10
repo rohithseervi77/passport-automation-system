@@ -95,9 +95,23 @@ export async function POST(req: Request) {
       },
     });
 
+    // Unhappy Path: If the officer rejected documents and asked for correction,
+    // re-uploading should push it back to DOCUMENT_REVIEW via the FSM.
+    import { transitionApplicationStatus } from "@/lib/applicationService";
+    let updatedStatus = application.status;
+    if (application.status === "DOCUMENT_CORRECTION_REQUIRED") {
+      try {
+        const updatedApp = await transitionApplicationStatus(application.id, "DOCUMENT_REVIEW", userId, "Applicant uploaded corrected documents");
+        updatedStatus = updatedApp.status;
+      } catch (fsmError) {
+        console.error("Failed to transition application after document re-upload", fsmError);
+      }
+    }
+
     return NextResponse.json({
       message: "Document uploaded successfully",
       document: newDoc,
+      status: updatedStatus
     });
   } catch (error) {
     console.error("Upload document error:", error);

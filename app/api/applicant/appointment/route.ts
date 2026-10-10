@@ -81,40 +81,54 @@ export async function POST(req: Request) {
     const appointmentId = `APT-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
 
     let appointment;
-    if (application.appointment) {
-      // Update existing appointment
-      appointment = await prisma.appointment.update({
-        where: { id: application.appointment.id },
-        data: {
-          date: appointmentDate,
-          timeSlot,
-        },
-      });
-    } else {
-      // Create new appointment
-      appointment = await prisma.appointment.create({
-        data: {
-          appointmentId,
-          date: appointmentDate,
-          timeSlot,
-          applicationId: application.id,
-        },
-      });
+    try {
+      if (application.appointment) {
+        // Update existing appointment
+        appointment = await prisma.appointment.update({
+          where: { id: application.appointment.id },
+          data: {
+            date: appointmentDate,
+            timeSlot,
+            status: "BOOKED",
+          },
+        });
+      } else {
+        // Create new appointment
+        appointment = await prisma.appointment.create({
+          data: {
+            appointmentId,
+            date: appointmentDate,
+            timeSlot,
+            status: "BOOKED",
+            applicationId: application.id,
+          },
+        });
+      }
+    } catch (dbError: any) {
+      if (dbError.code === "P2002") {
+        return NextResponse.json(
+          { error: "This time slot was just booked by someone else. Please choose another slot." },
+          { status: 409 }
+        );
+      }
+      throw dbError;
     }
 
-    // Update application status to APPOINTMENT_SCHEDULED if it was SUBMITTED or DRAFT
-    if (application.status === "SUBMITTED" || application.status === "DRAFT") {
-      await prisma.application.update({
-        where: { id: application.id },
-        data: {
-          status: "APPOINTMENT_SCHEDULED",
-        },
-      });
+    // Update application status to APPOINTMENT_BOOKED via FSM if it is currently eligible
+    import { transitionApplicationStatus } from "@/lib/applicationService";
+    let updatedApp = application;
+    try {
+      if (application.status === "APPOINTMENT_PENDING" || application.status === "PAYMENT_COMPLETED") {
+        updatedApp = await transitionApplicationStatus(application.id, "APPOINTMENT_BOOKED", userId, "Applicant booked appointment");
+      }
+    } catch (fsmError) {
+      console.log("FSM transition non-critical error:", fsmError);
     }
 
     return NextResponse.json({
       message: "Appointment scheduled successfully",
       appointment,
+      status: updatedApp.status
     });
   } catch (error) {
     console.error("Schedule appointment error:", error);

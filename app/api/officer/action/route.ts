@@ -87,6 +87,20 @@ export async function POST(req: Request) {
         break;
       }
 
+      case "REQUEST_CORRECTION": {
+        await prisma.document.updateMany({
+          where: { applicationId: application.id },
+          data: { fileStatus: "REJECTED" },
+        });
+
+        try {
+          updatedApplication = await transitionApplicationStatus(application.id, "DOCUMENT_CORRECTION_REQUIRED", user.id, remarks || "Documents rejected, correction required");
+        } catch (e: any) {
+          return NextResponse.json({ error: e.message }, { status: 400 });
+        }
+        break;
+      }
+
       case "ISSUE_PASSPORT": {
         const randomNum = Math.floor(1000000 + Math.random() * 9000000);
         const passportNumber = `P${randomNum}`;

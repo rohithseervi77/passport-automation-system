@@ -48,11 +48,18 @@ export async function POST(req: Request) {
     });
 
     // Update application status based on clearance
-    const nextStatus = clearanceStatus === "CLEARED" ? "POLICE_VERIFICATION_COMPLETED" : "POLICE_VERIFICATION_FAILED";
+    let nextStatus: import("@/lib/fsm").ApplicationStatus;
+    if (clearanceStatus === "CLEARED") {
+      nextStatus = "POLICE_VERIFICATION_COMPLETED";
+    } else if (clearanceStatus === "CLARIFICATION_REQUIRED") {
+      nextStatus = "CLARIFICATION_REQUIRED";
+    } else {
+      nextStatus = "POLICE_VERIFICATION_FAILED";
+    }
 
     let updatedApp;
     try {
-      updatedApp = await transitionApplicationStatus(application.id, nextStatus, user.id, remarks || `Police verification ${clearanceStatus}`);
+      updatedApp = await transitionApplicationStatus(application.id, nextStatus, user.id, remarks || `Police verification: ${clearanceStatus}`);
     } catch (e: any) {
       return NextResponse.json({ error: e.message }, { status: 400 });
     }

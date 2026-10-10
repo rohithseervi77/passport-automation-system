@@ -161,6 +161,8 @@ model Appointment {
 
   applicationId Int      @unique
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([date, timeSlot])
 }
 
 // =====================================================

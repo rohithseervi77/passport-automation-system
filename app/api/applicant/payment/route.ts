@@ -82,22 +82,67 @@ export async function POST(req: Request) {
 
     const body = await req.json();
     const { paymentMethod, amount } = body;
+    const idempotencyKey = req.headers.get("idempotency-key");
 
-    // Generate Transaction ID
-    const txnId = `TXN-PAS-${Date.now().toString().slice(-6)}-${Math.floor(1000 + Math.random() * 9000)}`;
-    const timestamp = new Date().toISOString();
+    if (!idempotencyKey) {
+      return NextResponse.json({ error: "Idempotency-Key header is required." }, { status: 400 });
+    }
+
+    // Check if we already processed this exact payment to prevent double charging
+    const existingPayment = await prisma.payment.findFirst({
+      where: { transactionId: idempotencyKey }
+    });
+
+    if (existingPayment && existingPayment.status === "SUCCESS") {
+      return NextResponse.json({
+        message: "Payment already processed (Idempotency Hit).",
+        transaction: existingPayment,
+      });
+    }
+
+    // Generate Transaction ID based on idempotency key for uniqueness
+    const txnId = idempotencyKey;
+
+    // Simulate Payment Gateway Random Failure (Unhappy Path)
+    const isNetworkFailure = Math.random() < 0.1; // 10% chance
+    if (isNetworkFailure) {
+      await prisma.payment.create({
+        data: {
+          transactionId: txnId,
+          amount: amount || 1500,
+          paymentMethod: paymentMethod || "Credit/Debit Card",
+          status: "FAILED",
+          applicationId: application.id,
+        }
+      });
+      return NextResponse.json({ error: "Payment Gateway Timeout. Please try again." }, { status: 502 });
+    }
+
+    let payment;
+    import { transitionApplicationStatus } from "@/lib/applicationService";
+    
+    try {
+      payment = await prisma.payment.create({
+        data: {
+          transactionId: txnId,
+          amount: amount || 1500,
+          paymentMethod: paymentMethod || "Credit/Debit Card",
+          status: "SUCCESS",
+          applicationId: application.id,
+        }
+      });
+
+      if (application.status === "PAYMENT_PENDING" || application.status === "SUBMITTED" || application.status === "DRAFT") {
+        await transitionApplicationStatus(application.id, "PAYMENT_COMPLETED", userId, "Payment successful");
+      }
+    } catch (e: any) {
+      console.error("Payment transaction error", e);
+      return NextResponse.json({ error: "Failed to save payment record." }, { status: 500 });
+    }
 
     return NextResponse.json({
       message: "Payment processed and confirmed successfully!",
-      transaction: {
-        txnId,
-        amount: amount || 1500,
-        currency: "INR",
-        paymentMethod: paymentMethod || "Credit/Debit Card",
-        status: "SUCCESS",
-        timestamp,
-        applicationId: application.applicationId,
-      },
+      transaction: payment,
     });
   } catch (error) {
     console.error("Payment processing error:", error);

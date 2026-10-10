@@ -245,6 +245,7 @@ export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   appointmentId?: string
   applicationId?: number
+  date_timeSlot?: Prisma.AppointmentDateTimeSlotCompoundUniqueInput
   AND?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   OR?: Prisma.AppointmentWhereInput[]
   NOT?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
@@ -252,7 +253,7 @@ export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   timeSlot?: Prisma.StringFilter<"Appointment"> | string
   status?: Prisma.StringFilter<"Appointment"> | string
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
-}, "id" | "appointmentId" | "applicationId">
+}, "id" | "appointmentId" | "applicationId" | "date_timeSlot">
 
 export type AppointmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -342,6 +343,11 @@ export type AppointmentUncheckedUpdateManyInput = {
 export type AppointmentNullableScalarRelationFilter = {
   is?: Prisma.AppointmentWhereInput | null
   isNot?: Prisma.AppointmentWhereInput | null
+}
+
+export type AppointmentDateTimeSlotCompoundUniqueInput = {
+  date: Date | string
+  timeSlot: string
 }
 
 export type AppointmentCountOrderByAggregateInput = {
