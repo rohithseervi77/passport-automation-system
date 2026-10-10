@@ -52,7 +52,10 @@ export default function ApplicantPaymentPage() {
     try {
       const res = await fetch("/api/applicant/payment", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Idempotency-Key": crypto.randomUUID()
+        },
         body: JSON.stringify({
           paymentMethod,
           amount: feeAmount,
