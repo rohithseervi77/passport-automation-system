@@ -2,6 +2,7 @@ import Link from "next/link";
 import Script from "next/script";
 import ShinyText from "@/components/ShinyText";
 import GlowCursor from "@/components/GlowCursor";
+import { TextEffect } from "@/components/TextEffect";
 
 export default function Home() {
   const jsonLd = {
@@ -116,9 +117,15 @@ export default function Home() {
             />
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400">
+          <TextEffect
+            as="p"
+            per="word"
+            preset="fade-in-blur"
+            speedReveal={1.5}
+            className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400"
+          >
             Passport Automation System (PAS) digitizes the complete passport issuance lifecycle: online applicant registration, document verification, biometric appointment booking, statutory fee processing, police background enquiry, booklet printing, and Speed Post tracking.
-          </p>
+          </TextEffect>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
