@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import ShinyText from "@/components/ShinyText";
+import GlowCursor from "@/components/GlowCursor";
 
 export default function Home() {
   const jsonLd = {
@@ -12,7 +13,8 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-slate-950 text-white relative">
+      <GlowCursor color="#3b82f6" secondaryColor="#93c5fd" />
       <Script
         id="schema-org"
         type="application/ld+json"
