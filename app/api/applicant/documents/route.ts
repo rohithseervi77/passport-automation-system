@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { transitionApplicationStatus } from "@/lib/applicationService";
 
 // GET documents for applicant
 export async function GET() {
@@ -97,7 +98,6 @@ export async function POST(req: Request) {
 
     // Unhappy Path: If the officer rejected documents and asked for correction,
     // re-uploading should push it back to DOCUMENT_REVIEW via the FSM.
-    const { transitionApplicationStatus } = await import("@/lib/applicationService");
     let updatedStatus = application.status;
     if (application.status === "DOCUMENT_CORRECTION_REQUIRED") {
       try {

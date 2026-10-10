@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { transitionApplicationStatus } from "@/lib/applicationService";
 
 // GET payment status and fee structure
 export async function GET() {
@@ -119,8 +120,6 @@ export async function POST(req: Request) {
     }
 
     let payment;
-    const { transitionApplicationStatus } = await import("@/lib/applicationService");
-    
     try {
       payment = await prisma.payment.create({
         data: {

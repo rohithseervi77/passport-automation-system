@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { transitionApplicationStatus } from "@/lib/applicationService";
 
 // GET appointment for applicant
 export async function GET() {
@@ -115,7 +116,6 @@ export async function POST(req: Request) {
     }
 
     // Update application status to APPOINTMENT_BOOKED via FSM if it is currently eligible
-    const { transitionApplicationStatus } = await import("@/lib/applicationService");
     let updatedApp: any = application;
     try {
       if (application.status === "APPOINTMENT_PENDING" || application.status === "PAYMENT_COMPLETED") {
