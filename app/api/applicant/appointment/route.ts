@@ -116,7 +116,7 @@ export async function POST(req: Request) {
 
     // Update application status to APPOINTMENT_BOOKED via FSM if it is currently eligible
     const { transitionApplicationStatus } = await import("@/lib/applicationService");
-    let updatedApp = application;
+    let updatedApp: any = application;
     try {
       if (application.status === "APPOINTMENT_PENDING" || application.status === "PAYMENT_COMPLETED") {
         updatedApp = await transitionApplicationStatus(application.id, "APPOINTMENT_BOOKED", userId, "Applicant booked appointment");
