@@ -15,15 +15,20 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [actionLoading, setActionLoading] = useState(false);
+  const [listLoading, setListLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   async function fetchApplications() {
+    setListLoading(true);
     try {
       const query = new URLSearchParams();
       if (filterStatus !== "ALL") query.append("status", filterStatus);
       if (search) query.append("q", search);
+      query.append("page", page.toString());
 
       const res = await fetch(`/api/officer/applications?${query.toString()}`);
       if (res.status === 401 || res.status === 403) {
@@ -33,18 +38,22 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
       const data = await res.json();
       if (data.officer) setOfficer(data.officer);
       setApplications(data.applications || []);
+      setTotalPages(data.totalPages || 1);
+      
       if (selectedApp) {
         const updated = (data.applications || []).find((a: any) => a.id === selectedApp.id);
         if (updated) setSelectedApp(updated);
       }
     } catch (err) {
       console.error("Failed to load applications:", err);
+    } finally {
+      setListLoading(false);
     }
   }
 
   useEffect(() => {
     fetchApplications();
-  }, [filterStatus]);
+  }, [filterStatus, page]);
 
   async function handleAction(action: string) {
     if (!selectedApp) return;
@@ -195,7 +204,7 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
             ].map((st) => (
               <button
                 key={st}
-                onClick={() => setFilterStatus(st)}
+                onClick={() => { setFilterStatus(st); setPage(1); }}
                 className={`rounded-xl px-3 py-1.5 text-[11px] font-bold transition ${
                   filterStatus === st
                     ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm shadow-amber-500/20"
@@ -213,11 +222,11 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
               placeholder="Search ARN or Name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && fetchApplications()}
+              onKeyDown={(e) => { if (e.key === "Enter") { setPage(1); fetchApplications(); } }}
               className="rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-1.5 text-xs text-white outline-none focus:border-amber-500"
             />
             <button
-              onClick={fetchApplications}
+              onClick={() => { setPage(1); fetchApplications(); }}
               className="rounded-xl bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-700"
             >
               Search
@@ -228,59 +237,85 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
         {/* Main Applications Table & Scrutiny Panel */}
         <div className="grid gap-6 lg:grid-cols-12">
           {/* Applications Table (Left 7 Cols) */}
-          <div className="lg:col-span-7 rounded-2xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl">
+          <div className="lg:col-span-7 rounded-2xl border border-slate-800 bg-slate-900/90 overflow-hidden shadow-xl flex flex-col">
             <div className="p-4 border-b border-slate-800 flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-                Queue Applications ({applications.length})
+                Queue Applications
               </h3>
               <span className="text-[10px] text-slate-400">Select application to inspect</span>
             </div>
 
-            {applications.length === 0 ? (
+            {listLoading ? (
+              <div className="p-16 text-center text-slate-500 flex flex-col items-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mb-4"></div>
+                <p className="text-xs font-medium">Loading secure queue...</p>
+              </div>
+            ) : applications.length === 0 ? (
               <div className="p-16 text-center text-slate-500 space-y-1">
                 <p className="text-3xl">📋</p>
                 <p className="text-xs font-medium">No applications found in this queue.</p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-800/80 max-h-[600px] overflow-y-auto">
-                {applications.map((app) => {
-                  const isSelected = selectedApp?.id === app.id;
-                  const badge = statusColorMap[app.status] || "bg-slate-800 text-slate-400";
+              <>
+                <div className="divide-y divide-slate-800/80 overflow-y-auto flex-grow">
+                  {applications.map((app) => {
+                    const isSelected = selectedApp?.id === app.id;
+                    const badge = statusColorMap[app.status] || "bg-slate-800 text-slate-400";
 
-                  return (
-                    <div
-                      key={app.id}
-                      onClick={() => setSelectedApp(app)}
-                      className={`p-4 cursor-pointer transition flex items-center justify-between hover:bg-slate-800/60 ${
-                        isSelected ? "bg-amber-500/10 border-l-4 border-amber-500" : ""
-                      }`}
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold text-white">
-                            {app.applicationId}
-                          </span>
-                          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold ${badge}`}>
-                            {app.status.replace(/_/g, " ")}
-                          </span>
+                    return (
+                      <div
+                        key={app.id}
+                        onClick={() => setSelectedApp(app)}
+                        className={`p-4 cursor-pointer transition flex items-center justify-between hover:bg-slate-800/60 ${
+                          isSelected ? "bg-amber-500/10 border-l-4 border-amber-500" : ""
+                        }`}
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs font-bold text-white">
+                              {app.applicationId}
+                            </span>
+                            <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold ${badge}`}>
+                              {app.status.replace(/_/g, " ")}
+                            </span>
+                          </div>
+
+                          <p className="text-xs font-bold text-slate-200">
+                            {app.applicant?.name} • <span className="font-normal text-slate-400">{app.passportType}</span>
+                          </p>
+
+                          <p className="text-[10px] text-slate-500">
+                            Docs: {app.documents?.length || 0} • Biometrics: {app.appointment ? "Scheduled" : "None"} • Reports: {app.policeReports?.length || 0}
+                          </p>
                         </div>
 
-                        <p className="text-xs font-bold text-slate-200">
-                          {app.applicant?.name} • <span className="font-normal text-slate-400">{app.passportType}</span>
-                        </p>
-
-                        <p className="text-[10px] text-slate-500">
-                          Docs: {app.documents?.length || 0} • Biometrics: {app.appointment ? "Scheduled" : "None"} • Reports: {app.policeReports?.length || 0}
-                        </p>
+                        <span className="text-xs text-amber-400 font-bold">
+                          Scrutinize →
+                        </span>
                       </div>
-
-                      <span className="text-xs text-amber-400 font-bold">
-                        Scrutinize →
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+                
+                {/* Pagination Controls */}
+                <div className="p-3 border-t border-slate-800 bg-slate-950/50 flex justify-between items-center text-xs">
+                  <button 
+                    disabled={page === 1}
+                    onClick={() => setPage(p => p - 1)}
+                    className="px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-slate-400">Page {page} of {totalPages}</span>
+                  <button 
+                    disabled={page >= totalPages}
+                    onClick={() => setPage(p => p + 1)}
+                    className="px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
             )}
           </div>
 

@@ -22,6 +22,9 @@ export async function GET(req: Request) {
     const statusFilter = searchParams.get("status");
     const searchQuery = searchParams.get("q");
 
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = 10;
+
     const whereClause: any = {};
     if (statusFilter && statusFilter !== "ALL") {
       whereClause.status = statusFilter;
@@ -33,26 +36,33 @@ export async function GET(req: Request) {
       ];
     }
 
-    const applications = await prisma.application.findMany({
-      where: whereClause,
-      orderBy: { id: "desc" },
-      include: {
-        applicant: true,
-        documents: true,
-        appointment: true,
-        policeReports: {
-          include: {
-            police: true,
+    const [applications, totalCount] = await Promise.all([
+      prisma.application.findMany({
+        where: whereClause,
+        orderBy: { id: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          applicant: true,
+          documents: true,
+          appointment: true,
+          policeReports: {
+            include: {
+              police: true,
+            },
           },
+          passport: true,
+          officer: true,
         },
-        passport: true,
-        officer: true,
-      },
-    });
+      }),
+      prisma.application.count({ where: whereClause })
+    ]);
 
     return NextResponse.json({
       officer: user.passportOfficer,
       applications,
+      totalPages: Math.ceil(totalCount / limit),
+      currentPage: page,
     });
   } catch (error) {
     console.error("Officer fetch applications error:", error);
