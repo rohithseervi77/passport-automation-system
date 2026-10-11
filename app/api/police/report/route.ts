@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     } else if (clearanceStatus === "CLARIFICATION_REQUIRED") {
       nextStatus = "CLARIFICATION_REQUIRED";
     } else {
-      nextStatus = "POLICE_VERIFICATION_FAILED";
+      nextStatus = "REJECTED";
     }
 
     let updatedApp;
@@ -65,7 +65,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({
-      message: "Police clearance report submitted successfully.",
+      message: clearanceStatus === "ADVERSE"
+        ? "Adverse report recorded. Application has been rejected."
+        : "Police clearance report submitted successfully.",
       report,
       application: updatedApp,
     });

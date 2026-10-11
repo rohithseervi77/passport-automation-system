@@ -33,7 +33,13 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
       setEnquiries(data.enquiries || []);
       if (selectedEnquiry) {
         const updated = (data.enquiries || []).find((e: any) => e.id === selectedEnquiry.id);
-        if (updated) setSelectedEnquiry(updated);
+        if (updated) {
+          setSelectedEnquiry(updated);
+          if (updated.policeReports && updated.policeReports.length > 0) {
+            setClearanceStatus(updated.policeReports[0].clearanceStatus);
+            setRemarks(updated.policeReports[0].remarks);
+          }
+        }
       }
     } catch (err) {
       console.error("Failed to load enquiries:", err);
@@ -69,7 +75,11 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
         return;
       }
 
-      setMessage("Police Clearance Certificate generated & transmitted to Passport Office!");
+      setMessage(
+        clearanceStatus === "ADVERSE"
+          ? "Adverse report recorded & transmitted! Application has been REJECTED."
+          : "Police Clearance Certificate generated & transmitted to Passport Office!"
+      );
       await fetchEnquiries();
     } catch (err) {
       console.error("Submit error:", err);
@@ -82,8 +92,11 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
   const pendingCount = enquiries.filter(
     (e) => e.status === "POLICE_VERIFICATION_PENDING"
   ).length;
-  const completedCount = enquiries.filter(
-    (e) => e.policeReports && e.policeReports.length > 0
+  const clearedCount = enquiries.filter(
+    (e) => (e.policeReports?.[0]?.clearanceStatus === "CLEARED" || e.status === "POLICE_VERIFICATION_COMPLETED") && e.status !== "REJECTED"
+  ).length;
+  const adverseCount = enquiries.filter(
+    (e) => e.policeReports?.[0]?.clearanceStatus === "ADVERSE" || e.status === "REJECTED"
   ).length;
 
   return (
@@ -131,18 +144,16 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
 
           <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg">
             <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-              Issued Clearance Certificates
+              Clearance Granted
             </p>
-            <p className="text-3xl font-extrabold text-emerald-300 mt-1">{completedCount}</p>
+            <p className="text-3xl font-extrabold text-emerald-300 mt-1">{clearedCount}</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Assigned Police Jurisdiction
+          <div className="rounded-2xl border border-red-500/20 bg-red-950/20 p-5 shadow-lg">
+            <p className="text-[10px] font-bold text-red-400 uppercase tracking-wider">
+              Adverse Reports (Rejected)
             </p>
-            <p className="text-base font-bold text-white mt-1">
-              Central Police Station Division
-            </p>
+            <p className="text-3xl font-extrabold text-red-300 mt-1">{adverseCount}</p>
           </div>
         </div>
 
@@ -178,14 +189,30 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
               <div className="divide-y divide-slate-800/80 max-h-[520px] overflow-y-auto">
                 {enquiries.map((enq) => {
                   const isSelected = selectedEnquiry?.id === enq.id;
+                  const latestReport = enq.policeReports?.[0];
                   const isPending = enq.status === "POLICE_VERIFICATION_PENDING";
+                  const isAdverse = latestReport?.clearanceStatus === "ADVERSE" || enq.status === "REJECTED";
 
                   return (
                     <div
                       key={enq.id}
-                      onClick={() => setSelectedEnquiry(enq)}
+                      onClick={() => {
+                        setSelectedEnquiry(enq);
+                        if (enq.policeReports && enq.policeReports.length > 0) {
+                          const latest = enq.policeReports[0];
+                          setClearanceStatus(latest.clearanceStatus);
+                          setRemarks(latest.remarks);
+                        } else {
+                          setClearanceStatus("CLEARED");
+                          setRemarks("Physical site verification conducted at residential address. Interacted with local residents. CCTNS & Court records clear with no adverse criminal history.");
+                        }
+                      }}
                       className={`p-4 cursor-pointer transition flex items-center justify-between hover:bg-slate-800/60 ${
-                        isSelected ? "bg-emerald-500/10 border-l-4 border-emerald-500" : ""
+                        isSelected
+                          ? isAdverse
+                            ? "bg-red-500/10 border-l-4 border-red-500"
+                            : "bg-emerald-500/10 border-l-4 border-emerald-500"
+                          : ""
                       }`}
                     >
                       <div className="space-y-1">
@@ -197,10 +224,16 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                             className={`rounded-full border px-2 py-0.5 text-[9px] font-bold ${
                               isPending
                                 ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
+                                : isAdverse
+                                ? "bg-red-500/10 text-red-400 border-red-500/30"
                                 : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                             }`}
                           >
-                            {isPending ? "SITE CHECK PENDING" : "CLEARANCE TRANSMITTED"}
+                            {isPending
+                              ? "SITE CHECK PENDING"
+                              : isAdverse
+                              ? "ADVERSE (REJECTED)"
+                              : "CLEARANCE TRANSMITTED"}
                           </span>
                         </div>
 
@@ -213,7 +246,7 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                         </p>
                       </div>
 
-                      <span className="text-xs text-emerald-400 font-bold">
+                      <span className={`text-xs font-bold ${isAdverse ? "text-red-400" : "text-emerald-400"}`}>
                         Examine →
                       </span>
                     </div>
@@ -270,24 +303,44 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 </div>
 
                 {/* Existing Report Display if already submitted */}
-                {selectedEnquiry.policeReports?.length > 0 && (
-                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3.5 text-xs space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-emerald-400 uppercase text-[10px]">
-                        Transmitted Clearance Certificate
-                      </span>
-                      <span className="font-mono text-[10px] text-slate-400">
-                        {selectedEnquiry.policeReports[0].reportId}
-                      </span>
+                {selectedEnquiry.policeReports?.length > 0 && (() => {
+                  const latestReport = selectedEnquiry.policeReports[0];
+                  const isAdverse = latestReport.clearanceStatus === "ADVERSE" || selectedEnquiry.status === "REJECTED";
+
+                  return (
+                    <div
+                      className={`rounded-xl border p-3.5 text-xs space-y-1 ${
+                        isAdverse
+                          ? "border-red-500/40 bg-red-950/30"
+                          : "border-emerald-500/30 bg-emerald-950/20"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={`font-bold uppercase text-[10px] ${
+                            isAdverse ? "text-red-400" : "text-emerald-400"
+                          }`}
+                        >
+                          {isAdverse
+                            ? "⚠️ Transmitted Adverse Report (Application Rejected)"
+                            : "✓ Transmitted Clearance Certificate"}
+                        </span>
+                        <span className="font-mono text-[10px] text-slate-400">
+                          {latestReport.reportId}
+                        </span>
+                      </div>
+                      <p className="font-semibold text-white">
+                        Clearance Decision:{" "}
+                        <span className={isAdverse ? "text-red-400 font-bold" : "text-emerald-400 font-bold"}>
+                          {isAdverse ? "ADVERSE (REJECTED)" : "CLEARED"}
+                        </span>
+                      </p>
+                      <p className="text-slate-300 text-[11px] leading-relaxed">
+                        {latestReport.remarks}
+                      </p>
                     </div>
-                    <p className="font-semibold text-white">
-                      Clearance: {selectedEnquiry.policeReports[0].clearanceStatus}
-                    </p>
-                    <p className="text-slate-300 text-[11px]">
-                      {selectedEnquiry.policeReports[0].remarks}
-                    </p>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Form controls */}
                 <div>
@@ -342,9 +395,15 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50 shadow-lg shadow-emerald-600/30"
+                  className={`w-full rounded-xl px-4 py-2.5 text-xs font-bold text-white transition disabled:opacity-50 shadow-lg ${
+                    clearanceStatus === "ADVERSE"
+                      ? "bg-red-600 hover:bg-red-700 shadow-red-600/30"
+                      : "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/30"
+                  }`}
                 >
-                  {submitting ? "Transmitting Certificate..." : "Transmit Police Clearance Report →"}
+                  {submitting
+                    ? (clearanceStatus === "ADVERSE" ? "Transmitting Adverse Report..." : "Transmitting Certificate...")
+                    : (clearanceStatus === "ADVERSE" ? "Transmit Adverse Report (Reject Application) →" : "Transmit Police Clearance Report →")}
                 </button>
               </form>
             )}

@@ -47,6 +47,7 @@ export async function GET(req: Request) {
           documents: true,
           appointment: true,
           policeReports: {
+            orderBy: { id: "desc" },
             include: {
               police: true,
             },

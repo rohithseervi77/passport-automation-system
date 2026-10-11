@@ -407,7 +407,7 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                 {/* Police Reports section */}
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Police Clearance Certificate
+                    Police Verification & Clearance Status
                   </h4>
                   {selectedApp.policeReports?.length === 0 ? (
                     <p className="text-xs text-slate-500 italic">
@@ -416,19 +416,33 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                         : "Police enquiry not yet initiated."}
                     </p>
                   ) : (
-                    <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3 text-xs space-y-1">
-                      <div className="flex items-center justify-between font-bold">
-                        <span className="text-emerald-400">
-                          Status: {selectedApp.policeReports[0].clearanceStatus}
-                        </span>
-                        <span className="font-mono text-slate-400 text-[10px]">
-                          {selectedApp.policeReports[0].reportId}
-                        </span>
-                      </div>
-                      <p className="text-slate-300">
-                        {selectedApp.policeReports[0].remarks || "Residential & criminal checks clear."}
-                      </p>
-                    </div>
+                    (() => {
+                      const report = selectedApp.policeReports[0];
+                      const isAdverse = report.clearanceStatus === "ADVERSE" || selectedApp.status === "REJECTED";
+                      return (
+                        <div
+                          className={`rounded-xl border p-3 text-xs space-y-1 ${
+                            isAdverse
+                              ? "border-red-500/30 bg-red-950/20"
+                              : "border-emerald-500/30 bg-emerald-950/20"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between font-bold">
+                            <span className={isAdverse ? "text-red-400" : "text-emerald-400"}>
+                              {isAdverse
+                                ? "⚠️ Adverse Police Report (Verification Failed - Rejected)"
+                                : "✓ Police Clearance: CLEARED"}
+                            </span>
+                            <span className="font-mono text-slate-400 text-[10px]">
+                              {report.reportId}
+                            </span>
+                          </div>
+                          <p className="text-slate-300">
+                            {report.remarks || (isAdverse ? "Adverse findings during police enquiry." : "Residential & criminal checks clear.")}
+                          </p>
+                        </div>
+                      );
+                    })()
                   )}
                 </div>
 

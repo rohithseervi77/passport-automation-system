@@ -33,6 +33,7 @@ export async function GET() {
         applicant: true,
         documents: true,
         policeReports: {
+          orderBy: { id: "desc" },
           include: {
             police: true,
           },

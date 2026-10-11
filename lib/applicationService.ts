@@ -17,6 +17,10 @@ export async function transitionApplicationStatus(
 
   const currentStatus = application.status;
 
+  if (currentStatus === newStatus) {
+    return application;
+  }
+
   if (!canTransition(currentStatus, newStatus)) {
     throw new Error(`Illegal state transition from ${currentStatus} to ${newStatus}`);
   }
