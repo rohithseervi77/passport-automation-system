@@ -90,13 +90,13 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
   }
 
   const pendingCount = enquiries.filter(
-    (e) => e.status === "POLICE_VERIFICATION_PENDING"
+    (e) => e.status === "POLICE_VERIFICATION_PENDING" && (!e.policeReports || e.policeReports.length === 0)
   ).length;
   const clearedCount = enquiries.filter(
-    (e) => (e.policeReports?.[0]?.clearanceStatus === "CLEARED" || e.status === "POLICE_VERIFICATION_COMPLETED") && e.status !== "REJECTED"
+    (e) => e.policeReports?.[0]?.clearanceStatus === "CLEARED"
   ).length;
   const adverseCount = enquiries.filter(
-    (e) => e.policeReports?.[0]?.clearanceStatus === "ADVERSE" || e.status === "REJECTED"
+    (e) => e.policeReports?.[0]?.clearanceStatus === "ADVERSE" || (e.status === "REJECTED" && (!e.policeReports || e.policeReports.length === 0))
   ).length;
 
   return (
@@ -190,8 +190,8 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 {enquiries.map((enq) => {
                   const isSelected = selectedEnquiry?.id === enq.id;
                   const latestReport = enq.policeReports?.[0];
-                  const isPending = enq.status === "POLICE_VERIFICATION_PENDING";
-                  const isAdverse = latestReport?.clearanceStatus === "ADVERSE" || enq.status === "REJECTED";
+                  const isPending = enq.status === "POLICE_VERIFICATION_PENDING" && (!latestReport);
+                  const isAdverse = latestReport ? latestReport.clearanceStatus === "ADVERSE" : enq.status === "REJECTED";
 
                   return (
                     <div
@@ -305,7 +305,7 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
                 {/* Existing Report Display if already submitted */}
                 {selectedEnquiry.policeReports?.length > 0 && (() => {
                   const latestReport = selectedEnquiry.policeReports[0];
-                  const isAdverse = latestReport.clearanceStatus === "ADVERSE" || selectedEnquiry.status === "REJECTED";
+                  const isAdverse = latestReport.clearanceStatus === "ADVERSE";
 
                   return (
                     <div
