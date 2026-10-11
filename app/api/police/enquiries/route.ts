@@ -20,13 +20,12 @@ export async function GET() {
 
     const police = user.police;
 
-    // Applications that either need police enquiry or have already had a report submitted
+    // Applications in system available for police background and address verification
     const enquiries = await prisma.application.findMany({
       where: {
-        OR: [
-          { status: "POLICE_VERIFICATION_PENDING" },
-          { policeReports: { some: {} } },
-        ],
+        status: {
+          notIn: ["CANCELLED", "EXPIRED"],
+        },
       },
       orderBy: { id: "desc" },
       include: {

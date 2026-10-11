@@ -86,14 +86,16 @@ export async function POST(req: Request) {
     const isSubmit = action === "SUBMIT";
     const existingApp = applicant.applications[0];
 
-    // If an application already exists in DRAFT state, we can update it or submit it
-    if (existingApp && (existingApp.status === "DRAFT" || !isSubmit)) {
+    // If an application already exists for this applicant, update it
+    if (existingApp) {
       const updated = await prisma.application.update({
         where: { id: existingApp.id },
         data: {
           passportType,
-          status: isSubmit ? "SUBMITTED" : "DRAFT",
-          submissionDate: isSubmit ? new Date() : existingApp.submissionDate,
+          status: isSubmit
+            ? (existingApp.status === "POLICE_VERIFICATION_PENDING" ? "POLICE_VERIFICATION_PENDING" : "SUBMITTED")
+            : existingApp.status,
+          submissionDate: isSubmit ? (existingApp.submissionDate || new Date()) : existingApp.submissionDate,
         },
         include: {
           documents: true,

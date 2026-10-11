@@ -141,6 +141,8 @@ export async function POST(request: Request) {
         );
       }
 
+      const initialAppId = `PAS-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
+
       createdUser = await prisma.user.create({
         data: {
           username,
@@ -153,11 +155,23 @@ export async function POST(request: Request) {
               name,
               dob: new Date(dob),
               address,
+              applications: {
+                create: {
+                  applicationId: initialAppId,
+                  passportType: "REGULAR (36 Pages)",
+                  status: "POLICE_VERIFICATION_PENDING",
+                  submissionDate: new Date(),
+                },
+              },
             },
           },
         },
         include: {
-          applicant: true,
+          applicant: {
+            include: {
+              applications: true,
+            },
+          },
         },
       });
 
