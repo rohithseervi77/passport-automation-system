@@ -1,7 +1,4 @@
 import { ImageResponse } from 'next/og'
-
-export const runtime = 'edge'
-
 export const alt = 'Passport Automation System'
 export const size = {
   width: 1200,

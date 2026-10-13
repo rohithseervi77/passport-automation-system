@@ -14,6 +14,7 @@ interface NavbarProps {
 export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
   const pathname = usePathname();
   const [showSupportModal, setShowSupportModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const applicantLinks = [
     { href: "/applicant/dashboard", label: "Overview", icon: "📊" },
@@ -139,9 +140,44 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
               {role}
             </span>
 
+            {role === "APPLICANT" && (
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="xl:hidden flex items-center justify-center p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition border border-slate-800"
+                aria-label="Toggle Navigation Menu"
+              >
+                <span className="text-sm leading-none">{mobileMenuOpen ? "✕" : "☰"}</span>
+              </button>
+            )}
             <LogoutButton />
           </div>
         </div>
+        {/* Mobile Navigation Drawer for Applicant */}
+        {role === "APPLICANT" && mobileMenuOpen && (
+          <div className="xl:hidden border-t border-slate-800 bg-slate-950/95 px-6 py-3 backdrop-blur-xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {applicantLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+                      isActive
+                        ? "bg-blue-600/20 text-blue-400 border border-blue-500/40 shadow-sm shadow-blue-500/10"
+                        : "text-slate-400 hover:text-white hover:bg-slate-900/80"
+                    }`}
+                  >
+                    <span className="text-xs">{link.icon}</span>
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Support / Help Modal */}

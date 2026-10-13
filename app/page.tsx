@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white relative">
-      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full">
+      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full hidden md:block">
         <GlowCursor color="#3b82f6" secondaryColor="#93c5fd" />
       </div>
       <div className="relative z-10">

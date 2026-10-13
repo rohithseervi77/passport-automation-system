@@ -39,7 +39,14 @@ export async function POST(req: Request) {
     }
 
     // Verify date of birth matching
-    const inputDob = new Date(dob).toISOString().split("T")[0];
+    const parsedDob = new Date(dob);
+    if (isNaN(parsedDob.getTime())) {
+      return NextResponse.json(
+        { error: "Invalid Date of Birth format. Please select a valid date." },
+        { status: 400 }
+      );
+    }
+    const inputDob = parsedDob.toISOString().split("T")[0];
     const recordDob = new Date(application.applicant.dob).toISOString().split("T")[0];
 
     if (inputDob !== recordDob) {

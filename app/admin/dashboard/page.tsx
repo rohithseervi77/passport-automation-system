@@ -34,103 +34,156 @@ export default function AdminDashboard() {
     }
   }
 
+  function getStatusBadge(status: string) {
+    if (status.includes("APPROVED") || status.includes("ISSUED") || status.includes("DISPATCHED")) {
+      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+    }
+    if (status.includes("REJECTED")) {
+      return "bg-red-500/10 text-red-400 border-red-500/30";
+    }
+    if (status.includes("PENDING") || status.includes("VERIFICATION")) {
+      return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+    }
+    return "bg-blue-500/10 text-blue-400 border-blue-500/30";
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-slate-900 text-white p-4 flex justify-between items-center shadow-md">
-        <h1 className="text-2xl font-bold tracking-tight">System Admin Console</h1>
-        <button 
-          onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); router.push('/login'); }}
-          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md font-medium transition"
-        >
-          Logout
-        </button>
+    <div className="min-h-screen bg-slate-950 text-white pb-16">
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl transition-all">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-600 font-bold text-white shadow-lg shadow-purple-600/30">
+              PAS
+            </div>
+            <div>
+              <h1 className="font-bold text-base sm:text-lg leading-tight tracking-tight">
+                System Administration Console
+              </h1>
+              <p className="text-xs text-slate-400">
+                Centralized Governance & Workload Oversight
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase text-purple-300">
+              ADMIN
+            </span>
+            <button 
+              onClick={async () => {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                router.push('/login');
+              }}
+              className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-300 hover:bg-red-500/20 transition"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </header>
 
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Application Workload</h2>
-          <select 
-            value={filter} 
-            onChange={(e) => { setFilter(e.target.value); setPage(1); }}
-            className="border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="ALL">All Statuses</option>
-            <option value="SUBMITTED">Submitted</option>
-            <option value="DOCUMENT_VERIFIED">Doc Verified</option>
-            <option value="POLICE_VERIFICATION_PENDING">Police Pending</option>
-            <option value="APPROVED">Approved</option>
-            <option value="PASSPORT_PRINTING">Printing</option>
-          </select>
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
+        {/* Controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">System Application Workload</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Overview of all incoming, verified, and pending citizen passport requests.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label htmlFor="filter-status" className="text-xs text-slate-400">Filter:</label>
+            <select 
+              id="filter-status"
+              value={filter} 
+              onChange={(e) => { setFilter(e.target.value); setPage(1); }}
+              className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-white outline-none focus:border-blue-500 transition"
+            >
+              <option value="ALL">All Statuses</option>
+              <option value="SUBMITTED">Submitted</option>
+              <option value="UNDER_OFFICER_VERIFICATION">Officer Verification</option>
+              <option value="POLICE_VERIFICATION_PENDING">Police Pending</option>
+              <option value="POLICE_CLEARED">Police Cleared</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+              <option value="PASSPORT_ISSUED">Passport Issued</option>
+              <option value="PASSPORT_DISPATCHED">Passport Dispatched</option>
+            </select>
+          </div>
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div>
+          <div className="flex justify-center items-center h-64 rounded-2xl border border-slate-800 bg-slate-900/40">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
           </div>
         ) : (
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">App ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applicant</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Update</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {applications.map((app) => (
-                  <tr key={app.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                      {app.applicationId}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {app.applicant?.name || "Unknown"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {app.passportType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {app.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(app.updatedAt).toLocaleDateString()}
-                    </td>
-                  </tr>
-                ))}
-                {applications.length === 0 && (
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 shadow-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-800 text-left">
+                <thead className="bg-slate-950/80 text-xs font-semibold uppercase tracking-wider text-slate-400">
                   <tr>
-                    <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                      No applications found.
-                    </td>
+                    <th className="px-6 py-3.5">Application ID</th>
+                    <th className="px-6 py-3.5">Applicant Name</th>
+                    <th className="px-6 py-3.5">Type</th>
+                    <th className="px-6 py-3.5">Status</th>
+                    <th className="px-6 py-3.5">Last Updated</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-              <div className="flex-1 flex justify-between sm:hidden">
-                <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50">Previous</button>
-                <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50">Next</button>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60 text-sm">
+                  {applications.map((app) => (
+                    <tr key={app.id} className="hover:bg-slate-800/30 transition">
+                      <td className="px-6 py-4 font-mono font-bold text-blue-400 whitespace-nowrap">
+                        {app.applicationId}
+                      </td>
+                      <td className="px-6 py-4 font-medium text-white whitespace-nowrap">
+                        {app.applicant?.name || "Unknown"}
+                      </td>
+                      <td className="px-6 py-4 text-slate-300 text-xs whitespace-nowrap">
+                        {app.passportType}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${getStatusBadge(app.status)}`}>
+                          {app.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
+                        {new Date(app.updatedAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                  {applications.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-sm text-slate-500">
+                        No applications found for the selected status.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="flex items-center justify-between border-t border-slate-800 bg-slate-950/60 px-6 py-3.5 text-xs text-slate-400">
+              <div>
+                Showing page <span className="font-semibold text-white">{page}</span> of <span className="font-semibold text-white">{totalPages}</span>
               </div>
-              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm text-gray-700">
-                    Showing page <span className="font-medium">{page}</span> of <span className="font-medium">{totalPages}</span>
-                  </p>
-                </div>
-                <div>
-                  <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50">
-                      Previous
-                    </button>
-                    <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50">
-                      Next
-                    </button>
-                  </nav>
-                </div>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setPage(p => Math.max(1, p - 1))} 
+                  disabled={page === 1}
+                  className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 font-medium text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                >
+                  Previous
+                </button>
+                <button 
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))} 
+                  disabled={page === totalPages}
+                  className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 font-medium text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                >
+                  Next
+                </button>
               </div>
             </div>
           </div>

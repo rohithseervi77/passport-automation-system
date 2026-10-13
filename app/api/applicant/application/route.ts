@@ -20,6 +20,7 @@ export async function GET() {
             documents: true,
             appointment: true,
             policeReports: {
+              orderBy: { id: "desc" },
               include: {
                 police: true,
               },

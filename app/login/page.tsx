@@ -51,6 +51,8 @@ export default function LoginPage() {
         router.push("/officer/dashboard");
       } else if (data.user.role === "POLICE") {
         router.push("/police/dashboard");
+      } else if (data.user.role === "ADMIN") {
+        router.push("/admin/dashboard");
       } else {
         setError("Unknown user role.");
         setLoading(false);
@@ -110,7 +112,7 @@ export default function LoginPage() {
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
               ⚡ Quick Fill Demo Accounts
             </p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => fillCredentials("applicant_demo", "Applicant@123")}
@@ -131,6 +133,13 @@ export default function LoginPage() {
                 className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-2 text-xs font-medium text-emerald-300 hover:bg-emerald-500/20 transition text-center"
               >
                 👮 Police
+              </button>
+              <button
+                type="button"
+                onClick={() => fillCredentials("admin_demo", "Admin@123")}
+                className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-2 py-2 text-xs font-medium text-purple-300 hover:bg-purple-500/20 transition text-center"
+              >
+                🛡️ Admin
               </button>
             </div>
           </div>
