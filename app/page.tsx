@@ -301,10 +301,12 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex gap-6 text-xs text-slate-400">
+          <div className="flex flex-wrap gap-4 sm:gap-6 text-xs text-slate-400">
             <Link href="/track" className="hover:text-white">Public Tracker</Link>
             <Link href="/login" className="hover:text-white">Sign In</Link>
             <Link href="/register" className="hover:text-white">Register</Link>
+            <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white">Terms of Service</Link>
           </div>
         </div>
       </footer>
