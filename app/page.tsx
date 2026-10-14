@@ -4,6 +4,7 @@ import ShinyText from "@/components/ShinyText";
 import GlowCursor from "@/components/GlowCursor";
 import { TextEffect } from "@/components/TextEffect";
 import { InView } from "@/components/InView";
+import { TricolorRibbon, PortalStats, WorkflowRoadmap, CitizenFAQ } from "@/components/LandingEnhancements";
 
 export default function Home() {
   const jsonLd = {
@@ -25,6 +26,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <TricolorRibbon />
       {/* Navigation Bar */}
       <nav className="border-b border-slate-800 bg-slate-950/95 sticky top-0 z-50 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -152,6 +154,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <PortalStats />
+
+      <WorkflowRoadmap />
 
       {/* Features Section */}
       <section
@@ -290,6 +296,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <CitizenFAQ />
 
       {/* Footer */}
       <footer className="border-t border-slate-800">

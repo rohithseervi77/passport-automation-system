@@ -49,6 +49,7 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl transition-all print:hidden">
+        <div className="h-0.5 w-full bg-gradient-to-r from-amber-500 via-white to-emerald-500 opacity-90" />
         {/* Top Ministry Ribbon */}
         <div className="bg-gradient-to-r from-blue-900/40 via-slate-900 to-amber-950/30 px-6 py-1 text-[11px] text-slate-400 border-b border-slate-900 flex justify-between items-center">
           <div className="flex items-center gap-2">
