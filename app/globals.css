@@ -70,3 +70,27 @@ body {
     background: #ffffff !important;
   }
 }
+
+
+/* Passport Leather & Gold Foil Stamping */
+.passport-gold-gradient {
+  background: linear-gradient(135deg, #f7d070 0%, #d4af37 35%, #aa7c11 70%, #ffd978 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.passport-gold-border {
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.passport-gold-glow {
+  box-shadow: 0 0 25px -5px rgba(212, 175, 55, 0.25);
+}
+
+.passport-booklet-shadow {
+  box-shadow: 
+    -12px 14px 28px -6px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset -2px 0 8px rgba(0, 0, 0, 0.6),
+    inset 4px 0 6px rgba(255, 255, 255, 0.12);
+}

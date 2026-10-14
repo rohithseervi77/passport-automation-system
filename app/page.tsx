@@ -5,6 +5,8 @@ import GlowCursor from "@/components/GlowCursor";
 import { TextEffect } from "@/components/TextEffect";
 import { InView } from "@/components/InView";
 import { TricolorRibbon, PortalStats, WorkflowRoadmap, CitizenFAQ } from "@/components/LandingEnhancements";
+import PassportCover from "@/components/PassportCover";
+import PassportIndexExplorer from "@/components/PassportIndexExplorer";
 
 export default function Home() {
   const jsonLd = {
@@ -103,54 +105,67 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-        <div className="max-w-4xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs text-blue-300 font-medium">
-            <span>🇮🇳</span> Centralized Passport Seva Automation Platform
+      <section id="home" className="mx-auto max-w-7xl px-6 py-16 md:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-300 font-semibold shadow-inner">
+              <span>🇮🇳</span> Centralized Sovereign Passport Seva Platform
+            </div>
+
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
+              Sovereign passport issuance,
+              <span className="passport-gold-gradient block sm:inline-block font-serif italic">
+                {" "}digitized & refined.
+              </span>
+            </h1>
+
+            <TextEffect
+              as="p"
+              per="word"
+              preset="fade-in-blur"
+              speedReveal={1.5}
+              className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400"
+            >
+              Passport Automation System (PAS) digitizes the complete passport issuance lifecycle: online applicant registration, document verification, biometric appointment booking, statutory fee processing, police background enquiry, booklet printing, and Speed Post tracking.
+            </TextEffect>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Link
+                href="/register"
+                className="rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-xl shadow-blue-600/30"
+              >
+                Start New Application →
+              </Link>
+
+              <Link
+                href="/track"
+                className="rounded-xl border border-blue-500/40 bg-blue-950/40 px-6 py-3.5 text-sm font-semibold text-blue-300 hover:bg-blue-900/50 transition"
+              >
+                🔍 Track Application Status
+              </Link>
+
+              <Link
+                href="#passport-explorer"
+                className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-3.5 text-sm font-semibold text-amber-300 hover:bg-amber-500/20 transition flex items-center gap-2"
+              >
+                <span>📘</span>
+                <span>Passport Index Explorer</span>
+              </Link>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
-            Passport processing,
-            <ShinyText
-              text=" digitized & simplified."
-              color="#3b82f6"
-              shineColor="#93c5fd"
-              speed={2.5}
-              className="ml-2 block sm:inline-block"
-            />
-          </h1>
-
-          <TextEffect
-            as="p"
-            per="word"
-            preset="fade-in-blur"
-            speedReveal={1.5}
-            className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400"
-          >
-            Passport Automation System (PAS) digitizes the complete passport issuance lifecycle: online applicant registration, document verification, biometric appointment booking, statutory fee processing, police background enquiry, booklet printing, and Speed Post tracking.
-          </TextEffect>
-
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link
-              href="/register"
-              className="rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-xl shadow-blue-600/30"
-            >
-              Start New Application →
-            </Link>
-
-            <Link
-              href="/track"
-              className="rounded-xl border border-blue-500/40 bg-blue-950/40 px-6 py-3.5 text-sm font-semibold text-blue-300 hover:bg-blue-900/50 transition"
-            >
-              🔍 Track Application Status
-            </Link>
-
-            <Link
-              href="/login"
-              className="rounded-xl border border-slate-800 px-6 py-3.5 text-sm font-semibold text-slate-300 hover:bg-slate-900 transition"
-            >
-              Portal Login
-            </Link>
+          {/* Right Column: Hero Physical 3D Passport Cover */}
+          <div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center relative">
+            <div className="absolute -inset-6 bg-gradient-to-r from-blue-600/20 via-amber-500/20 to-indigo-600/20 rounded-3xl blur-3xl opacity-50 pointer-events-none" />
+            <div className="relative group">
+              <PassportCover type="REGULAR" size="lg" interactive={true} />
+              <div className="mt-5 text-center">
+                <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-amber-300 bg-slate-900/90 border border-slate-800 px-4 py-1.5 rounded-full shadow-2xl">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Republic of India • Type P e-Passport Booklet
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -158,6 +173,8 @@ export default function Home() {
       <PortalStats />
 
       <WorkflowRoadmap />
+
+      <PassportIndexExplorer />
 
       {/* Features Section */}
       <section

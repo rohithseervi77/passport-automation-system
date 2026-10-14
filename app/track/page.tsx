@@ -1,5 +1,7 @@
 "use client";
 
+import PassportCover from "@/components/PassportCover";
+
 import { useState } from "react";
 import Link from "next/link";
 
@@ -158,21 +160,33 @@ export default function PublicTrackPage() {
           <div className="space-y-6">
             {/* Header / Summary Card */}
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 md:p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-                <div>
+              <div className="flex flex-col sm:flex-row items-center gap-6 border-b border-slate-800 pb-6">
+                <div className="shrink-0 hidden sm:block">
+                  <PassportCover
+                    type={result.application.passportType?.toLowerCase().includes("diplomatic") ? "DIPLOMATIC" : result.application.passportType?.toLowerCase().includes("official") ? "OFFICIAL" : "REGULAR"}
+                    holderName={result.applicant.name}
+                    applicationId={result.application.applicationId}
+                    size="sm"
+                  />
+                </div>
+
+                <div className="flex-1 space-y-1.5 text-center sm:text-left">
                   <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                    Applicant Name
+                    Applicant Dossier & Booklet Registry
                   </span>
-                  <h3 className="text-2xl font-bold text-white mt-0.5">
+                  <h3 className="text-2xl font-extrabold text-white">
                     {result.applicant.name}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Application ID: <span className="font-mono text-blue-400">{result.application.applicationId}</span> • Type: {result.application.passportType}
+                  <p className="text-xs text-slate-400">
+                    Application Ref: <span className="font-mono text-blue-400 font-bold">{result.application.applicationId}</span> • Category: {result.application.passportType}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    Resident Address: {result.applicant.address}
                   </p>
                 </div>
 
-                <div className="text-left sm:text-right flex flex-col items-start sm:items-end gap-2">
-                  <span className="rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-400">
+                <div className="text-center sm:text-right flex flex-col items-center sm:items-end gap-2.5 shrink-0">
+                  <span className="rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-1 text-xs font-semibold text-emerald-400 shadow-sm shadow-emerald-500/10">
                     {result.application.status.replace(/_/g, " ")}
                   </span>
                   <button
@@ -180,7 +194,7 @@ export default function PublicTrackPage() {
                     onClick={handlePrint}
                     className="print:hidden rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700 transition flex items-center gap-1.5"
                   >
-                    <span>🖨️</span> Print Status Acknowledgement
+                    <span>🖨️</span> Print Slip
                   </button>
                 </div>
               </div>

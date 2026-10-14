@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
+import PassportCover from "@/components/PassportCover";
 import Link from "next/link";
 
 export default async function ApplicantDashboard() {
@@ -106,8 +107,8 @@ export default async function ApplicantDashboard() {
 
         {/* Live Application Progression Card */}
         <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900/90 to-blue-950/40 p-6 md:p-8 shadow-2xl relative overflow-hidden mb-10">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-xl">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="space-y-4 max-w-xl">
               <div className="flex items-center gap-3">
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                   Active Application Status
@@ -125,43 +126,64 @@ export default async function ApplicantDashboard() {
                 </span>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-extrabold text-white">
-                {currentApp ? currentApp.applicationId : "Start Your Digital Passport Application"}
-              </h3>
+              <div>
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white">
+                  {currentApp ? currentApp.applicationId : "Start Your Digital Passport Application"}
+                </h3>
+                <p className="text-xs text-slate-300 mt-1">
+                  {currentApp
+                    ? `Category: ${currentApp.passportType} • Current Step: ${progressInfo.label} (${progressInfo.desc})`
+                    : "Begin your streamlined application process with online verification and biometric scheduling."}
+                </p>
+              </div>
 
-              <p className="text-xs text-slate-300">
-                {currentApp
-                  ? `Category: ${currentApp.passportType} • Current Step: ${progressInfo.label} (${progressInfo.desc})`
-                  : "Begin your streamlined application process with online verification and biometric scheduling."}
-              </p>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+                {currentApp ? (
+                  <>
+                    <Link
+                      href="/applicant/status"
+                      className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2"
+                    >
+                      <span>Track Live Status</span>
+                      <span>→</span>
+                    </Link>
+                    <Link
+                      href="/applicant/payment"
+                      className="rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition flex items-center justify-center gap-1.5"
+                    >
+                      <span>💳</span>
+                      <span>Fee Receipt</span>
+                    </Link>
+                    <Link
+                      href="/applicant/documents"
+                      className="rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition flex items-center justify-center gap-1.5"
+                    >
+                      <span>📁</span>
+                      <span>Documents Hub</span>
+                    </Link>
+                  </>
+                ) : (
+                  <Link
+                    href="/applicant/application"
+                    className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
+                  >
+                    Start Application Now →
+                  </Link>
+                )}
+              </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              {currentApp ? (
-                <>
-                  <Link
-                    href="/applicant/status"
-                    className="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2"
-                  >
-                    <span>Track Live Status</span>
-                    <span>→</span>
-                  </Link>
-                  <Link
-                    href="/applicant/payment"
-                    className="rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition flex items-center justify-center gap-1.5"
-                  >
-                    <span>💳</span>
-                    <span>Fee Receipt</span>
-                  </Link>
-                </>
-              ) : (
-                <Link
-                  href="/applicant/application"
-                  className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
-                >
-                  Start Application Now →
-                </Link>
-              )}
+            {/* Passport Booklet Card on Right */}
+            <div className="shrink-0 hidden md:flex flex-col items-center justify-center bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+              <PassportCover
+                type={currentApp?.passportType?.toLowerCase().includes("diplomatic") ? "DIPLOMATIC" : currentApp?.passportType?.toLowerCase().includes("official") ? "OFFICIAL" : "REGULAR"}
+                holderName={applicant.name}
+                applicationId={currentApp?.applicationId}
+                size="sm"
+              />
+              <span className="text-[10px] font-mono text-slate-400 mt-2">
+                Republic of India e-Passport
+              </span>
             </div>
           </div>
 
