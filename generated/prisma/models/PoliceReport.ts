@@ -596,6 +596,7 @@ export type PoliceReportCreateOrConnectWithoutPoliceInput = {
 
 export type PoliceReportCreateManyPoliceInputEnvelope = {
   data: Prisma.PoliceReportCreateManyPoliceInput | Prisma.PoliceReportCreateManyPoliceInput[]
+  skipDuplicates?: boolean
 }
 
 export type PoliceReportUpsertWithWhereUniqueWithoutPoliceInput = {
@@ -660,6 +661,7 @@ export type PoliceReportCreateOrConnectWithoutApplicationInput = {
 
 export type PoliceReportCreateManyApplicationInputEnvelope = {
   data: Prisma.PoliceReportCreateManyApplicationInput | Prisma.PoliceReportCreateManyApplicationInput[]
+  skipDuplicates?: boolean
 }
 
 export type PoliceReportUpsertWithWhereUniqueWithoutApplicationInput = {
@@ -1532,6 +1534,7 @@ export type PoliceReportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many PoliceReports.
    */
   data: Prisma.PoliceReportCreateManyInput | Prisma.PoliceReportCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1550,6 +1553,7 @@ export type PoliceReportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many PoliceReports.
    */
   data: Prisma.PoliceReportCreateManyInput | Prisma.PoliceReportCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

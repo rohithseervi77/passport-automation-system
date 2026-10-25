@@ -1289,6 +1289,7 @@ export type AppointmentCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many Appointments.
    */
   data: Prisma.AppointmentCreateManyInput | Prisma.AppointmentCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1307,6 +1308,7 @@ export type AppointmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many Appointments.
    */
   data: Prisma.AppointmentCreateManyInput | Prisma.AppointmentCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

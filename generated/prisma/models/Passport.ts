@@ -543,6 +543,7 @@ export type PassportCreateOrConnectWithoutOfficerInput = {
 
 export type PassportCreateManyOfficerInputEnvelope = {
   data: Prisma.PassportCreateManyOfficerInput | Prisma.PassportCreateManyOfficerInput[]
+  skipDuplicates?: boolean
 }
 
 export type PassportUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -1416,6 +1417,7 @@ export type PassportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many Passports.
    */
   data: Prisma.PassportCreateManyInput | Prisma.PassportCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1434,6 +1436,7 @@ export type PassportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many Passports.
    */
   data: Prisma.PassportCreateManyInput | Prisma.PassportCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

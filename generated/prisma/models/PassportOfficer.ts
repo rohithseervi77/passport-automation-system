@@ -1317,6 +1317,7 @@ export type PassportOfficerCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many PassportOfficers.
    */
   data: Prisma.PassportOfficerCreateManyInput | Prisma.PassportOfficerCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1335,6 +1336,7 @@ export type PassportOfficerCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many PassportOfficers.
    */
   data: Prisma.PassportOfficerCreateManyInput | Prisma.PassportOfficerCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

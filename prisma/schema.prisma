@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 // =====================================================
@@ -35,6 +35,9 @@ model User {
   notifications     Notification[]
   auditLogs         AuditLog[]
   resetTokens       PasswordResetToken[]
+
+  @@index([role])
+  @@index([createdAt])
 }
 
 model Admin {
@@ -42,6 +45,8 @@ model Admin {
   adminCode   String @unique
   userId      Int    @unique
   user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 // =====================================================
@@ -59,6 +64,8 @@ model Applicant {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   applications Application[]
+
+  @@index([userId])
 }
 
 // =====================================================
@@ -75,6 +82,8 @@ model PassportOfficer {
 
   assignedApplications Application[]
   passports           Passport[]
+
+  @@index([userId])
 }
 
 // =====================================================
@@ -90,6 +99,8 @@ model Police {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   reports     PoliceReport[]
+
+  @@index([userId])
 }
 
 // =====================================================
@@ -185,6 +196,14 @@ model Application {
   
   statusHistory  ApplicationStatusHistory[]
   payments       Payment[]
+
+  @@index([applicantId])
+  @@index([officerId])
+  @@index([status])
+  @@index([serviceType])
+  @@index([applicationCategory])
+  @@index([submissionDate])
+  @@index([status, applicationCategory])
 }
 
 model ApplicationStatusHistory {
@@ -199,6 +218,9 @@ model ApplicationStatusHistory {
   role          String?  @default("SYSTEM")
   changedById   Int?
   changedAt     DateTime @default(now())
+
+  @@index([applicationId])
+  @@index([changedAt])
 }
 
 // =====================================================
@@ -206,17 +228,26 @@ model ApplicationStatusHistory {
 // =====================================================
 
 model Document {
-  id           Int      @id @default(autoincrement())
-  docId        String   @unique
-  documentType String
-  fileStatus   String
-  fileUrl      String?
-  fileName     String?
-  fileSize     Int?
-  uploadedAt   DateTime @default(now())
+  id                 Int       @id @default(autoincrement())
+  docId              String    @unique
+  documentType       String
+  fileStatus         String    @default("UPLOADED")
+  fileUrl            String?
+  fileName           String?
+  fileSize           Int?
+  storagePath        String?
+  mimeType           String?
+  verificationStatus String    @default("PENDING")
+  verifiedBy         String?
+  verifiedAt         DateTime?
+  uploadedAt         DateTime  @default(now())
 
-  applicationId Int
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId      Int
+  application        Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@index([documentType])
+  @@index([verificationStatus])
 }
 
 // =====================================================
@@ -235,6 +266,10 @@ model Appointment {
 
   applicationId Int      @unique
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@index([date, timeSlot])
+  @@index([status])
 }
 
 // =====================================================
@@ -255,6 +290,10 @@ model Payment {
 
   applicationId Int
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@index([status])
+  @@index([transactionId])
 }
 
 // =====================================================
@@ -276,6 +315,10 @@ model PoliceReport {
 
   policeId        Int?
   police          Police?  @relation(fields: [policeId], references: [id])
+
+  @@index([applicationId])
+  @@index([policeId])
+  @@index([clearanceStatus])
 }
 
 // =====================================================
@@ -295,6 +338,10 @@ model Passport {
 
   officerId      Int?
   officer        PassportOfficer? @relation(fields: [officerId], references: [id])
+
+  @@index([applicationId])
+  @@index([officerId])
+  @@index([dispatchStatus])
 }
 
 // =====================================================
@@ -310,6 +357,9 @@ model Notification {
   isRead      Boolean  @default(false)
   type        String   @default("INFO") // INFO, SUCCESS, WARNING, ALERT
   createdAt   DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([createdAt])
 }
 
 model AuditLog {
@@ -322,6 +372,10 @@ model AuditLog {
   ipAddress   String?
   userAgent   String?
   createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
 
 model PasswordResetToken {
@@ -332,4 +386,7 @@ model PasswordResetToken {
   expiresAt   DateTime
   isUsed      Boolean  @default(false)
   createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }

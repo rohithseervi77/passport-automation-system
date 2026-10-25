@@ -1,23 +1,42 @@
 import { PrismaClient } from "../generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  pgPool: Pool | undefined;
 };
 
-let prisma: PrismaClient;
+function createPrismaClient(): PrismaClient {
+  const connectionString =
+    process.env.DATABASE_URL &&
+    (process.env.DATABASE_URL.startsWith("postgres://") ||
+      process.env.DATABASE_URL.startsWith("postgresql://"))
+      ? process.env.DATABASE_URL
+      : "postgresql://postgres:postgres@127.0.0.1:5432/passport_db";
 
-if (globalForPrisma.prisma) {
-  prisma = globalForPrisma.prisma;
-} else {
-  const url = process.env.DATABASE_URL || "file:./dev.db";
-  const cleanUrl = url.startsWith("file:") ? url.replace(/^file:/, "") : url;
-  const adapter = new PrismaBetterSqlite3({ url: cleanUrl });
-  prisma = new PrismaClient({ adapter });
+  const pool =
+    globalForPrisma.pgPool ||
+    new Pool({
+      connectionString,
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
+      ssl: connectionString.includes("supabase.co")
+        ? { rejectUnauthorized: false }
+        : undefined,
+    });
+
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.pgPool = pool;
+  }
+
+  const adapter = new PrismaPg(pool);
+  return new PrismaClient({ adapter });
 }
+
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
-
-export { prisma };

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { transitionApplicationStatus } from "@/lib/applicationService";
+import { logAuditEvent } from "@/lib/audit";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
@@ -56,10 +59,15 @@ export async function POST(req: Request) {
 
     switch (action) {
       case "VERIFY_DOCS": {
-        // Mark documents as verified
+        // Mark documents as verified in database metadata
         await prisma.document.updateMany({
           where: { applicationId: application.id },
-          data: { fileStatus: "VERIFIED" },
+          data: {
+            fileStatus: "VERIFIED",
+            verificationStatus: "VERIFIED",
+            verifiedBy: officer.officerId,
+            verifiedAt: new Date(),
+          },
         });
 
         updatedApplication = await transitionApplicationStatus(
@@ -68,6 +76,13 @@ export async function POST(req: Request) {
           user.id,
           remarks || "All uploaded supporting documents verified by Verifying Officer at Counter B."
         );
+
+        await logAuditEvent({
+          userId: user.id,
+          action: "OFFICER_VERIFY_DOCS",
+          entityId: application.applicationId,
+          details: { officerId: officer.officerId, remarks },
+        });
         break;
       }
 
@@ -220,6 +235,13 @@ export async function POST(req: Request) {
       default:
         return NextResponse.json({ error: `Unknown scrutiny action: ${action}` }, { status: 400 });
     }
+
+    await logAuditEvent({
+      userId: user.id,
+      action: `OFFICER_ACTION_${action}`,
+      entityId: application.applicationId,
+      details: { officerId: officer.officerId, action, remarks, reason },
+    });
 
     return NextResponse.json({
       message: `Action '${action}' recorded successfully!`,

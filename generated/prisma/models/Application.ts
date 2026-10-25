@@ -1999,6 +1999,7 @@ export type ApplicationCreateOrConnectWithoutApplicantInput = {
 
 export type ApplicationCreateManyApplicantInputEnvelope = {
   data: Prisma.ApplicationCreateManyApplicantInput | Prisma.ApplicationCreateManyApplicantInput[]
+  skipDuplicates?: boolean
 }
 
 export type ApplicationUpsertWithWhereUniqueWithoutApplicantInput = {
@@ -2231,6 +2232,7 @@ export type ApplicationCreateOrConnectWithoutOfficerInput = {
 
 export type ApplicationCreateManyOfficerInputEnvelope = {
   data: Prisma.ApplicationCreateManyOfficerInput | Prisma.ApplicationCreateManyOfficerInput[]
+  skipDuplicates?: boolean
 }
 
 export type ApplicationUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -5701,6 +5703,7 @@ export type ApplicationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many Applications.
    */
   data: Prisma.ApplicationCreateManyInput | Prisma.ApplicationCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -5719,6 +5722,7 @@ export type ApplicationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many Applications.
    */
   data: Prisma.ApplicationCreateManyInput | Prisma.ApplicationCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

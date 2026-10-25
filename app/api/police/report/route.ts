@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { transitionApplicationStatus } from "@/lib/applicationService";
+import { logAuditEvent } from "@/lib/audit";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
@@ -62,6 +65,18 @@ export async function POST(req: Request) {
     } else {
       nextStatus = "REJECTED";
     }
+
+    await logAuditEvent({
+      userId: user.id,
+      action: "POLICE_VERIFICATION_SUBMITTED",
+      entityId: application.applicationId,
+      details: {
+        reportId,
+        clearanceStatus,
+        stationCode: police.stationCode,
+        adverseReason,
+      },
+    });
 
     let updatedApp;
     try {

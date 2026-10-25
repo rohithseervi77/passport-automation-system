@@ -528,6 +528,7 @@ export type ApplicationStatusHistoryCreateOrConnectWithoutApplicationInput = {
 
 export type ApplicationStatusHistoryCreateManyApplicationInputEnvelope = {
   data: Prisma.ApplicationStatusHistoryCreateManyApplicationInput | Prisma.ApplicationStatusHistoryCreateManyApplicationInput[]
+  skipDuplicates?: boolean
 }
 
 export type ApplicationStatusHistoryUpsertWithWhereUniqueWithoutApplicationInput = {
@@ -1350,6 +1351,7 @@ export type ApplicationStatusHistoryCreateManyArgs<ExtArgs extends runtime.Types
    * The data used to create many ApplicationStatusHistories.
    */
   data: Prisma.ApplicationStatusHistoryCreateManyInput | Prisma.ApplicationStatusHistoryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1368,6 +1370,7 @@ export type ApplicationStatusHistoryCreateManyAndReturnArgs<ExtArgs extends runt
    * The data used to create many ApplicationStatusHistories.
    */
   data: Prisma.ApplicationStatusHistoryCreateManyInput | Prisma.ApplicationStatusHistoryCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

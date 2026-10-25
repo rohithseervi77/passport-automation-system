@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start -H 0.0.0.0",
     "seed": "node prisma/seed.mjs",
+    "seed:supabase": "node scripts/seed_supabase.mjs",
+    "migrate:supabase": "node scripts/migrate_sqlite_to_supabase.mjs",
     "test:e2e": "node prisma/test_e2e.mjs",
     "lint": "eslint"
   },
@@ -14,6 +16,7 @@
     "@prisma/adapter-better-sqlite3": "^7.10.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "@supabase/supabase-js": "^2.118.0",
     "@types/canvas-confetti": "^1.9.0",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^13.0.3",
