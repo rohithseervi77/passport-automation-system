@@ -186,7 +186,7 @@ export default function PublicTrackPage() {
           {/* Demo helper quick-fill buttons */}
           <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
             <span className="text-slate-400 font-medium">Quick Demo ARNs:</span>
-            {["PAS202610250001", "PAS202610250002", "PAS202610250003"].map((code) => (
+            {["APP-20261025-4921", "APP-20261024-8832", "APP-20261020-1194"].map((code) => (
               <button
                 key={code}
                 type="button"
