@@ -45,6 +45,7 @@ export type LoginHistoryMinAggregateOutputType = {
   ipAddress: string | null
   userAgent: string | null
   sessionId: string | null
+  isRevoked: boolean | null
   createdAt: Date | null
 }
 
@@ -59,6 +60,7 @@ export type LoginHistoryMaxAggregateOutputType = {
   ipAddress: string | null
   userAgent: string | null
   sessionId: string | null
+  isRevoked: boolean | null
   createdAt: Date | null
 }
 
@@ -73,6 +75,7 @@ export type LoginHistoryCountAggregateOutputType = {
   ipAddress: number
   userAgent: number
   sessionId: number
+  isRevoked: number
   createdAt: number
   _all: number
 }
@@ -97,6 +100,7 @@ export type LoginHistoryMinAggregateInputType = {
   ipAddress?: true
   userAgent?: true
   sessionId?: true
+  isRevoked?: true
   createdAt?: true
 }
 
@@ -111,6 +115,7 @@ export type LoginHistoryMaxAggregateInputType = {
   ipAddress?: true
   userAgent?: true
   sessionId?: true
+  isRevoked?: true
   createdAt?: true
 }
 
@@ -125,6 +130,7 @@ export type LoginHistoryCountAggregateInputType = {
   ipAddress?: true
   userAgent?: true
   sessionId?: true
+  isRevoked?: true
   createdAt?: true
   _all?: true
 }
@@ -226,6 +232,7 @@ export type LoginHistoryGroupByOutputType = {
   ipAddress: string | null
   userAgent: string | null
   sessionId: string | null
+  isRevoked: boolean
   createdAt: Date
   _count: LoginHistoryCountAggregateOutputType | null
   _avg: LoginHistoryAvgAggregateOutputType | null
@@ -263,6 +270,7 @@ export type LoginHistoryWhereInput = {
   ipAddress?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
+  isRevoked?: Prisma.BoolFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LoginHistory"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
@@ -278,6 +286,7 @@ export type LoginHistoryOrderByWithRelationInput = {
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRevoked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -296,6 +305,7 @@ export type LoginHistoryWhereUniqueInput = Prisma.AtLeast<{
   ipAddress?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
+  isRevoked?: Prisma.BoolFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LoginHistory"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
@@ -311,6 +321,7 @@ export type LoginHistoryOrderByWithAggregationInput = {
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRevoked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.LoginHistoryCountOrderByAggregateInput
   _avg?: Prisma.LoginHistoryAvgOrderByAggregateInput
@@ -333,6 +344,7 @@ export type LoginHistoryScalarWhereWithAggregatesInput = {
   ipAddress?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   userAgent?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
+  isRevoked?: Prisma.BoolWithAggregatesFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LoginHistory"> | Date | string
 }
 
@@ -345,6 +357,7 @@ export type LoginHistoryCreateInput = {
   ipAddress?: string | null
   userAgent?: string | null
   sessionId?: string | null
+  isRevoked?: boolean
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutLoginHistoriesInput
 }
@@ -360,6 +373,7 @@ export type LoginHistoryUncheckedCreateInput = {
   ipAddress?: string | null
   userAgent?: string | null
   sessionId?: string | null
+  isRevoked?: boolean
   createdAt?: Date | string
 }
 
@@ -372,6 +386,7 @@ export type LoginHistoryUpdateInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutLoginHistoriesNestedInput
 }
@@ -387,6 +402,7 @@ export type LoginHistoryUncheckedUpdateInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -401,6 +417,7 @@ export type LoginHistoryCreateManyInput = {
   ipAddress?: string | null
   userAgent?: string | null
   sessionId?: string | null
+  isRevoked?: boolean
   createdAt?: Date | string
 }
 
@@ -413,6 +430,7 @@ export type LoginHistoryUpdateManyMutationInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -427,6 +445,7 @@ export type LoginHistoryUncheckedUpdateManyInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -451,6 +470,7 @@ export type LoginHistoryCountOrderByAggregateInput = {
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
+  isRevoked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -469,6 +489,7 @@ export type LoginHistoryMaxOrderByAggregateInput = {
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
+  isRevoked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -483,6 +504,7 @@ export type LoginHistoryMinOrderByAggregateInput = {
   ipAddress?: Prisma.SortOrder
   userAgent?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
+  isRevoked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -541,6 +563,7 @@ export type LoginHistoryCreateWithoutUserInput = {
   ipAddress?: string | null
   userAgent?: string | null
   sessionId?: string | null
+  isRevoked?: boolean
   createdAt?: Date | string
 }
 
@@ -554,6 +577,7 @@ export type LoginHistoryUncheckedCreateWithoutUserInput = {
   ipAddress?: string | null
   userAgent?: string | null
   sessionId?: string | null
+  isRevoked?: boolean
   createdAt?: Date | string
 }
 
@@ -597,6 +621,7 @@ export type LoginHistoryScalarWhereInput = {
   ipAddress?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   userAgent?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
   sessionId?: Prisma.StringNullableFilter<"LoginHistory"> | string | null
+  isRevoked?: Prisma.BoolFilter<"LoginHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LoginHistory"> | Date | string
 }
 
@@ -610,6 +635,7 @@ export type LoginHistoryCreateManyUserInput = {
   ipAddress?: string | null
   userAgent?: string | null
   sessionId?: string | null
+  isRevoked?: boolean
   createdAt?: Date | string
 }
 
@@ -622,6 +648,7 @@ export type LoginHistoryUpdateWithoutUserInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -635,6 +662,7 @@ export type LoginHistoryUncheckedUpdateWithoutUserInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -648,6 +676,7 @@ export type LoginHistoryUncheckedUpdateManyWithoutUserInput = {
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRevoked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -664,6 +693,7 @@ export type LoginHistorySelect<ExtArgs extends runtime.Types.Extensions.Internal
   ipAddress?: boolean
   userAgent?: boolean
   sessionId?: boolean
+  isRevoked?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.LoginHistory$userArgs<ExtArgs>
 }, ExtArgs["result"]["loginHistory"]>
@@ -679,6 +709,7 @@ export type LoginHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   ipAddress?: boolean
   userAgent?: boolean
   sessionId?: boolean
+  isRevoked?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.LoginHistory$userArgs<ExtArgs>
 }, ExtArgs["result"]["loginHistory"]>
@@ -694,6 +725,7 @@ export type LoginHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   ipAddress?: boolean
   userAgent?: boolean
   sessionId?: boolean
+  isRevoked?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.LoginHistory$userArgs<ExtArgs>
 }, ExtArgs["result"]["loginHistory"]>
@@ -709,10 +741,11 @@ export type LoginHistorySelectScalar = {
   ipAddress?: boolean
   userAgent?: boolean
   sessionId?: boolean
+  isRevoked?: boolean
   createdAt?: boolean
 }
 
-export type LoginHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authUserId" | "email" | "role" | "loginTime" | "logoutTime" | "success" | "ipAddress" | "userAgent" | "sessionId" | "createdAt", ExtArgs["result"]["loginHistory"]>
+export type LoginHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authUserId" | "email" | "role" | "loginTime" | "logoutTime" | "success" | "ipAddress" | "userAgent" | "sessionId" | "isRevoked" | "createdAt", ExtArgs["result"]["loginHistory"]>
 export type LoginHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.LoginHistory$userArgs<ExtArgs>
 }
@@ -739,6 +772,7 @@ export type $LoginHistoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     ipAddress: string | null
     userAgent: string | null
     sessionId: string | null
+    isRevoked: boolean
     createdAt: Date
   }, ExtArgs["result"]["loginHistory"]>
   composites: {}
@@ -1174,6 +1208,7 @@ export interface LoginHistoryFieldRefs {
   readonly ipAddress: Prisma.FieldRef<"LoginHistory", 'String'>
   readonly userAgent: Prisma.FieldRef<"LoginHistory", 'String'>
   readonly sessionId: Prisma.FieldRef<"LoginHistory", 'String'>
+  readonly isRevoked: Prisma.FieldRef<"LoginHistory", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"LoginHistory", 'DateTime'>
 }
     

@@ -1,429 +1,360 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AdminShell from "@/components/AdminShell";
+import {
+  Users,
+  FileText,
+  ShieldAlert,
+  Activity,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  FileCheck2,
+  UserCheck,
+  UserPlus,
+  RefreshCw,
+  Download,
+  ArrowRight,
+  TrendingUp,
+  Shield,
+  KeyRound,
+  ExternalLink,
+} from "lucide-react";
 
-export default function AdminDashboard() {
+export default function AdminDashboardPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"APPLICATIONS" | "LOGINS">("APPLICATIONS");
+  const [data, setData] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  // Application Workload State
-  const [applications, setApplications] = useState<any[]>([]);
-  const [appLoading, setAppLoading] = useState(true);
-  const [filter, setFilter] = useState("ALL");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  // Login Activity State
-  const [loginHistory, setLoginHistory] = useState<any[]>([]);
-  const [loginLoading, setLoginLoading] = useState(false);
-  const [loginFilter, setLoginFilter] = useState("ALL");
-  const [loginPage, setLoginPage] = useState(1);
-  const [loginTotalPages, setLoginTotalPages] = useState(1);
-  const [loginStats, setLoginStats] = useState({
-    totalLogins: 0,
-    successfulLogins: 0,
-    failedAttempts: 0,
-    activeSessions: 0,
-  });
-
-  const fetchApplications = useCallback(async () => {
-    setAppLoading(true);
+  const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch(`/api/admin/applications?status=${filter}&page=${page}`);
+      setRefreshing(true);
+      const res = await fetch("/api/admin/stats");
       if (res.status === 401 || res.status === 403) {
-        router.push("/login");
+        router.push("/admin/login");
         return;
       }
-      const data = await res.json();
-      setApplications(data.applications || []);
-      setTotalPages(data.totalPages || 1);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setAppLoading(false);
-    }
-  }, [filter, page, router]);
-
-  const fetchLoginHistory = useCallback(async () => {
-    setLoginLoading(true);
-    try {
-      const res = await fetch(
-        `/api/admin/login-history?status=${loginFilter}&page=${loginPage}`
-      );
-      if (res.status === 401 || res.status === 403) {
-        router.push("/login");
+      if (!res.ok) {
+        setError("Failed to load administrative metrics.");
         return;
       }
-      const data = await res.json();
-      setLoginHistory(data.logins || []);
-      setLoginTotalPages(data.pagination?.totalPages || 1);
-      if (data.stats) {
-        setLoginStats(data.stats);
-      }
-    } catch (error) {
-      console.error(error);
+      const json = await res.json();
+      setData(json);
+      setError("");
+    } catch (err) {
+      console.error(err);
+      setError("Network error loading administrative statistics.");
     } finally {
-      setLoginLoading(false);
+      setLoading(false);
+      setRefreshing(false);
     }
-  }, [loginFilter, loginPage, router]);
+  }, [router]);
 
   useEffect(() => {
-    if (activeTab === "APPLICATIONS") {
-      fetchApplications();
-    } else {
-      fetchLoginHistory();
-    }
-  }, [activeTab, fetchApplications, fetchLoginHistory]);
+    fetchStats();
+  }, [fetchStats]);
 
-  function getStatusBadge(status: string) {
-    if (status.includes("APPROVED") || status.includes("ISSUED") || status.includes("DISPATCHED")) {
-      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-    }
-    if (status.includes("REJECTED")) {
-      return "bg-red-500/10 text-red-400 border-red-500/30";
-    }
-    if (status.includes("PENDING") || status.includes("VERIFICATION")) {
-      return "bg-amber-500/10 text-amber-400 border-amber-500/30";
-    }
-    return "bg-blue-500/10 text-blue-400 border-blue-500/30";
-  }
+  const users = data?.users || {};
+  const apps = data?.applications || {};
+  const security = data?.security || {};
+  const recentLogs = data?.recentAuditLogs || [];
+  const recentApps = data?.recentApplications || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white pb-16">
-      {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl transition-all">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-600 font-bold text-white shadow-lg shadow-purple-600/30">
-              PAS
-            </div>
-            <div>
-              <h1 className="font-bold text-base sm:text-lg leading-tight tracking-tight">
-                System Administration Console
-              </h1>
-              <p className="text-xs text-slate-400">
-                Centralized Governance, Workload Oversight & Security Audit
-              </p>
+    <AdminShell
+      pageTitle="Executive Administration Dashboard"
+      pageSubtitle="Comprehensive operational overview of citizen applications, authority workflows, and platform security."
+    >
+      {/* Top Header Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+        <div>
+          <h2 className="text-xl font-extrabold text-white tracking-tight">System Operational Overview</h2>
+          <p className="text-xs text-slate-400">
+            Real-time aggregate telemetry synchronized from the core PostgreSQL engine.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={fetchStats}
+            disabled={refreshing}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
+            <span>Refresh</span>
+          </button>
+
+          <a
+            href="/api/admin/export?type=applications"
+            download
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition shadow-xs"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Data</span>
+          </a>
+        </div>
+      </div>
+
+      {error && (
+        <div className="p-4 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-200 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* 4 Primary Top KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Users */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Users</span>
+            <div className="h-8 w-8 rounded-lg bg-blue-900/40 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+              <Users className="w-4 h-4" />
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <span className="rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase text-purple-300">
-              ADMIN
+          <div>
+            <span className="text-3xl font-extrabold text-white font-mono">
+              {loading ? "..." : users.total ?? 0}
             </span>
-            <button
-              onClick={async () => {
-                await fetch("/api/auth/logout", { method: "POST" });
-                router.push("/login");
-              }}
-              className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-300 hover:bg-red-500/20 transition"
-            >
-              Logout
-            </button>
+            <p className="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+              <TrendingUp className="w-3 h-3" />
+              <span>+{users.newWeek ?? 0} new this week</span>
+            </p>
+          </div>
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>{users.applicants ?? 0} Citizens</span>
+            <span>{users.officers ?? 0} Officers</span>
+            <span>{users.police ?? 0} Police</span>
           </div>
         </div>
-      </header>
 
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-800 gap-4">
-          <button
-            onClick={() => setActiveTab("APPLICATIONS")}
-            className={`pb-3 text-sm font-semibold transition border-b-2 ${
-              activeTab === "APPLICATIONS"
-                ? "border-purple-500 text-purple-400"
-                : "border-transparent text-slate-400 hover:text-white"
-            }`}
-          >
-            Application Workload
-          </button>
-          <button
-            onClick={() => setActiveTab("LOGINS")}
-            className={`pb-3 text-sm font-semibold transition border-b-2 flex items-center gap-2 ${
-              activeTab === "LOGINS"
-                ? "border-purple-500 text-purple-400"
-                : "border-transparent text-slate-400 hover:text-white"
-            }`}
-          >
-            <span>Login Activity</span>
-            {loginStats.failedAttempts > 0 && (
-              <span className="rounded-full bg-red-500/20 px-2 py-0.2 text-[10px] font-bold text-red-400 border border-red-500/30">
-                {loginStats.failedAttempts} failed
-              </span>
-            )}
-          </button>
+        {/* Total Applications */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Applications</span>
+            <div className="h-8 w-8 rounded-lg bg-indigo-900/40 border border-indigo-500/30 text-indigo-400 flex items-center justify-center">
+              <FileText className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <span className="text-3xl font-extrabold text-white font-mono">
+              {loading ? "..." : apps.total ?? 0}
+            </span>
+            <p className="text-[11px] text-indigo-300 mt-1">
+              {apps.policePending ?? 0} awaiting Police Enquiry
+            </p>
+          </div>
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>{apps.submitted ?? 0} Submitted</span>
+            <span>{apps.approved ?? 0} Approved</span>
+            <span>{apps.dispatched ?? 0} Dispatched</span>
+          </div>
         </div>
 
-        {/* TAB 1: APPLICATION WORKLOAD */}
-        {activeTab === "APPLICATIONS" && (
-          <>
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-                  System Application Workload
-                </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Overview of all incoming, verified, and pending citizen passport requests.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <label htmlFor="filter-status" className="text-xs text-slate-400">
-                  Filter:
-                </label>
-                <select
-                  id="filter-status"
-                  value={filter}
-                  onChange={(e) => {
-                    setFilter(e.target.value);
-                    setPage(1);
-                  }}
-                  className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-white outline-none focus:border-purple-500 transition"
-                >
-                  <option value="ALL">All Statuses</option>
-                  <option value="SUBMITTED">Submitted</option>
-                  <option value="UNDER_OFFICER_VERIFICATION">Officer Verification</option>
-                  <option value="POLICE_VERIFICATION_PENDING">Police Pending</option>
-                  <option value="POLICE_CLEARED">Police Cleared</option>
-                  <option value="APPROVED">Approved</option>
-                  <option value="REJECTED">Rejected</option>
-                  <option value="PASSPORT_ISSUED">Passport Issued</option>
-                  <option value="PASSPORT_DISPATCHED">Passport Dispatched</option>
-                </select>
-              </div>
+        {/* Active Logins & Sessions */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Security & Sessions</span>
+            <div className="h-8 w-8 rounded-lg bg-emerald-900/40 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
+              <Activity className="w-4 h-4" />
             </div>
+          </div>
+          <div>
+            <span className="text-3xl font-extrabold text-white font-mono">
+              {loading ? "..." : security.activeSessions ?? 0}
+            </span>
+            <p className="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Active Concurrent Sessions</span>
+            </p>
+          </div>
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+            <span>{security.loginsToday ?? 0} Logins Today</span>
+            <span className="text-rose-400">{security.failedLoginsToday ?? 0} Failed Attempts</span>
+          </div>
+        </div>
 
-            {appLoading ? (
-              <div className="flex justify-center items-center h-64 rounded-2xl border border-slate-800 bg-slate-900/40">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
-              </div>
+        {/* System Administration */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Administrators</span>
+            <div className="h-8 w-8 rounded-lg bg-amber-900/40 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+              <KeyRound className="w-4 h-4" />
+            </div>
+          </div>
+          <div>
+            <span className="text-3xl font-extrabold text-white font-mono">
+              {loading ? "..." : users.admins ?? 1}
+            </span>
+            <p className="text-[11px] text-amber-400 mt-1">
+              Protected Least-Privilege Nodes
+            </p>
+          </div>
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+            <Link href="/admin/administrators" className="text-blue-400 hover:underline">
+              Manage Admins →
+            </Link>
+            <Link href="/admin/invitations" className="text-amber-400 hover:underline">
+              Invite →
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Application Lifecycle Pipeline Breakdown */}
+      <div className="bg-slate-950 border border-slate-800 rounded-xl p-6 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+              Application Pipeline Distribution
+            </h3>
+            <p className="text-xs text-slate-400">
+              Distribution of applications through canonical passport service stages.
+            </p>
+          </div>
+          <Link
+            href="/admin/applications"
+            className="text-xs font-semibold text-blue-400 hover:underline flex items-center gap-1"
+          >
+            <span>View Full Pipeline</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 pt-2">
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block">DRAFT</span>
+            <span className="text-lg font-bold text-slate-300 font-mono">{apps.draft ?? 0}</span>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-blue-400 block">SUBMITTED</span>
+            <span className="text-lg font-bold text-blue-300 font-mono">{apps.submitted ?? 0}</span>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-indigo-400 block">APPT BOOKED</span>
+            <span className="text-lg font-bold text-indigo-300 font-mono">{apps.appointmentBooked ?? 0}</span>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-amber-400 block">POLICE ENQUIRY</span>
+            <span className="text-lg font-bold text-amber-300 font-mono">{apps.policePending ?? 0}</span>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-emerald-400 block">APPROVED</span>
+            <span className="text-lg font-bold text-emerald-300 font-mono">{apps.approved ?? 0}</span>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-teal-400 block">DISPATCHED</span>
+            <span className="text-lg font-bold text-teal-300 font-mono">{apps.dispatched ?? 0}</span>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
+            <span className="text-[10px] font-bold uppercase text-rose-400 block">REJECTED</span>
+            <span className="text-lg font-bold text-rose-300 font-mono">{apps.rejected ?? 0}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Two-Column Activity Feeds */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Applications Feed */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <FileCheck2 className="w-4 h-4 text-blue-400" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+                Recent Citizen Applications
+              </h3>
+            </div>
+            <Link href="/admin/applications" className="text-xs text-blue-400 hover:underline">
+              View all
+            </Link>
+          </div>
+
+          <div className="space-y-2.5">
+            {recentApps.length === 0 ? (
+              <p className="text-xs text-slate-500 py-4 text-center">No recent application records found.</p>
             ) : (
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/80 shadow-2xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-slate-800 text-left">
-                    <thead className="bg-slate-950/80 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                      <tr>
-                        <th className="px-6 py-3.5">Application ID</th>
-                        <th className="px-6 py-3.5">Applicant Name</th>
-                        <th className="px-6 py-3.5">Type</th>
-                        <th className="px-6 py-3.5">Status</th>
-                        <th className="px-6 py-3.5">Last Updated</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800/60 text-sm">
-                      {applications.map((app) => (
-                        <tr key={app.id} className="hover:bg-slate-800/30 transition">
-                          <td className="px-6 py-4 font-mono font-bold text-blue-400 whitespace-nowrap">
-                            {app.applicationId}
-                          </td>
-                          <td className="px-6 py-4 font-medium text-white whitespace-nowrap">
-                            {app.applicant?.name || "Unknown"}
-                          </td>
-                          <td className="px-6 py-4 text-slate-300 text-xs whitespace-nowrap">
-                            {app.passportType}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`inline-flex rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${getStatusBadge(
-                                app.status
-                              )}`}
-                            >
-                              {app.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
-                            {new Date(app.updatedAt).toLocaleDateString()}
-                          </td>
-                        </tr>
-                      ))}
-                      {applications.length === 0 && (
-                        <tr>
-                          <td colSpan={5} className="px-6 py-12 text-center text-sm text-slate-500">
-                            No applications found for the selected status.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="flex items-center justify-between border-t border-slate-800 bg-slate-950/60 px-6 py-3.5 text-xs text-slate-400">
-                  <div>
-                    Showing page <span className="font-semibold text-white">{page}</span> of{" "}
-                    <span className="font-semibold text-white">{totalPages}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setPage((p) => Math.max(1, p - 1))}
-                      disabled={page === 1}
-                      className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 font-medium text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                      disabled={page === totalPages}
-                      className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 font-medium text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-
-        {/* TAB 2: LOGIN ACTIVITY & SECURITY AUDIT */}
-        {activeTab === "LOGINS" && (
-          <>
-            {/* KPI Summary Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-                <span className="text-xs text-slate-400">Total Logins</span>
-                <p className="text-2xl font-bold mt-1 text-white">{loginStats.totalLogins}</p>
-              </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-                <span className="text-xs text-slate-400">Successful Logins</span>
-                <p className="text-2xl font-bold mt-1 text-emerald-400">
-                  {loginStats.successfulLogins}
-                </p>
-              </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-                <span className="text-xs text-slate-400">Failed Attempts</span>
-                <p className="text-2xl font-bold mt-1 text-red-400">
-                  {loginStats.failedAttempts}
-                </p>
-              </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-                <span className="text-xs text-slate-400">Active Sessions</span>
-                <p className="text-2xl font-bold mt-1 text-purple-400">
-                  {loginStats.activeSessions}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-                  Authentication & Login Activity
-                </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Immutable record of user logins, timestamps, session states, and security events. Passwords are never stored or logged.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <label htmlFor="filter-login" className="text-xs text-slate-400">
-                  Filter:
-                </label>
-                <select
-                  id="filter-login"
-                  value={loginFilter}
-                  onChange={(e) => {
-                    setLoginFilter(e.target.value);
-                    setLoginPage(1);
-                  }}
-                  className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-white outline-none focus:border-purple-500 transition"
+              recentApps.map((a: any) => (
+                <div
+                  key={a.id}
+                  className="p-3 rounded-lg bg-slate-900 border border-slate-800/80 flex items-center justify-between text-xs hover:border-slate-700 transition"
                 >
-                  <option value="ALL">All Events</option>
-                  <option value="SUCCESS">Successful Only</option>
-                  <option value="FAILED">Failed Attempts Only</option>
-                </select>
-              </div>
-            </div>
-
-            {loginLoading ? (
-              <div className="flex justify-center items-center h-64 rounded-2xl border border-slate-800 bg-slate-900/40">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/80 shadow-2xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-slate-800 text-left">
-                    <thead className="bg-slate-950/80 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                      <tr>
-                        <th className="px-6 py-3.5">User ID / Auth ID</th>
-                        <th className="px-6 py-3.5">Email</th>
-                        <th className="px-6 py-3.5">Role</th>
-                        <th className="px-6 py-3.5">Login Time</th>
-                        <th className="px-6 py-3.5">IP Address</th>
-                        <th className="px-6 py-3.5">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800/60 text-sm">
-                      {loginHistory.map((log) => (
-                        <tr key={log.id} className="hover:bg-slate-800/30 transition">
-                          <td className="px-6 py-4 font-mono text-xs text-slate-400 whitespace-nowrap">
-                            {log.authUserId ? log.authUserId.slice(0, 13) + "..." : "N/A"}
-                          </td>
-                          <td className="px-6 py-4 font-medium text-white whitespace-nowrap">
-                            {log.email}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-                              {log.role || "USER"}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-xs text-slate-300 whitespace-nowrap">
-                            {new Date(log.loginTime).toLocaleString()}
-                          </td>
-                          <td className="px-6 py-4 font-mono text-xs text-slate-400 whitespace-nowrap">
-                            {log.ipAddress || "unknown"}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {log.success ? (
-                              <span className="inline-flex rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                                SUCCESS
-                              </span>
-                            ) : (
-                              <span className="inline-flex rounded-full border border-red-500/30 bg-red-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-red-400">
-                                FAILED
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                      {loginHistory.length === 0 && (
-                        <tr>
-                          <td colSpan={6} className="px-6 py-12 text-center text-sm text-slate-500">
-                            No login history events found.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="flex items-center justify-between border-t border-slate-800 bg-slate-950/60 px-6 py-3.5 text-xs text-slate-400">
-                  <div>
-                    Showing page <span className="font-semibold text-white">{loginPage}</span> of{" "}
-                    <span className="font-semibold text-white">{loginTotalPages}</span>
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-white">{a.applicationId}</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-900/40 text-blue-300 border border-blue-500/30">
+                        {a.serviceType}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      {a.applicant?.name || a.givenName || "Citizen"} • {a.rpoLocation}
+                    </p>
                   </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setLoginPage((p) => Math.max(1, p - 1))}
-                      disabled={loginPage === 1}
-                      className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 font-medium text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() => setLoginPage((p) => Math.min(loginTotalPages, p + 1))}
-                      disabled={loginPage === loginTotalPages}
-                      className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 font-medium text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                    >
-                      Next
-                    </button>
+                  <div className="text-right space-y-1">
+                    <span className="inline-block text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-slate-800 text-slate-300 border border-slate-700">
+                      {a.status}
+                    </span>
+                    <p className="text-[10px] text-slate-500">
+                      {new Date(a.updatedAt).toLocaleDateString("en-IN")}
+                    </p>
                   </div>
                 </div>
-              </div>
+              ))
             )}
-          </>
-        )}
-      </main>
-    </div>
+          </div>
+        </div>
+
+        {/* Recent Administrative Audit Events */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+                Real-Time Security Audit Trail
+              </h3>
+            </div>
+            <Link href="/admin/audit-logs" className="text-xs text-blue-400 hover:underline">
+              Full log
+            </Link>
+          </div>
+
+          <div className="space-y-2.5">
+            {recentLogs.length === 0 ? (
+              <p className="text-xs text-slate-500 py-4 text-center">No security audit logs recorded yet.</p>
+            ) : (
+              recentLogs.map((log: any) => (
+                <div
+                  key={log.id}
+                  className="p-3 rounded-lg bg-slate-900 border border-slate-800/80 flex items-start justify-between text-xs space-x-3 hover:border-slate-700 transition"
+                >
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[11px] font-bold text-emerald-400">
+                        {log.action}
+                      </span>
+                      {log.entityId && (
+                        <span className="text-[10px] font-mono text-slate-400">
+                          [{log.entityId}]
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      Actor: {log.user?.username || "SYSTEM"} ({log.user?.role || "AUTO"})
+                    </p>
+                  </div>
+                  <span className="text-[10px] text-slate-500 shrink-0 mt-0.5">
+                    {new Date(log.createdAt).toLocaleTimeString()}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </AdminShell>
   );
 }

@@ -72,7 +72,22 @@ export async function getCurrentSession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get("pas_session")?.value;
   if (!token) return null;
-  return await verifySessionToken(token);
+  const session = await verifySessionToken(token);
+  if (!session) return null;
+
+  // Check if session has been revoked by an administrator
+  if (session.sessionId) {
+    try {
+      const revoked = await prisma.loginHistory.findFirst({
+        where: { sessionId: session.sessionId, isRevoked: true },
+      });
+      if (revoked) return null;
+    } catch {
+      // Fallback
+    }
+  }
+
+  return session;
 }
 
 /**
@@ -80,12 +95,12 @@ export async function getCurrentSession(): Promise<SessionPayload | null> {
  * Guaranteed to never return passwords (passwords reside strictly in Supabase Auth).
  */
 export async function getCurrentUser() {
-  const userId = await getCurrentUserId();
-  if (!userId) return null;
+  const session = await getCurrentSession();
+  if (!session?.userId) return null;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: session.userId },
       include: {
         applicant: true,
         passportOfficer: true,
@@ -93,6 +108,8 @@ export async function getCurrentUser() {
         admin: true,
       },
     });
+
+    if (!user || !user.isActive) return null;
     return user;
   } catch {
     return null;
@@ -110,5 +127,16 @@ export async function requireUserWithRole(allowedRoles: string[]) {
   if (!allowedRoles.includes(user.role)) {
     return null;
   }
+  return user;
+}
+
+/**
+ * Enforces strictly ADMIN role authorization server-side.
+ * Returns the authenticated Admin User or null if unauthorized.
+ */
+export async function requireAdmin() {
+  const user = await getCurrentUser();
+  if (!user || !user.isActive) return null;
+  if (user.role !== "ADMIN" || !user.admin) return null;
   return user;
 }

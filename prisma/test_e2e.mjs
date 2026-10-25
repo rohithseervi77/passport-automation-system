@@ -23,7 +23,29 @@ db.exec(`
     ipAddress TEXT,
     userAgent TEXT,
     sessionId TEXT,
+    isRevoked BOOLEAN DEFAULT 0,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS AdminInvitation (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    token TEXT UNIQUE NOT NULL,
+    email TEXT NOT NULL,
+    role TEXT DEFAULT 'ADMIN',
+    invitedBy TEXT NOT NULL,
+    expiresAt DATETIME NOT NULL,
+    isAccepted BOOLEAN DEFAULT 0,
+    acceptedAt DATETIME,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS SystemSetting (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key TEXT UNIQUE NOT NULL,
+    value TEXT NOT NULL,
+    description TEXT,
+    updatedBy TEXT,
+    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
   CREATE TABLE IF NOT EXISTS User_new (

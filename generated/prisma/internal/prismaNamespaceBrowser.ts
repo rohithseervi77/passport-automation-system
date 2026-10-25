@@ -68,7 +68,9 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PasswordResetToken: 'PasswordResetToken',
   LoginHistory: 'LoginHistory',
-  Grievance: 'Grievance'
+  Grievance: 'Grievance',
+  AdminInvitation: 'AdminInvitation',
+  SystemSetting: 'SystemSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -385,6 +387,7 @@ export const LoginHistoryScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   sessionId: 'sessionId',
+  isRevoked: 'isRevoked',
   createdAt: 'createdAt'
 } as const
 
@@ -408,6 +411,33 @@ export const GrievanceScalarFieldEnum = {
 } as const
 
 export type GrievanceScalarFieldEnum = (typeof GrievanceScalarFieldEnum)[keyof typeof GrievanceScalarFieldEnum]
+
+
+export const AdminInvitationScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  email: 'email',
+  role: 'role',
+  invitedBy: 'invitedBy',
+  expiresAt: 'expiresAt',
+  isAccepted: 'isAccepted',
+  acceptedAt: 'acceptedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type AdminInvitationScalarFieldEnum = (typeof AdminInvitationScalarFieldEnum)[keyof typeof AdminInvitationScalarFieldEnum]
+
+
+export const SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  description: 'description',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
 
 
 export const SortOrder = {

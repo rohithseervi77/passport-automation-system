@@ -443,6 +443,7 @@ model LoginHistory {
   ipAddress   String?
   userAgent   String?
   sessionId   String?
+  isRevoked   Boolean   @default(false)
   createdAt   DateTime  @default(now())
 
   user        User?     @relation(fields: [authUserId], references: [authUserId], onDelete: SetNull)
@@ -451,6 +452,7 @@ model LoginHistory {
   @@index([email])
   @@index([loginTime])
   @@index([success])
+  @@index([sessionId])
 }
 
 // =====================================================
@@ -478,4 +480,34 @@ model Grievance {
   @@index([ticketId])
   @@index([status])
   @@index([createdAt])
+}
+
+// =====================================================
+// ADMIN INVITATIONS & SYSTEM SETTINGS
+// =====================================================
+
+model AdminInvitation {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  email       String
+  role        String    @default("ADMIN")
+  invitedBy   String    // username or adminCode of inviting administrator
+  expiresAt   DateTime
+  isAccepted  Boolean   @default(false)
+  acceptedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([token])
+  @@index([email])
+}
+
+model SystemSetting {
+  id          Int       @id @default(autoincrement())
+  key         String    @unique
+  value       String
+  description String?
+  updatedBy   String?
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  @@index([key])
 }

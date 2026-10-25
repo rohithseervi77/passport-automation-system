@@ -1,30 +1,47 @@
 import { NextResponse } from "next/server";
-import { getCurrentUserId } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   try {
-    const userId = await getCurrentUserId();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const admin = await requireAdmin();
+    if (!admin) {
+      return NextResponse.json({ error: "Access denied. Administrator privileges required." }, { status: 403 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: { admin: true },
-    });
-
-    if (!user || user.role !== "ADMIN" || !user.admin) {
-      return NextResponse.json({ error: "Access denied. Admin role required." }, { status: 403 });
-    }
-
-    // Get URL parameters for pagination/filtering
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
-    const page = parseInt(searchParams.get("page") || "1");
+    const serviceType = searchParams.get("serviceType");
+    const quota = searchParams.get("quota");
+    const searchQuery = searchParams.get("q") || "";
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
     const limit = 20;
 
-    const where = status && status !== "ALL" ? { status } : {};
+    const where: any = {};
+
+    if (status && status !== "ALL") {
+      where.status = status;
+    }
+
+    if (serviceType && serviceType !== "ALL") {
+      where.serviceType = serviceType;
+    }
+
+    if (quota && quota !== "ALL") {
+      where.applicationCategory = quota;
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim();
+      where.OR = [
+        { applicationId: { contains: q } },
+        { givenName: { contains: q } },
+        { surname: { contains: q } },
+        { applicant: { name: { contains: q } } },
+      ];
+    }
 
     const [applications, totalCount] = await Promise.all([
       prisma.application.findMany({
@@ -32,10 +49,15 @@ export async function GET(req: Request) {
         include: {
           applicant: true,
           officer: true,
+          appointment: true,
+          policeReports: {
+            take: 1,
+            orderBy: { id: "desc" },
+          },
           statusHistory: {
-            orderBy: { changedAt: 'desc' },
-            take: 1
-          }
+            orderBy: { changedAt: "desc" },
+            take: 1,
+          },
         },
         skip: (page - 1) * limit,
         take: limit,
@@ -46,8 +68,12 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       applications,
-      totalPages: Math.ceil(totalCount / limit),
-      currentPage: page,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit) || 1,
+      },
     });
   } catch (error) {
     console.error("Admin applications error:", error);

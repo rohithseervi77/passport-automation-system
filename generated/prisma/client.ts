@@ -131,3 +131,13 @@ export type LoginHistory = Prisma.LoginHistoryModel
  * 
  */
 export type Grievance = Prisma.GrievanceModel
+/**
+ * Model AdminInvitation
+ * 
+ */
+export type AdminInvitation = Prisma.AdminInvitationModel
+/**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = Prisma.SystemSettingModel
