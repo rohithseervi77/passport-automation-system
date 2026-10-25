@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState, useEffect, Suspense } from "react";
+import { FormEvent, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -13,13 +13,9 @@ function ResetPasswordForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!token) {
-      setError("Invalid or missing reset token. Please request a new link.");
-    }
-  }, [token]);
+  const [error, setError] = useState(
+    !token ? "Invalid or missing reset token. Please request a new link." : ""
+  );
 
   async function handleReset(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

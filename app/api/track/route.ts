@@ -48,11 +48,22 @@ export async function POST(req: Request) {
 
     // Optional DOB validation
     if (dob && dob.trim()) {
-      const inputDob = new Date(dob).toISOString().split("T")[0];
-      const appDob = application.dob ? new Date(application.dob).toISOString().split("T")[0] : null;
-      const userDob = application.applicant.dob ? new Date(application.applicant.dob).toISOString().split("T")[0] : null;
+      const parsedDate = new Date(dob.trim());
+      if (isNaN(parsedDate.getTime())) {
+        return NextResponse.json(
+          { error: "Invalid Date of Birth format. Please select a valid date." },
+          { status: 400 }
+        );
+      }
+      const inputDob = parsedDate.toISOString().split("T")[0];
+      const appDob = application.dob && !isNaN(new Date(application.dob).getTime())
+        ? new Date(application.dob).toISOString().split("T")[0]
+        : null;
+      const userDob = application.applicant.dob && !isNaN(new Date(application.applicant.dob).getTime())
+        ? new Date(application.applicant.dob).toISOString().split("T")[0]
+        : null;
 
-      if (appDob && inputDob !== appDob && inputDob !== userDob) {
+      if ((appDob || userDob) && inputDob !== appDob && inputDob !== userDob) {
         return NextResponse.json(
           { error: "Date of Birth does not match department records for this Application Reference Number." },
           { status: 401 }

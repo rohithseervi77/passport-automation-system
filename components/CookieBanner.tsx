@@ -1,26 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 
-export default function CookieBanner() {
-  const [mounted, setMounted] = useState(false);
-  const [consentGiven, setConsentGiven] = useState(true);
+function subscribe(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
 
-  useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem("pas_cookie_consent");
-    if (!stored) {
-      setConsentGiven(false);
-    }
-  }, []);
+function getSnapshot(): string | null {
+  return localStorage.getItem("pas_cookie_consent");
+}
+
+function getServerSnapshot(): string {
+  return "server_hydrating";
+}
+
+export default function CookieBanner() {
+  const [localDismissed, setLocalDismissed] = useState(false);
+  const storedConsent = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   function handleAccept(type: "all" | "essential") {
     localStorage.setItem("pas_cookie_consent", type);
-    setConsentGiven(true);
+    setLocalDismissed(true);
   }
 
-  if (!mounted || consentGiven) return null;
+  if (storedConsent === "server_hydrating" || storedConsent !== null || localDismissed) return null;
 
   return (
     <div
@@ -47,19 +52,16 @@ export default function CookieBanner() {
         >
           Privacy Policy
         </Link>
-
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <button
-            type="button"
             onClick={() => handleAccept("essential")}
-            className="rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-1 text-[11px] font-medium text-slate-300 hover:bg-slate-700 transition"
+            className="px-3 py-1 text-[11px] font-semibold text-slate-300 hover:text-white rounded-lg border border-slate-700 hover:bg-slate-800 transition"
           >
             Essential Only
           </button>
           <button
-            type="button"
             onClick={() => handleAccept("all")}
-            className="rounded-lg bg-blue-600 px-3 py-1 text-[11px] font-semibold text-white hover:bg-blue-700 shadow-sm shadow-blue-600/30 transition"
+            className="px-3.5 py-1 text-[11px] font-bold text-slate-950 bg-blue-400 hover:bg-blue-300 rounded-lg shadow-sm transition"
           >
             Accept All
           </button>

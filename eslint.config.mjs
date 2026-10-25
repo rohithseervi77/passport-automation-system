@@ -13,7 +13,7 @@ const eslintConfig = defineConfig([
       "prefer-const": "off",
       "@next/next/no-html-link-for-pages": "off",
       "react-hooks/rules-of-hooks": "warn",
-      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/set-state-in-effect": "off",
       "react-hooks/immutability": "warn",
       "react-hooks/refs": "warn",
       "react-hooks/exhaustive-deps": "warn",

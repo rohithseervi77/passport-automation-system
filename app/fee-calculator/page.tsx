@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
-import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import Link from "next/link";
 import { 
   Calculator, 
@@ -50,7 +49,6 @@ export default function FeeCalculatorPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-16">
-      <AcademicDisclaimer />
       <Navbar role="APPLICANT" userName="Citizen Portal" />
 
       {/* Header */}

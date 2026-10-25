@@ -63,27 +63,30 @@ export default function ApplicantAppointmentPage() {
     { slot: "04:30 PM - 05:30 PM", available: 3, quota: "Normal (Walk-in Backup)" },
   ];
 
-  async function fetchAppointmentData() {
-    try {
-      const res = await fetch("/api/applicant/appointment");
-      if (res.status === 401) {
-        router.push("/login");
-        return;
-      }
-      const data = await res.json();
-      setApplicant(data.applicant);
-      setApplication(data.application);
-      setAppointment(data.appointment);
-      setIsPaymentCompleted(data.isPaymentCompleted);
-    } catch (err) {
-      console.error("Failed to load appointment:", err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    let isMounted = true;
+    async function fetchAppointmentData() {
+      try {
+        const res = await fetch("/api/applicant/appointment");
+        if (res.status === 401) {
+          router.push("/login");
+          return;
+        }
+        const data = await res.json();
+        if (isMounted) {
+          setApplicant(data.applicant);
+          setApplication(data.application);
+          setAppointment(data.appointment);
+          setIsPaymentCompleted(data.isPaymentCompleted);
+        }
+      } catch (err) {
+        console.error("Failed to load appointment:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
     fetchAppointmentData();
+    return () => { isMounted = false; };
   }, [router]);
 
   async function handleBook(e: React.FormEvent) {

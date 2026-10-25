@@ -117,18 +117,6 @@ export default function ApplicantApplicationPage() {
   // Clarification reply if required
   const [clarificationResponse, setClarificationResponse] = useState("");
 
-  // Auto-detect Minor applicant (< 18 years)
-  useEffect(() => {
-    if (dob) {
-      const birthDate = new Date(dob);
-      const now = new Date();
-      if (!isNaN(birthDate.getTime())) {
-        const age = (now.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-        setIsMinor(age < 18);
-      }
-    }
-  }, [dob]);
-
   // Load existing application if available
   useEffect(() => {
     async function fetchApplicationData() {
@@ -929,7 +917,17 @@ export default function ApplicantApplicationPage() {
                       type="date"
                       value={dob}
                       max={new Date().toISOString().split("T")[0]}
-                      onChange={(e) => setDob(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setDob(val);
+                        if (val) {
+                          const birthDate = new Date(val);
+                          if (!isNaN(birthDate.getTime())) {
+                            const age = (Date.now() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+                            setIsMinor(age < 18);
+                          }
+                        }
+                      }}
                       className="w-full rounded border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-900"
                     />
                   </div>

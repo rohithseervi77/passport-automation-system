@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { 
@@ -49,7 +49,7 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  async function fetchEnquiries() {
+  const fetchEnquiries = useCallback(async () => {
     setLoading(true);
     try {
       const query = new URLSearchParams();
@@ -75,11 +75,11 @@ export default function PoliceDashboardClient({ initialPolice }: PoliceDashboard
     } finally {
       setLoading(false);
     }
-  }
+  }, [filterStatus, search, router, selectedEnquiry]);
 
   useEffect(() => {
     fetchEnquiries();
-  }, [filterStatus]);
+  }, [fetchEnquiries]);
 
   function handleSelectEnquiry(enquiry: any) {
     setSelectedEnquiry(enquiry);

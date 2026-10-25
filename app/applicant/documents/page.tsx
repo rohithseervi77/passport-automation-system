@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -87,7 +87,7 @@ export default function ApplicantDocumentsPage() {
     },
   ];
 
-  async function fetchDocuments() {
+  const fetchDocuments = useCallback(async () => {
     try {
       const res = await fetch("/api/applicant/documents");
       if (res.status === 401) {
@@ -103,11 +103,11 @@ export default function ApplicantDocumentsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [router]);
 
   useEffect(() => {
     fetchDocuments();
-  }, [router]);
+  }, [fetchDocuments]);
 
   async function handleUpload(e: React.FormEvent) {
     e.preventDefault();

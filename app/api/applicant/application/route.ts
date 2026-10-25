@@ -337,6 +337,15 @@ export async function POST(req: Request) {
             changedById: userId,
           },
         });
+
+        await prisma.notification.create({
+          data: {
+            userId,
+            title: "Application Submitted Successfully",
+            message: `Your passport application with ARN ${existingApp.applicationId} has been submitted. Next step: Please proceed to fee payment.`,
+            type: "SUCCESS",
+          },
+        });
       } else if (isRespondingToClarification) {
         await prisma.applicationStatusHistory.create({
           data: {

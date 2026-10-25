@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -28,15 +28,7 @@ export default function AdminDashboard() {
     activeSessions: 0,
   });
 
-  useEffect(() => {
-    if (activeTab === "APPLICATIONS") {
-      fetchApplications();
-    } else {
-      fetchLoginHistory();
-    }
-  }, [activeTab, filter, page, loginFilter, loginPage]);
-
-  async function fetchApplications() {
+  const fetchApplications = useCallback(async () => {
     setAppLoading(true);
     try {
       const res = await fetch(`/api/admin/applications?status=${filter}&page=${page}`);
@@ -52,9 +44,9 @@ export default function AdminDashboard() {
     } finally {
       setAppLoading(false);
     }
-  }
+  }, [filter, page, router]);
 
-  async function fetchLoginHistory() {
+  const fetchLoginHistory = useCallback(async () => {
     setLoginLoading(true);
     try {
       const res = await fetch(
@@ -75,7 +67,15 @@ export default function AdminDashboard() {
     } finally {
       setLoginLoading(false);
     }
-  }
+  }, [loginFilter, loginPage, router]);
+
+  useEffect(() => {
+    if (activeTab === "APPLICATIONS") {
+      fetchApplications();
+    } else {
+      fetchLoginHistory();
+    }
+  }, [activeTab, fetchApplications, fetchLoginHistory]);
 
   function getStatusBadge(status: string) {
     if (status.includes("APPROVED") || status.includes("ISSUED") || status.includes("DISPATCHED")) {

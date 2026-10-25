@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import Link from "next/link";
@@ -39,7 +39,7 @@ export default function PskSimulationPage() {
   const [processing, setProcessing] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     try {
       const res = await fetch("/api/applicant/application");
       if (res.ok) {
@@ -58,11 +58,11 @@ export default function PskSimulationPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const hasDigiLocker = application?.documents?.some(
     (d: any) => d.documentType?.includes("DigiLocker") || d.verifiedBy?.includes("DIGILOCKER")

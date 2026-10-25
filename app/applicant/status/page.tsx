@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ export default function ApplicantStatusPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  async function fetchStatus() {
+  const fetchStatus = useCallback(async () => {
     try {
       const res = await fetch("/api/applicant/status");
       if (res.status === 401) {
@@ -44,11 +44,11 @@ export default function ApplicantStatusPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [router]);
 
   useEffect(() => {
     fetchStatus();
-  }, [router]);
+  }, [fetchStatus]);
 
   async function handleSendClarification(e: React.FormEvent) {
     e.preventDefault();

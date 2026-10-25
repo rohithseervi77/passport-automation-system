@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { 
@@ -32,6 +32,7 @@ interface OfficerDashboardClientProps {
 
 export default function OfficerDashboardClient({ initialOfficer }: OfficerDashboardClientProps) {
   const router = useRouter();
+  const [referenceTime] = useState<number>(() => Date.now());
   const [officer, setOfficer] = useState<any>(initialOfficer);
   const [applications, setApplications] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any>({
@@ -79,7 +80,7 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
     policeCleared: false,
   });
 
-  async function fetchApplications() {
+  const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
       const query = new URLSearchParams();
@@ -113,11 +114,11 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
     } finally {
       setLoading(false);
     }
-  }
+  }, [filterStatus, filterQuota, filterPriority, filterType, search, page, router, selectedApp]);
 
   useEffect(() => {
     fetchApplications();
-  }, [filterStatus, filterQuota, filterPriority, filterType, page]);
+  }, [fetchApplications]);
 
   function handleSelectApplication(app: any) {
     setSelectedApp(app);
@@ -392,14 +393,14 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                         };
 
                         const submittedAt = new Date(app.submissionDate || app.createdAt);
-                        const daysPending = Math.max(0, Math.floor((Date.now() - submittedAt.getTime()) / (1000 * 60 * 60 * 24)));
+                        const daysPending = Math.max(0, Math.floor((referenceTime - submittedAt.getTime()) / (1000 * 60 * 60 * 24)));
                         const slaLimit = isTatkaal ? 3 : 30;
                         const isSlaBreached = daysPending > slaLimit;
 
                         let ageStr = "";
                         if (app.dob) {
                           const birth = new Date(app.dob);
-                          const age = Math.floor((Date.now() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+                          const age = Math.floor((referenceTime - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
                           ageStr = `${age} yrs`;
                         }
 

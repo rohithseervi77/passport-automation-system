@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
-import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import Link from "next/link";
 import { 
   HelpCircle, 
@@ -32,7 +31,7 @@ export default function GrievancePage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  async function loadGrievances() {
+  const loadGrievances = useCallback(async () => {
     try {
       const res = await fetch("/api/grievance");
       if (res.ok) {
@@ -44,11 +43,11 @@ export default function GrievancePage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     loadGrievances();
-  }, []);
+  }, [loadGrievances]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,7 +102,6 @@ export default function GrievancePage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-16">
-      <AcademicDisclaimer />
       <Navbar role="APPLICANT" userName="Citizen Portal" />
 
       {/* Header */}

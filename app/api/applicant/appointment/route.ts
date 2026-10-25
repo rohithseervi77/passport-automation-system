@@ -122,9 +122,9 @@ export async function POST(req: Request) {
     let appointment;
     if (application.appointment) {
       // Rescheduling existing slot
-      if (application.appointment.rescheduleCount >= 2) {
+      if (application.appointment.rescheduleCount >= 3) {
         return NextResponse.json({ 
-          error: "Maximum reschedule limit (2 times) reached. Further slot modifications require visiting RPO helpdesk." 
+          error: "Maximum reschedule limit (3 times) reached. Further slot modifications require visiting RPO helpdesk." 
         }, { status: 400 });
       }
 

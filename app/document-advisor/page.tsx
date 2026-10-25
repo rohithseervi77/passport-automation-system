@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
-import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import Link from "next/link";
 import { 
   FileCheck2, 
@@ -136,7 +135,6 @@ export default function DocumentAdvisorPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-16">
-      <AcademicDisclaimer />
       <Navbar role="APPLICANT" userName="Citizen Portal" />
 
       {/* Header */}
