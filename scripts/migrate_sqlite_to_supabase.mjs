@@ -2,8 +2,8 @@
  * Passport Automation System (PAS)
  * Data Migration Script: Local SQLite (dev.db) -> Supabase PostgreSQL
  * 
- * Usage:
- *   DATABASE_URL="postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres" node scripts/migrate_sqlite_to_supabase.mjs
+ * Migrates application data while stripping out any legacy password fields.
+ * Supabase Auth remains the sole identity provider.
  */
 
 import Database from "better-sqlite3";
@@ -11,6 +11,7 @@ import pg from "pg";
 import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
+import crypto from "crypto";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
@@ -22,7 +23,6 @@ const postgresUrl = process.env.DATABASE_URL;
 
 if (!postgresUrl || postgresUrl.startsWith("file:")) {
   console.error("❌ ERROR: DATABASE_URL must be a valid PostgreSQL connection string (Supabase).");
-  console.error("Example: DATABASE_URL=\"postgresql://postgres:password@db.xxx.supabase.co:5432/postgres\"");
   process.exit(1);
 }
 
@@ -40,13 +40,13 @@ const pool = new Pool({
 async function migrate() {
   console.log("==================================================");
   console.log("PAS — Migrating SQLite Data to Supabase PostgreSQL");
+  console.log("(Zero Passwords Stored in Application Database)");
   console.log("==================================================");
 
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
 
-    // Order of tables respecting foreign key constraints
     const tables = [
       { name: "User", seq: "User_id_seq" },
       { name: "Admin", seq: "Admin_id_seq" },
@@ -63,37 +63,47 @@ async function migrate() {
       { name: "Notification", seq: "Notification_id_seq" },
       { name: "AuditLog", seq: "AuditLog_id_seq" },
       { name: "PasswordResetToken", seq: "PasswordResetToken_id_seq" },
+      { name: "LoginHistory", seq: "LoginHistory_id_seq" },
     ];
 
     for (const { name: table, seq } of tables) {
-      // Check if table exists in SQLite
       const tableCheck = sqlite
         .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name=?")
         .get(table);
       if (!tableCheck) {
-        console.log(`⚠️  Table ${table} does not exist in SQLite, skipping.`);
         continue;
       }
 
       const rows = sqlite.prepare(`SELECT * FROM "${table}"`).all();
-      console.log(`\n📦 Migrating ${rows.length} records for "${table}"...`);
-
       if (rows.length === 0) continue;
 
-      const columns = Object.keys(rows[0]);
-      const quotedCols = columns.map((c) => `"${c}"`).join(", ");
+      console.log(`\n📦 Migrating ${rows.length} records for "${table}"...`);
 
       for (const row of rows) {
+        // Strip legacy password field from User table
+        if (table === "User") {
+          delete row.password;
+          if (!row.authUserId) {
+            row.authUserId = crypto.randomUUID();
+          }
+        }
+
+        const columns = Object.keys(row);
+        const quotedCols = columns.map((c) => `"${c}"`).join(", ");
+
         const values = columns.map((col) => {
           let val = row[col];
-          // Handle SQLite boolean representations (0 / 1 -> false / true)
           if (
             typeof val === "number" &&
-            (col.startsWith("is") || col.startsWith("has") || col === "confirmedDeclaration" || col === "isRead" || col === "isUsed")
+            (col.startsWith("is") ||
+              col.startsWith("has") ||
+              col === "confirmedDeclaration" ||
+              col === "isRead" ||
+              col === "isUsed" ||
+              col === "success")
           ) {
             val = Boolean(val);
           }
-          // Parse date strings if ISO
           if (typeof val === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(val)) {
             val = new Date(val);
           }
@@ -109,7 +119,6 @@ async function migrate() {
         await client.query(insertQuery, values);
       }
 
-      // Reset auto-increment sequence in PostgreSQL
       if (seq) {
         try {
           await client.query(`
@@ -119,7 +128,7 @@ async function migrate() {
             );
           `);
         } catch {
-          // Sequence adjustment fallback
+          // Ignore sequence reset if empty
         }
       }
 

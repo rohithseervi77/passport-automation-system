@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { supabaseAuthResetPassword } from "@/lib/supabase";
+import { logAuditEvent } from "@/lib/audit";
 import crypto from "crypto";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
@@ -16,14 +20,23 @@ export async function POST(request: Request) {
 
     if (!user) {
       // Return 200 to prevent email enumeration attacks
-      return NextResponse.json({ message: "If that email is in our database, we will send a password reset link to it." }, { status: 200 });
+      return NextResponse.json(
+        {
+          message:
+            "If that email is registered in our records, a secure password reset link has been dispatched.",
+        },
+        { status: 200 }
+      );
     }
 
     if (!user.isActive) {
       return NextResponse.json({ error: "Account is suspended." }, { status: 403 });
     }
 
-    // In a real app, delete existing tokens for this user first
+    // 1. Dispatch password reset via Supabase Auth
+    await supabaseAuthResetPassword(email);
+
+    // 2. Track token expiration for web flow compatibility
     await prisma.passwordResetToken.deleteMany({
       where: { userId: user.id },
     });
@@ -39,25 +52,20 @@ export async function POST(request: Request) {
       },
     });
 
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: "PASSWORD_RESET_REQUESTED",
-        ipAddress: request.headers.get("x-forwarded-for") || "unknown",
-      }
+    await logAuditEvent({
+      userId: user.id,
+      action: "PASSWORD_RESET_REQUESTED",
+      entityId: user.authUserId || user.email,
     });
 
-    // TODO: Send email using a service like SendGrid, Resend, etc.
-    // For this simulation, we will just return success.
-    console.log(`[SIMULATED EMAIL] Password reset token for ${email}: ${token}`);
-
-    return NextResponse.json({
-      message: "If that email is in our database, we will send a password reset link to it.",
-      // Returning token in response ONLY for local testing purposes. 
-      // In production, NEVER return this in the response body.
-      ...(process.env.NODE_ENV !== "production" ? { simulatedToken: token } : {})
-    }, { status: 200 });
-
+    return NextResponse.json(
+      {
+        message:
+          "If that email is registered in our records, a secure password reset link has been dispatched.",
+        ...(process.env.NODE_ENV !== "production" ? { simulatedToken: token } : {}),
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Forgot password error:", error);
     return NextResponse.json({ error: "Something went wrong." }, { status: 500 });

@@ -1,6 +1,6 @@
 # Database & Storage Setup Guide
 
-This guide provides step-by-step instructions for provisioning, configuring, and connecting the **Passport Automation System (PAS)** to **Supabase PostgreSQL** and **Supabase Storage**.
+This guide provides step-by-step instructions for provisioning, configuring, and connecting the **Passport Automation System (PAS)** to **Supabase Auth, Supabase PostgreSQL, and Supabase Storage**.
 
 ---
 
@@ -30,11 +30,11 @@ Navigate to **Project Settings** in your Supabase dashboard:
 
 ### A. Database Connection Strings (`Settings` -> `Database`)
 1. Under **Connection Pooling**, copy the **Transaction** mode connection string (Port `6543`). This is your `DATABASE_URL`:
-   ```
+   ```text
    postgresql://postgres.[YOUR-PROJECT-REF]:[YOUR-PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?pgbouncer=true
    ```
 2. Under **Direct Connection**, copy the direct connection string (Port `5432`). This is your `DIRECT_URL`:
-   ```
+   ```text
    postgresql://postgres.[YOUR-PROJECT-REF]:[YOUR-PASSWORD]@aws-0-[REGION].pooler.supabase.com:5432/postgres
    ```
 
@@ -76,31 +76,24 @@ Run Prisma's push command to automatically create all tables and indexes in your
 npx prisma db push
 ```
 
-Or generate and execute standard SQL migrations:
-
-```bash
-npx prisma migrate dev --name init_supabase_postgres
-```
-
 ---
 
-## 6. Step 5: Execute RLS & Storage SQL Script
+## 6. Step 5: Execute SQL Script for RLS & Storage
 
 1. In the Supabase Dashboard, open the **SQL Editor** from the left navigation bar.
 2. Open the file [`supabase/schema.sql`](supabase/schema.sql) in this repository.
 3. Paste the contents into the SQL Editor and click **Run**.
 4. This script will:
    - Create the private `passport-documents` storage bucket.
-   - Set maximum file upload size to 5 MB with MIME type whitelisting.
-   - Configure Row Level Security (RLS) on all system tables.
+   - Configure Row Level Security (RLS) on all system tables including `LoginHistory`.
    - Create performance composite indexes for application lookups, status transitions, and audit trails.
 
 ---
 
-## 7. Step 6: Populate Seed Data or Migrate from SQLite
+## 7. Step 7: Populate Seed Data or Migrate from SQLite
 
 ### Option A: Seed Fresh Realistic Demo Data
-To immediately populate your Supabase database with demo accounts (`applicant_demo`, `officer_demo`, `police_demo`) and realistic sample applications across every workflow stage:
+To immediately populate your Supabase database with demo accounts (`applicant_demo`, `officer_demo`, `police_demo`) and realistic sample applications across every workflow stage (with zero passwords stored in the database):
 
 ```bash
 npm run seed:supabase
@@ -115,34 +108,16 @@ npm run migrate:supabase
 
 ---
 
-## 8. Step 7: Verify Seed Accounts & Workflow
+## 8. Step 8: Verify Dashboard Navigation
 
-Once seeded, you can log in immediately with the following pre-configured credentials:
+Once seeded, you can inspect your live data in the Supabase Dashboard:
 
-| Role | Username | Password | Operational Purpose |
-|---|---|---|---|
-| **Applicant** | `applicant_demo` | `Applicant@123` | View application, book appointment, upload documents, make simulated payment. |
-| **Passport Officer** | `officer_demo` | `Officer@123` | Review documents, grant approval, issue booklet, dispatch passport. |
-| **Police Authority** | `police_demo` | `Police@123` | Inspect applicant details, submit residential enquiry report, clear/adverse flag. |
-
----
-
-## 9. Step 8: Vercel Deployment Configuration
-
-When deploying the application to Vercel:
-
-1. In your Vercel Project Dashboard, navigate to **Settings** -> **Environment Variables**.
-2. Add the following variables:
-   - `DATABASE_URL`
-   - `DIRECT_URL`
-   - `AUTH_SECRET`
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-   - `NEXT_PUBLIC_BASE_URL` (set to `https://passport-automation-system-psi.vercel.app`)
-3. Trigger a redeploy:
-   ```bash
-   npx vercel --prod
-   ```
-4. Verify your live deployment at:
-   `https://passport-automation-system-psi.vercel.app`
+1. **Authentication** -> **Users**:
+   - Inspect user IDs, emails, roles, and last sign-in timestamps.
+2. **Table Editor**:
+   - `User`: Application profiles with `authUserId` (zero passwords stored).
+   - `LoginHistory`: Audit log of all successful and failed logins with timestamps, IPs, and user agents.
+   - `Application`: Live application records and ARNs.
+   - `Document`: File metadata and verification statuses.
+3. **Storage** -> `passport-documents`:
+   - Inspect uploaded private citizen documents organized in `{applicationId}/{category}/` folders.

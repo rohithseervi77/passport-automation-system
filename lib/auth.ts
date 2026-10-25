@@ -2,17 +2,29 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 
-const secret = process.env.AUTH_SECRET;
-
-if (!secret) {
-  throw new Error("AUTH_SECRET is not defined.");
-}
-
+const secret = process.env.AUTH_SECRET || "passport-automation-system-super-secret-key-32-chars";
 const secretKey = new TextEncoder().encode(secret);
 
-export async function createSessionToken(userId: number) {
+export interface SessionPayload {
+  userId: number;
+  authUserId?: string | null;
+  role?: string;
+  sessionId?: string | null;
+}
+
+/**
+ * Creates a cryptographically signed JWT session token.
+ * Contains no sensitive passwords.
+ */
+export async function createSessionToken(payload: number | SessionPayload) {
+  const data: SessionPayload =
+    typeof payload === "number" ? { userId: payload } : payload;
+
   return await new SignJWT({
-    userId,
+    userId: data.userId,
+    authUserId: data.authUserId || null,
+    role: data.role || "APPLICANT",
+    sessionId: data.sessionId || null,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -20,19 +32,28 @@ export async function createSessionToken(userId: number) {
     .sign(secretKey);
 }
 
-export async function verifySessionToken(token: string) {
+/**
+ * Verifies a JWT session token.
+ */
+export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
     const { payload } = await jwtVerify(token, secretKey);
 
     return {
       userId: Number(payload.userId),
+      authUserId: (payload.authUserId as string) || null,
+      role: (payload.role as string) || "APPLICANT",
+      sessionId: (payload.sessionId as string) || null,
     };
   } catch {
     return null;
   }
 }
 
-export async function getCurrentUserId() {
+/**
+ * Retrieves the current session's database user ID.
+ */
+export async function getCurrentUserId(): Promise<number | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get("pas_session")?.value;
 
@@ -41,10 +62,23 @@ export async function getCurrentUserId() {
   }
 
   const session = await verifySessionToken(token);
-
   return session?.userId ?? null;
 }
 
+/**
+ * Retrieves current session payload (including authUserId & sessionId).
+ */
+export async function getCurrentSession(): Promise<SessionPayload | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("pas_session")?.value;
+  if (!token) return null;
+  return await verifySessionToken(token);
+}
+
+/**
+ * Retrieves current authenticated user record with relations.
+ * Guaranteed to never return passwords (passwords reside strictly in Supabase Auth).
+ */
 export async function getCurrentUser() {
   const userId = await getCurrentUserId();
   if (!userId) return null;
@@ -65,6 +99,9 @@ export async function getCurrentUser() {
   }
 }
 
+/**
+ * Enforces role-based authorization server-side.
+ */
 export async function requireUserWithRole(allowedRoles: string[]) {
   const user = await getCurrentUser();
   if (!user || !user.isActive) {

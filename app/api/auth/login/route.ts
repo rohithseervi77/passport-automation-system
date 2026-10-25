@@ -1,26 +1,34 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { createSessionToken } from "@/lib/auth";
+import { supabaseAuthSignIn } from "@/lib/supabase";
+import crypto from "crypto";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const ipAddress =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+  const userAgent = request.headers.get("user-agent") || "unknown";
+
   try {
     const body = await request.json();
-
     const { username, password } = body;
 
-    // 1. Check required fields
+    // 1. Check required credentials
     if (!username || !password) {
       return NextResponse.json(
         { error: "Username and password are required." },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
-    // 2. Find the user
-    const user = await prisma.user.findUnique({
+    // 2. Locate user profile by username or email
+    const user = await prisma.user.findFirst({
       where: {
-        username,
+        OR: [{ username }, { email: username }],
       },
       include: {
         applicant: true,
@@ -29,40 +37,56 @@ export async function POST(request: Request) {
       },
     });
 
-    // 3. Check whether user exists
     if (!user) {
+      // Record failed login event in LoginHistory (NO password stored)
+      await prisma.loginHistory.create({
+        data: {
+          authUserId: null,
+          email: username,
+          role: "UNKNOWN",
+          success: false,
+          ipAddress,
+          userAgent,
+        },
+      });
+
       return NextResponse.json(
         { error: "Invalid username or password." },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
-    // 4. Check if account is locked
+    // 3. Check account suspension
     if (!user.isActive) {
       return NextResponse.json(
         { error: "Account has been suspended. Please contact administration." },
-        { status: 403 },
+        { status: 403 }
       );
     }
 
+    // 4. Check lockout state
     if (user.lockedUntil && user.lockedUntil > new Date()) {
       return NextResponse.json(
-        { error: `Account locked due to too many failed attempts. Try again after ${user.lockedUntil.toLocaleTimeString()}.` },
-        { status: 403 },
+        {
+          error: `Account locked due to consecutive failed attempts. Try again after ${user.lockedUntil.toLocaleTimeString()}.`,
+        },
+        { status: 403 }
       );
     }
 
-    // 5. Compare entered password with hashed password
-    const passwordMatches = await bcrypt.compare(password, user.password);
+    // 5. Authenticate via Supabase Auth (Zero passwords handled by application database)
+    const authResult = await supabaseAuthSignIn({
+      email: user.email,
+      password,
+    });
 
-    // 6. Reject incorrect password and handle lockouts
-    if (!passwordMatches) {
+    // 6. Handle authentication failure
+    if (authResult.error || !authResult.user) {
       const newFailedAttempts = user.failedLoginAttempts + 1;
-      let lockedUntil = null;
+      let lockedUntil: Date | null = null;
 
       if (newFailedAttempts >= 5) {
-        // Lock for 15 minutes
-        lockedUntil = new Date(Date.now() + 15 * 60 * 1000);
+        lockedUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 min lock
       }
 
       await prisma.user.update({
@@ -73,53 +97,88 @@ export async function POST(request: Request) {
         },
       });
 
-      // Audit Log for failed login
-      await prisma.auditLog.create({
+      // Track failed attempt in LoginHistory (NEVER stores the password)
+      await prisma.loginHistory.create({
         data: {
-          userId: user.id,
-          action: "LOGIN_FAILED",
-          details: JSON.stringify({ reason: "Invalid password", attempt: newFailedAttempts }),
-          ipAddress: request.headers.get("x-forwarded-for") || "unknown",
-          userAgent: request.headers.get("user-agent") || "unknown",
-        }
+          authUserId: user.authUserId,
+          email: user.email,
+          role: user.role,
+          success: false,
+          ipAddress,
+          userAgent,
+        },
       });
 
       return NextResponse.json(
-        { error: lockedUntil ? "Too many failed attempts. Account locked for 15 minutes." : "Invalid username or password." },
-        { status: 401 },
+        {
+          error: lockedUntil
+            ? "Too many failed attempts. Account locked for 15 minutes."
+            : "Invalid username or password.",
+        },
+        { status: 401 }
       );
     }
 
-    // 7. Reset failed login attempts on success
-    if (user.failedLoginAttempts > 0 || user.lockedUntil) {
+    // 7. Successful login: synchronize authUserId if newly issued
+    const authUserId = authResult.user.id;
+    if (!user.authUserId || user.authUserId !== authUserId) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          authUserId,
+          failedLoginAttempts: 0,
+          lockedUntil: null,
+          lastLoginAt: new Date(),
+        },
+      });
+    } else if (user.failedLoginAttempts > 0 || user.lockedUntil) {
       await prisma.user.update({
         where: { id: user.id },
         data: {
           failedLoginAttempts: 0,
           lockedUntil: null,
+          lastLoginAt: new Date(),
         },
+      });
+    } else {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() },
       });
     }
 
-    // 8. Create login session
-    const sessionToken = await createSessionToken(user.id);
+    // 8. Generate session identifier
+    const sessionId = crypto.randomUUID();
 
-    // Audit Log for successful login
-    await prisma.auditLog.create({
+    // 9. Record successful event in LoginHistory
+    await prisma.loginHistory.create({
       data: {
-        userId: user.id,
-        action: "LOGIN_SUCCESS",
-        ipAddress: request.headers.get("x-forwarded-for") || "unknown",
-        userAgent: request.headers.get("user-agent") || "unknown",
-      }
+        authUserId,
+        email: user.email,
+        role: user.role,
+        success: true,
+        loginTime: new Date(),
+        ipAddress,
+        userAgent,
+        sessionId,
+      },
     });
 
-    // 9. Create response
+    // 10. Issue session JWT
+    const sessionToken = await createSessionToken({
+      userId: user.id,
+      authUserId,
+      role: user.role,
+      sessionId,
+    });
+
+    // 11. Create secure response
     const response = NextResponse.json(
       {
         message: "Login successful.",
         user: {
           id: user.id,
+          authUserId,
           username: user.username,
           email: user.email,
           role: user.role,
@@ -128,10 +187,10 @@ export async function POST(request: Request) {
           stationCode: user.police?.stationCode ?? null,
         },
       },
-      { status: 200 },
+      { status: 200 }
     );
 
-    // 10. Store session token in an HTTP-only cookie
+    // 12. Store session in HTTP-only Secure cookie
     response.cookies.set("pas_session", sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -143,12 +202,9 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error("Login error:", error);
-
     return NextResponse.json(
-      {
-        error: "Something went wrong during login.",
-      },
-      { status: 500 },
+      { error: "Something went wrong during login." },
+      { status: 500 }
     );
   }
 }

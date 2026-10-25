@@ -65,7 +65,8 @@ export const ModelName = {
   Passport: 'Passport',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
-  PasswordResetToken: 'PasswordResetToken'
+  PasswordResetToken: 'PasswordResetToken',
+  LoginHistory: 'LoginHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -86,13 +87,14 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  authUserId: 'authUserId',
   username: 'username',
-  password: 'password',
   email: 'email',
   role: 'role',
   isActive: 'isActive',
   failedLoginAttempts: 'failedLoginAttempts',
   lockedUntil: 'lockedUntil',
+  lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -343,6 +345,23 @@ export const PasswordResetTokenScalarFieldEnum = {
 } as const
 
 export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+export const LoginHistoryScalarFieldEnum = {
+  id: 'id',
+  authUserId: 'authUserId',
+  email: 'email',
+  role: 'role',
+  loginTime: 'loginTime',
+  logoutTime: 'logoutTime',
+  success: 'success',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  sessionId: 'sessionId',
+  createdAt: 'createdAt'
+} as const
+
+export type LoginHistoryScalarFieldEnum = (typeof LoginHistoryScalarFieldEnum)[keyof typeof LoginHistoryScalarFieldEnum]
 
 
 export const SortOrder = {

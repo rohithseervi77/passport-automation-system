@@ -1,6 +1,8 @@
 -- ====================================================================
 -- PASSPORT AUTOMATION SYSTEM (PAS)
 -- Supabase PostgreSQL Schema, Row Level Security (RLS), & Storage Setup
+-- NOTE: ZERO PASSWORDS STORED IN APPLICATION DATABASE.
+-- Authentication, passwords, and sessions are governed exclusively by Supabase Auth.
 -- ====================================================================
 
 -- 1. Create Storage Bucket for Passport Supporting Documents (Private)
@@ -26,9 +28,17 @@ USING (bucket_id = 'passport-documents')
 WITH CHECK (bucket_id = 'passport-documents');
 
 -- 2. Performance Indexes (Compound & Single-column)
--- User
+-- User / Profile
+CREATE INDEX IF NOT EXISTS "User_authUserId_idx" ON "User"("authUserId");
+CREATE INDEX IF NOT EXISTS "User_email_idx" ON "User"("email");
 CREATE INDEX IF NOT EXISTS "User_role_idx" ON "User"("role");
 CREATE INDEX IF NOT EXISTS "User_createdAt_idx" ON "User"("createdAt");
+
+-- Login History (Authentication Activity Audit)
+CREATE INDEX IF NOT EXISTS "LoginHistory_authUserId_idx" ON "LoginHistory"("authUserId");
+CREATE INDEX IF NOT EXISTS "LoginHistory_email_idx" ON "LoginHistory"("email");
+CREATE INDEX IF NOT EXISTS "LoginHistory_loginTime_idx" ON "LoginHistory"("loginTime");
+CREATE INDEX IF NOT EXISTS "LoginHistory_success_idx" ON "LoginHistory"("success");
 
 -- Applicant, Officer, Police
 CREATE INDEX IF NOT EXISTS "Applicant_userId_idx" ON "Applicant"("userId");
@@ -99,8 +109,9 @@ ALTER TABLE "Passport" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Notification" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "AuditLog" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "PasswordResetToken" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "LoginHistory" ENABLE ROW LEVEL SECURITY;
 
--- 4. Server-Side Service Role Full Access (Next.js Prisma Adapter)
+-- 4. Server-Side Service Role Full Access (Next.js Application Backend)
 CREATE POLICY "Service Role Full Access User" ON "User" FOR ALL TO service_role USING (true) WITH CHECK (true);
 CREATE POLICY "Service Role Full Access Applicant" ON "Applicant" FOR ALL TO service_role USING (true) WITH CHECK (true);
 CREATE POLICY "Service Role Full Access PassportOfficer" ON "PassportOfficer" FOR ALL TO service_role USING (true) WITH CHECK (true);
@@ -116,3 +127,4 @@ CREATE POLICY "Service Role Full Access Passport" ON "Passport" FOR ALL TO servi
 CREATE POLICY "Service Role Full Access Notification" ON "Notification" FOR ALL TO service_role USING (true) WITH CHECK (true);
 CREATE POLICY "Service Role Full Access AuditLog" ON "AuditLog" FOR ALL TO service_role USING (true) WITH CHECK (true);
 CREATE POLICY "Service Role Full Access PasswordResetToken" ON "PasswordResetToken" FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "Service Role Full Access LoginHistory" ON "LoginHistory" FOR ALL TO service_role USING (true) WITH CHECK (true);

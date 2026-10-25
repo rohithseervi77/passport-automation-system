@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { supabaseAuthSignUp } from "@/lib/supabase";
+import { logAuditEvent } from "@/lib/audit";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
@@ -23,7 +26,14 @@ export async function POST(request: Request) {
     if (!username || !email || !password) {
       return NextResponse.json(
         { error: "Username, email, and password are required." },
-        { status: 400 },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long." },
+        { status: 400 }
       );
     }
 
@@ -34,7 +44,7 @@ export async function POST(request: Request) {
     if (existingUsername) {
       return NextResponse.json(
         { error: "Username already exists." },
-        { status: 409 },
+        { status: 409 }
       );
     }
 
@@ -45,12 +55,26 @@ export async function POST(request: Request) {
     if (existingEmail) {
       return NextResponse.json(
         { error: "Email already exists." },
-        { status: 409 },
+        { status: 409 }
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // 1. Register identity in Supabase Auth (Zero passwords stored in application DB)
+    const authResult = await supabaseAuthSignUp({
+      email,
+      password,
+      role,
+      username,
+    });
 
+    if (authResult.error || !authResult.user) {
+      return NextResponse.json(
+        { error: authResult.error || "Supabase Auth registration failed." },
+        { status: 400 }
+      );
+    }
+
+    const authUserId = authResult.user.id;
     let createdUser;
 
     if (role === "OFFICER") {
@@ -61,20 +85,21 @@ export async function POST(request: Request) {
       if (existingOfficer) {
         return NextResponse.json(
           { error: "Officer ID already in use. Please choose another." },
-          { status: 409 },
+          { status: 409 }
         );
       }
 
       createdUser = await prisma.user.create({
         data: {
+          authUserId,
           username,
           email,
-          password: hashedPassword,
           role: "OFFICER",
           passportOfficer: {
             create: {
               officerId: offId,
-              branchLocation: branchLocation || "RPO Headquarters - Regional Processing Office",
+              branchLocation:
+                branchLocation || "RPO Headquarters - Regional Processing Office",
             },
           },
         },
@@ -83,14 +108,22 @@ export async function POST(request: Request) {
         },
       });
 
+      await logAuditEvent({
+        userId: createdUser.id,
+        action: "OFFICER_REGISTERED",
+        entityId: offId,
+        details: { role: "OFFICER", authUserId },
+      });
+
       return NextResponse.json(
         {
           message: "Passport Officer registration successful.",
           userId: createdUser.id,
+          authUserId,
           role: "OFFICER",
           officerId: createdUser.passportOfficer?.officerId,
         },
-        { status: 201 },
+        { status: 201 }
       );
     } else if (role === "POLICE") {
       const badge = badgeNumber || `POL-${Date.now().toString().slice(-6)}`;
@@ -100,15 +133,15 @@ export async function POST(request: Request) {
       if (existingPolice) {
         return NextResponse.json(
           { error: "Badge number already in use. Please choose another." },
-          { status: 409 },
+          { status: 409 }
         );
       }
 
       createdUser = await prisma.user.create({
         data: {
+          authUserId,
           username,
           email,
-          password: hashedPassword,
           role: "POLICE",
           police: {
             create: {
@@ -122,32 +155,45 @@ export async function POST(request: Request) {
         },
       });
 
+      await logAuditEvent({
+        userId: createdUser.id,
+        action: "POLICE_REGISTERED",
+        entityId: badge,
+        details: { role: "POLICE", authUserId },
+      });
+
       return NextResponse.json(
         {
           message: "Police Officer registration successful.",
           userId: createdUser.id,
+          authUserId,
           role: "POLICE",
           badgeNumber: createdUser.police?.badgeNumber,
           stationCode: createdUser.police?.stationCode,
         },
-        { status: 201 },
+        { status: 201 }
       );
     } else {
       // APPLICANT
       if (!name || !dob || !address) {
         return NextResponse.json(
-          { error: "Full name, date of birth, and residential address are required for applicant registration." },
-          { status: 400 },
+          {
+            error:
+              "Full name, date of birth, and residential address are required for applicant registration.",
+          },
+          { status: 400 }
         );
       }
 
-      const initialAppId = `PAS-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
+      const initialAppId = `PAS-${new Date().getFullYear()}-${Math.floor(
+        100000 + Math.random() * 900000
+      )}`;
 
       createdUser = await prisma.user.create({
         data: {
+          authUserId,
           username,
           email,
-          password: hashedPassword,
           role: "APPLICANT",
           applicant: {
             create: {
@@ -175,33 +221,29 @@ export async function POST(request: Request) {
         },
       });
 
-      await prisma.auditLog.create({
-        data: {
-          userId: createdUser.id,
-          action: "REGISTER_SUCCESS",
-          details: JSON.stringify({ role: "APPLICANT" }),
-          ipAddress: request.headers.get("x-forwarded-for") || "unknown",
-        }
+      await logAuditEvent({
+        userId: createdUser.id,
+        action: "APPLICANT_REGISTERED",
+        entityId: createdUser.applicant?.applicantId,
+        details: { role: "APPLICANT", authUserId },
       });
 
       return NextResponse.json(
         {
           message: "Applicant registration successful.",
           userId: createdUser.id,
+          authUserId,
           role: "APPLICANT",
           applicantId: createdUser.applicant?.applicantId,
         },
-        { status: 201 },
+        { status: 201 }
       );
     }
   } catch (error) {
     console.error("Registration error:", error);
-
     return NextResponse.json(
-      {
-        error: "Something went wrong during registration.",
-      },
-      { status: 500 },
+      { error: "Something went wrong during registration." },
+      { status: 500 }
     );
   }
 }

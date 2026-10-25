@@ -2,69 +2,107 @@
 
 ## 1. Executive Summary
 
-The **Passport Automation System (PAS)** operates an enterprise hybrid storage architecture designed for security, auditability, and scalability in compliance with high-assurance government service simulations:
+The **Passport Automation System (PAS)** operates an enterprise hybrid storage architecture where **Supabase serves as the central platform**:
 
-1. **Relational / Structured Data**: Hosted on **Supabase PostgreSQL** and queried using **Prisma ORM 7** with direct pooling via `@prisma/adapter-pg`.
-2. **Unstructured File Data**: Stored in a private **Supabase Storage** bucket (`passport-documents`) and accessed exclusively through server-minted short-lived signed URLs (5-minute TTL).
+1. **Authentication & Identity**: Governed exclusively by **Supabase Auth**. All user credentials, password hashing, and session tokens are isolated within Supabase's secure auth vault. **Zero passwords (plaintext or hashed) are stored in the application PostgreSQL database.**
+2. **Relational / Structured Data**: Hosted on **Supabase PostgreSQL** and queried using **Prisma ORM 7** with direct pooling via `@prisma/adapter-pg`.
+3. **Login & Security Audit**: Authentication events, successful logins, and failed attempts are recorded in the dedicated `LoginHistory` table (without storing attempted passwords) alongside Supabase Auth's native audit logs.
+4. **Unstructured File Data**: Stored in a private **Supabase Storage** bucket (`passport-documents`) and accessed exclusively through server-minted short-lived signed URLs (5-minute TTL).
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│                 PAS Web Client (Next.js 16)                 │
-└──────────────┬──────────────────────────────▲───────────────┘
-               │ (1) Authenticated Request    │ (4) Signed URL (5-min TTL)
-               ▼                              │
-┌─────────────────────────────────────────────────────────────┐
-│              Next.js Server API (Route Handlers)            │
-│  - Session Verification (jose HS256)                        │
-│  - Role-Based Access Control (RBAC)                         │
-│  - Application Ownership Checks                             │
-│  - Comprehensive Audit Logger                               │
-└──────────────┬──────────────────────────────┬───────────────┘
-               │                              │
-    (2) Structured Metadata         (3) Binary Upload / Signed URL
-               ▼                              ▼
-┌─────────────────────────────┐ ┌─────────────────────────────┐
-│     Prisma ORM 7 (pg)       │ │     Supabase Storage        │
-│              ▼              │ │              ▼              │
-│    Supabase PostgreSQL      │ │ Private 'passport-documents'│
-│   (Port 6543 Pooler / RLS)  │ │   {appId}/{type}/{file}     │
-└─────────────────────────────┘ └─────────────────────────────┘
+                         PAS
+                          |
+                       Next.js
+                          |
+          +---------------+---------------+
+          |               |               |
+          v               v               v
+    Supabase Auth    PostgreSQL       Supabase Storage
+          |               |               |
+          |               |               |
+       Users          PAS Data        Documents
+          |               |               |
+          |               |          Private Files
+          |
+    Login / Sessions
+    Authentication
+    Password Security (Zero DB Passwords)
 ```
 
 ---
 
 ## 2. Storage Mapping by Data Category
 
-| Data Category | Target Store | Format | Security & Access Controls |
-|---|---|---|---|
-| **User & Authentication** | Supabase PostgreSQL (`User`) | Relational Rows | Passwords hashed with `bcryptjs` (salt 10-12); brute-force lockout. |
-| **Applicant Profiles** | Supabase PostgreSQL (`Applicant`) | Relational Rows | Foreign key to `User`; 1:1 applicant relationship. |
-| **Passport Applications** | Supabase PostgreSQL (`Application`) | Relational Rows | Indexed by `applicationId` (ARN), `status`, `applicantId`. |
-| **Status History / Audit** | Supabase PostgreSQL (`ApplicationStatusHistory`, `AuditLog`) | Append-Only Rows | Immutable event log with IP, user agent, timestamp, actor ID. |
-| **Document Metadata** | Supabase PostgreSQL (`Document`) | Relational Rows | Tracks storage path, SHA/MIME type, size, verification status. |
-| **Physical Documents** (PDF/JPG/PNG) | Supabase Storage (`passport-documents`) | Binary Objects | **Private bucket**. No public access. 5MB quota. Strict MIME filter. |
-| **Appointments** | Supabase PostgreSQL (`Appointment`) | Relational Rows | Slot locking with compound index `(date, timeSlot)`. |
-| **Fee Transactions** | Supabase PostgreSQL (`Payment`) | Relational Rows | Unique transaction reference, base & Tatkaal fee breakdown. |
-| **Police Verification Reports** | Supabase PostgreSQL (`PoliceReport`) | Relational Rows | Clearances, station codes, adverse reasons, and officer timestamps. |
-| **Issued Passports** | Supabase PostgreSQL (`Passport`) | Relational Rows | 36/60-page booklet numbers, 10-year validity, India Post tracking numbers. |
+| Data Category | Target Store | Description / Access Rules |
+|---|---|---|
+| **Authentication & Passwords** | **Supabase Auth** | Cryptographic identity vault. Passwords are never stored, logged, or returned in the PAS application database. |
+| **User Profiles** | **Supabase PostgreSQL** (`User`) | Linked via `authUserId` (UUID) to Supabase Auth User. Contains `username`, `email`, `role`, `isActive`, `lastLoginAt`. |
+| **Login History & Security** | **Supabase PostgreSQL** (`LoginHistory`) | Append-only record of logins: `authUserId`, `email`, `role`, `loginTime`, `logoutTime`, `success`, `ipAddress`, `userAgent`, `sessionId`. **No passwords recorded**. |
+| **Applicant Profiles** | **Supabase PostgreSQL** (`Applicant`) | Full name, date of birth, residential address, linked 1:1 with `User`. |
+| **Passport Applications** | **Supabase PostgreSQL** (`Application`) | Master record containing ARN, personal, family, residential, emergency, and previous passport details. |
+| **Status History / Audit Logs** | **Supabase PostgreSQL** (`ApplicationStatusHistory`, `AuditLog`) | Immutable event log with IP, user agent, timestamp, actor ID. |
+| **Document Metadata** | **Supabase PostgreSQL** (`Document`) | Tracks storage path, SHA/MIME type, size, verification status. |
+| **Physical Documents** (PDF/JPG/PNG) | **Supabase Storage** (`passport-documents`) | **Private bucket**. No public access. 5MB quota. Strict MIME filter. |
+| **Appointments** | **Supabase PostgreSQL** (`Appointment`) | Slot booking with compound index `(date, timeSlot)`. |
+| **Fee Transactions** | **Supabase PostgreSQL** (`Payment`) | Unique transaction reference, base fee & Tatkaal fee breakdown. |
+| **Police Verification Reports** | **Supabase PostgreSQL** (`PoliceReport`) | Clearances, station codes, adverse reasons, and officer timestamps. |
+| **Issued Passports** | **Supabase PostgreSQL** (`Passport`) | 36/60-page booklet numbers, 10-year validity, India Post tracking numbers. |
 
 ---
 
-## 3. Supabase Storage: Object Structure & Life Cycle
+## 3. Supabase Dashboard Navigation Guide
 
-### 3.1 Bucket Configuration
+You can inspect, monitor, and manage the application's entire dataset directly from the Supabase Dashboard:
+
+```text
+https://supabase.com/dashboard/project/<your-project-id>
+    |
+    +-- 🔐 Authentication
+    |      ├── Users (Inspect user IDs, emails, roles, account creation, last sign-in)
+    |      └── Logs (Audit trail of logins, signups, token refreshes, password resets)
+    |
+    +-- 🗄️ Table Editor
+    |      ├── User (Application profiles with authUserId, username, role - NO passwords)
+    |      ├── LoginHistory (Who logged in, when, success/failed status, IP, session)
+    |      ├── Applicant (Citizen details, addresses, DOB)
+    |      ├── Application (Application Reference Numbers / ARNs, status, forms)
+    |      ├── Document (File metadata, verification status, storage paths)
+    |      ├── Appointment (PSK appointments, dates, slots, reschedule count)
+    |      ├── Payment (Transaction IDs, fees, payment methods)
+    |      ├── PoliceReport (Police enquiry status, station codes, adverse remarks)
+    |      ├── Passport (Issued passport booklets, dispatch numbers)
+    |      └── AuditLog (State transition forensics, officer actions)
+    |
+    +-- 📦 Storage
+    |      └── passport-documents (Private bucket: {applicationId}/{category}/{fileName})
+    |
+    +-- ⚡ SQL Editor (Run schema.sql, inspect table definitions, create custom queries)
+    |
+    +-- 📊 Database (Connection pooler settings, backup management, replication)
+    |
+    └── 📋 Logs (PostgreSQL query logs, API edge requests)
+```
+
+---
+
+## 4. Password Security Policy (Zero DB Passwords)
+
+1. **Absolute Prohibition**: The application database does not contain `password`, `plain_password`, `user_password`, or `login_password` columns.
+2. **Supabase Auth Ownership**: All password verification and hashing is delegated entirely to Supabase Auth's security engine.
+3. **No Credential Leaks**: Passwords are never serialized into API responses, logged into `AuditLog` or `LoginHistory`, or accessible via administrative tools.
+4. **Forgot Password Flow**: If a citizen or officer forgets their password, the `/forgot-password` workflow initiates a Supabase Auth email reset token link. The previous password is never displayed or recovered.
+
+---
+
+## 5. Supabase Storage: Private Document Lifecycle
+
+### 5.1 Bucket Configuration
 - **Bucket ID**: `passport-documents`
 - **Visibility**: `false` (Strictly Private)
 - **Maximum File Size**: `5242880` bytes (5 MB)
-- **Allowed MIME Types**:
-  - `application/pdf`
-  - `image/jpeg`
-  - `image/png`
-  - `image/webp`
+- **Allowed MIME Types**: `application/pdf`, `image/jpeg`, `image/png`, `image/webp`
 
-### 3.2 Directory Hierarchy
-Objects are stored hierarchically to prevent namespace collisions and simplify authorization checks:
-
+### 5.2 Storage Hierarchy
 ```text
 passport-documents/
 ├── APP-20261025-4921/
@@ -74,88 +112,9 @@ passport-documents/
 │   │   └── 1729864201000-electricity_bill.pdf
 │   └── proof_of_identity/
 │       └── 1729864202000-voter_card.pdf
-└── APP-20261024-8832/
-    └── ...
 ```
 
-### 3.3 Temporary Signed URL Strategy
-Confidential citizen identification documents are never exposed through permanent or public URLs.
-1. When an applicant, verifying officer, or police authority requests document inspection, the server verifies authentication, role, and application association.
-2. The server calls `supabase.storage.from('passport-documents').createSignedUrl(storagePath, 300)`.
-3. The resulting signed URL includes an HMAC token that expires in **300 seconds (5 minutes)**.
-4. Any attempt to use an expired or tampered link is rejected with HTTP 403 by Supabase Storage.
-
----
-
-## 4. Database Schema Specification
-
-### 4.1 Key Relational Models
-- **`User`**: Account credentials, role flag (`APPLICANT`, `OFFICER`, `POLICE`, `ADMIN`), lockout tracking.
-- **`Application`**: Master state record containing personal, family, residential, emergency, and previous passport details.
-- **`Document`**:
-  ```prisma
-  model Document {
-    id                 Int       @id @default(autoincrement())
-    docId              String    @unique
-    documentType       String
-    fileStatus         String    @default("UPLOADED")
-    fileUrl            String?
-    fileName           String?
-    fileSize           Int?
-    storagePath        String?
-    mimeType           String?
-    verificationStatus String    @default("PENDING")
-    verifiedBy         String?
-    verifiedAt         DateTime?
-    uploadedAt         DateTime  @default(now())
-    applicationId      Int
-    application        Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  }
-  ```
-- **`AuditLog`**:
-  ```prisma
-  model AuditLog {
-    id        Int      @id @default(autoincrement())
-    userId    Int?
-    action    String
-    entityId  String?
-    details   String?
-    ipAddress String?
-    userAgent String?
-    createdAt DateTime @default(now())
-  }
-  ```
-
----
-
-## 5. Performance Optimization & Compound Indexes
-
-To ensure sub-second response times under high concurrency, the following indexes are maintained in Supabase PostgreSQL:
-
-```sql
--- Application Lookups
-CREATE INDEX "Application_status_idx" ON "Application"("status");
-CREATE INDEX "Application_applicantId_idx" ON "Application"("applicantId");
-CREATE INDEX "Application_officerId_idx" ON "Application"("officerId");
-CREATE INDEX "Application_submissionDate_idx" ON "Application"("submissionDate");
-CREATE INDEX "Application_status_category_idx" ON "Application"("status", "applicationCategory");
-
--- Document Metadata
-CREATE INDEX "Document_applicationId_idx" ON "Document"("applicationId");
-CREATE INDEX "Document_documentType_idx" ON "Document"("documentType");
-CREATE INDEX "Document_verificationStatus_idx" ON "Document"("verificationStatus");
-
--- Audit Log & Analytics
-CREATE INDEX "AuditLog_userId_idx" ON "AuditLog"("userId");
-CREATE INDEX "AuditLog_action_idx" ON "AuditLog"("action");
-CREATE INDEX "AuditLog_createdAt_idx" ON "AuditLog"("createdAt");
-```
-
----
-
-## 6. Backup, Archival & Disaster Recovery
-
-1. **Automated Point-in-Time Recovery (PITR)**: Provided natively by Supabase PostgreSQL for up to 7-30 days of continuous transaction logs.
-2. **Scheduled Backups**: Daily database dumps via `pg_dump` automated via GitHub Actions or Supabase CLI.
-3. **Storage Replication**: Supabase Storage objects are backed by multi-region AWS S3 buckets with 99.999999999% (11 9s) durability.
-4. **Data Portability**: The included script `scripts/migrate_sqlite_to_supabase.mjs` allows bi-directional sync and backup export between SQLite snapshots and cloud PostgreSQL instances.
+### 5.3 Temporary Signed URLs (5-Minute Expiration)
+- Direct public access to documents is forbidden.
+- When an authorized user requests inspection, the server verifies identity, role, and application ownership.
+- The server generates an HMAC-signed URL with a 300-second TTL (`createSignedUrl(storagePath, 300)`).

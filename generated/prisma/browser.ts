@@ -92,3 +92,8 @@ export type AuditLog = Prisma.AuditLogModel
  * 
  */
 export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
+ * Model LoginHistory
+ * 
+ */
+export type LoginHistory = Prisma.LoginHistoryModel

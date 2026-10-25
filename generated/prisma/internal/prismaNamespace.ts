@@ -411,7 +411,8 @@ export const ModelName = {
   Passport: 'Passport',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
-  PasswordResetToken: 'PasswordResetToken'
+  PasswordResetToken: 'PasswordResetToken',
+  LoginHistory: 'LoginHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken"
+    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1541,6 +1542,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LoginHistory: {
+      payload: Prisma.$LoginHistoryPayload<ExtArgs>
+      fields: Prisma.LoginHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LoginHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LoginHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.LoginHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LoginHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.LoginHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.LoginHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.LoginHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LoginHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.LoginHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+        }
+        update: {
+          args: Prisma.LoginHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.LoginHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LoginHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LoginHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.LoginHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.LoginHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLoginHistory>
+        }
+        groupBy: {
+          args: Prisma.LoginHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LoginHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LoginHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LoginHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1582,13 +1657,14 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  authUserId: 'authUserId',
   username: 'username',
-  password: 'password',
   email: 'email',
   role: 'role',
   isActive: 'isActive',
   failedLoginAttempts: 'failedLoginAttempts',
   lockedUntil: 'lockedUntil',
+  lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1839,6 +1915,23 @@ export const PasswordResetTokenScalarFieldEnum = {
 } as const
 
 export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+export const LoginHistoryScalarFieldEnum = {
+  id: 'id',
+  authUserId: 'authUserId',
+  email: 'email',
+  role: 'role',
+  loginTime: 'loginTime',
+  logoutTime: 'logoutTime',
+  success: 'success',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  sessionId: 'sessionId',
+  createdAt: 'createdAt'
+} as const
+
+export type LoginHistoryScalarFieldEnum = (typeof LoginHistoryScalarFieldEnum)[keyof typeof LoginHistoryScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2099,6 +2192,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   auditLog?: Prisma.AuditLogOmit
   passwordResetToken?: Prisma.PasswordResetTokenOmit
+  loginHistory?: Prisma.LoginHistoryOmit
 }
 
 /* Types for Logging */

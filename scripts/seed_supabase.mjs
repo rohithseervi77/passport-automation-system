@@ -2,13 +2,15 @@
  * Passport Automation System (PAS)
  * Standalone Supabase PostgreSQL Seeding Script
  *
- * Populates Supabase with realistic Passport Seva simulation demo accounts,
- * active workflows, appointments, payments, documents, and notifications.
+ * Populates Supabase Auth with identities and Supabase PostgreSQL with
+ * application data, appointments, payments, documents, and login history.
+ *
+ * ABSOLUTELY NO PASSWORDS ARE STORED IN POSTGRESQL.
  */
 
 import pg from "pg";
-import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import crypto from "crypto";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
@@ -28,23 +30,23 @@ const pool = new Pool({
 
 async function seed() {
   console.log("==================================================");
-  console.log("PAS — Seeding Supabase PostgreSQL Demo Data");
+  console.log("PAS — Seeding Supabase (Zero Passwords in PostgreSQL)");
   console.log("==================================================");
 
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
 
-    // 1. Seed Demo Applicant
-    const applicantHash = await bcrypt.hash("Applicant@123", 10);
+    // 1. Seed Demo Applicant Profile
+    const applicantAuthId = "a1000000-0000-0000-0000-000000000001";
     const applicantRes = await client.query(
       `
-      INSERT INTO "User" (username, password, email, role, "isActive")
-      VALUES ($1, $2, $3, 'APPLICANT', true)
-      ON CONFLICT (username) DO UPDATE SET password = EXCLUDED.password
+      INSERT INTO "User" ("authUserId", username, email, role, "isActive", "lastLoginAt")
+      VALUES ($1, $2, $3, 'APPLICANT', true, NOW())
+      ON CONFLICT (username) DO UPDATE SET "authUserId" = EXCLUDED."authUserId"
       RETURNING id;
       `,
-      ["applicant_demo", applicantHash, "applicant.demo@pas.gov.in"]
+      [applicantAuthId, "applicant_demo", "applicant.demo@pas.gov.in"]
     );
     const applicantUserId = applicantRes.rows[0].id;
 
@@ -64,18 +66,18 @@ async function seed() {
       ]
     );
     const applicantRecordId = applicantProfileRes.rows[0].id;
-    console.log("✓ Seeded Applicant: applicant_demo / Applicant@123");
+    console.log("✓ Seeded Applicant profile: applicant_demo (Supabase Auth ID:", applicantAuthId, ")");
 
-    // 2. Seed Passport Officer
-    const officerHash = await bcrypt.hash("Officer@123", 10);
+    // 2. Seed Passport Officer Profile
+    const officerAuthId = "a1000000-0000-0000-0000-000000000002";
     const officerRes = await client.query(
       `
-      INSERT INTO "User" (username, password, email, role, "isActive")
-      VALUES ($1, $2, $3, 'OFFICER', true)
-      ON CONFLICT (username) DO UPDATE SET password = EXCLUDED.password
+      INSERT INTO "User" ("authUserId", username, email, role, "isActive", "lastLoginAt")
+      VALUES ($1, $2, $3, 'OFFICER', true, NOW())
+      ON CONFLICT (username) DO UPDATE SET "authUserId" = EXCLUDED."authUserId"
       RETURNING id;
       `,
-      ["officer_demo", officerHash, "officer.central@pas.gov.in"]
+      [officerAuthId, "officer_demo", "officer.central@pas.gov.in"]
     );
     const officerUserId = officerRes.rows[0].id;
 
@@ -86,21 +88,25 @@ async function seed() {
       ON CONFLICT ("userId") DO UPDATE SET "branchLocation" = EXCLUDED."branchLocation"
       RETURNING id;
       `,
-      ["OFF-CHENNAI-01", "Regional Passport Office, Rayala Towers, Anna Salai, Chennai", officerUserId]
+      [
+        "OFF-CHENNAI-01",
+        "Regional Passport Office, Rayala Towers, Anna Salai, Chennai",
+        officerUserId,
+      ]
     );
     const officerRecordId = officerProfileRes.rows[0].id;
-    console.log("✓ Seeded Officer: officer_demo / Officer@123");
+    console.log("✓ Seeded Officer profile: officer_demo (Supabase Auth ID:", officerAuthId, ")");
 
-    // 3. Seed Police Authority
-    const policeHash = await bcrypt.hash("Police@123", 10);
+    // 3. Seed Police Authority Profile
+    const policeAuthId = "a1000000-0000-0000-0000-000000000003";
     const policeRes = await client.query(
       `
-      INSERT INTO "User" (username, password, email, role, "isActive")
-      VALUES ($1, $2, $3, 'POLICE', true)
-      ON CONFLICT (username) DO UPDATE SET password = EXCLUDED.password
+      INSERT INTO "User" ("authUserId", username, email, role, "isActive", "lastLoginAt")
+      VALUES ($1, $2, $3, 'POLICE', true, NOW())
+      ON CONFLICT (username) DO UPDATE SET "authUserId" = EXCLUDED."authUserId"
       RETURNING id;
       `,
-      ["police_demo", policeHash, "police.central@pas.gov.in"]
+      [policeAuthId, "police_demo", "police.central@pas.gov.in"]
     );
     const policeUserId = policeRes.rows[0].id;
 
@@ -114,9 +120,23 @@ async function seed() {
       ["PS-CHENNAI-CENTRAL", "TN-POL-88219", policeUserId]
     );
     const policeRecordId = policeProfileRes.rows[0].id;
-    console.log("✓ Seeded Police: police_demo / Police@123");
+    console.log("✓ Seeded Police profile: police_demo (Supabase Auth ID:", policeAuthId, ")");
 
-    // 4. Seed Applications in Various Workflow States
+    // 4. Seed Initial Login Activity (LoginHistory)
+    await client.query(
+      `
+      INSERT INTO "LoginHistory" ("authUserId", email, role, "loginTime", success, "ipAddress", "userAgent")
+      VALUES 
+        ($1, 'applicant.demo@pas.gov.in', 'APPLICANT', NOW() - INTERVAL '1 hour', true, '127.0.0.1', 'Mozilla/5.0 PAS-Client'),
+        ($2, 'officer.central@pas.gov.in', 'OFFICER', NOW() - INTERVAL '45 minutes', true, '127.0.0.1', 'Mozilla/5.0 PAS-Officer-Terminal'),
+        ($3, 'police.central@pas.gov.in', 'POLICE', NOW() - INTERVAL '30 minutes', true, '127.0.0.1', 'Mozilla/5.0 PAS-Police-Terminal'),
+        ($1, 'applicant.demo@pas.gov.in', 'APPLICANT', NOW() - INTERVAL '2 hours', false, '192.168.1.100', 'Mozilla/5.0 Invalid-Attempt');
+      `,
+      [applicantAuthId, officerAuthId, policeAuthId]
+    );
+    console.log("✓ Seeded LoginHistory records (Success & Failed attempts tracked without passwords)");
+
+    // 5. Seed Applications in Various Workflow States
     const demoApps = [
       {
         arn: "APP-20261025-4921",
@@ -195,9 +215,21 @@ async function seed() {
 
       // Seed Documents for application
       const docs = [
-        { type: "Proof of Date of Birth (Aadhaar / Birth Certificate)", name: "aadhaar_card.pdf", path: `${app.arn}/proof_of_date_of_birth/aadhaar_card.pdf` },
-        { type: "Proof of Present Address (Utility Bill / Rent Agreement)", name: "electricity_bill.pdf", path: `${app.arn}/proof_of_present_address/electricity_bill.pdf` },
-        { type: "Proof of Identity / Voter ID", name: "voter_card.pdf", path: `${app.arn}/proof_of_identity/voter_card.pdf` },
+        {
+          type: "Proof of Date of Birth (Aadhaar / Birth Certificate)",
+          name: "aadhaar_card.pdf",
+          path: `${app.arn}/proof_of_date_of_birth/aadhaar_card.pdf`,
+        },
+        {
+          type: "Proof of Present Address (Utility Bill / Rent Agreement)",
+          name: "electricity_bill.pdf",
+          path: `${app.arn}/proof_of_present_address/electricity_bill.pdf`,
+        },
+        {
+          type: "Proof of Identity / Voter ID",
+          name: "voter_card.pdf",
+          path: `${app.arn}/proof_of_identity/voter_card.pdf`,
+        },
       ];
 
       for (let i = 0; i < docs.length; i++) {
