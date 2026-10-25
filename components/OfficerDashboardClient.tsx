@@ -24,6 +24,7 @@ import {
   Square
 } from "lucide-react";
 import { getStatusMeta } from "@/lib/fsm";
+import DocumentViewerModal from "@/components/DocumentViewerModal";
 
 interface OfficerDashboardClientProps {
   initialOfficer: any;
@@ -61,6 +62,10 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
   const [clarificationReason, setClarificationReason] = useState("");
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
+
+  // Document Viewer Modal State
+  const [viewingDoc, setViewingDoc] = useState<any | null>(null);
+  const [isDocViewerOpen, setIsDocViewerOpen] = useState(false);
 
   // Scrutiny 6-point checklist
   const [checklist, setChecklist] = useState({
@@ -528,26 +533,56 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
 
                   {/* Uploaded Supporting Documents */}
                   <div className="border border-slate-200 rounded-lg p-3 bg-white">
-                    <h3 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider mb-2 flex items-center gap-1.5 text-blue-950">
-                      <FileText className="w-3.5 h-3.5" /> 4. Uploaded Supporting Documents ({selectedApp.documents?.length || 0})
-                    </h3>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-blue-950">
+                        <FileText className="w-3.5 h-3.5" /> 4. Uploaded Supporting Documents ({selectedApp.documents?.length || 0})
+                      </h3>
+                      {selectedApp.documents?.some((d: any) => d.documentType?.includes("DigiLocker") || d.verifiedBy?.includes("DIGILOCKER")) && (
+                        <span className="text-[9px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                          <ShieldCheck className="w-3 h-3 text-emerald-600" /> Counter A Waived (DigiLocker)
+                        </span>
+                      )}
+                    </div>
                     {(!selectedApp.documents || selectedApp.documents.length === 0) ? (
                       <p className="text-[11px] text-slate-400">No documents attached.</p>
                     ) : (
                       <div className="space-y-1.5">
-                        {selectedApp.documents.map((d: any) => (
-                          <div key={d.id} className="p-2 rounded bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px]">
-                            <div>
-                              <span className="font-semibold text-slate-800 block">{d.documentType}</span>
-                              <span className="text-[10px] text-slate-400 font-mono">{d.fileName || "scan.pdf"}</span>
+                        {selectedApp.documents.map((d: any) => {
+                          const isDigi = d.documentType?.includes("DigiLocker") || d.verifiedBy?.includes("DIGILOCKER");
+                          return (
+                            <div key={d.id} className="p-2 rounded bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px]">
+                              <div>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-semibold text-slate-800 block">{d.documentType}</span>
+                                  {isDigi && (
+                                    <span className="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.2 rounded border border-emerald-300">
+                                      UIDAI Verified
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-[10px] text-slate-400 font-mono">{d.fileName || "scan.pdf"}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                  d.fileStatus === "VERIFIED" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                                }`}>
+                                  {d.fileStatus || "UPLOADED"}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setViewingDoc(d);
+                                    setIsDocViewerOpen(true);
+                                  }}
+                                  className="p-1 px-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-200 text-[10px] font-semibold inline-flex items-center gap-1 transition"
+                                  title="Inspect Document"
+                                >
+                                  <Eye className="w-3 h-3" /> View
+                                </button>
+                              </div>
                             </div>
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              d.fileStatus === "VERIFIED" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
-                            }`}>
-                              {d.fileStatus || "UPLOADED"}
-                            </span>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -845,6 +880,13 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
             </div>
           </div>
         )}
+        {/* Modal: Document Viewer & e-Aadhaar Inspector */}
+        <DocumentViewerModal
+          isOpen={isDocViewerOpen}
+          onClose={() => setIsDocViewerOpen(false)}
+          document={viewingDoc}
+          applicant={selectedApp?.applicant}
+        />
       </div>
     </main>
   );
