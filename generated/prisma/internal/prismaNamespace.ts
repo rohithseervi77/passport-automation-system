@@ -406,13 +406,15 @@ export const ModelName = {
   ApplicationStatusHistory: 'ApplicationStatusHistory',
   Document: 'Document',
   Appointment: 'Appointment',
+  AppointmentHistory: 'AppointmentHistory',
   Payment: 'Payment',
   PoliceReport: 'PoliceReport',
   Passport: 'Passport',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
   PasswordResetToken: 'PasswordResetToken',
-  LoginHistory: 'LoginHistory'
+  LoginHistory: 'LoginHistory',
+  Grievance: 'Grievance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory"
+    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "appointmentHistory" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory" | "grievance"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1098,6 +1100,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AppointmentHistory: {
+      payload: Prisma.$AppointmentHistoryPayload<ExtArgs>
+      fields: Prisma.AppointmentHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppointmentHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppointmentHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.AppointmentHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppointmentHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.AppointmentHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.AppointmentHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.AppointmentHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppointmentHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.AppointmentHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>
+        }
+        update: {
+          args: Prisma.AppointmentHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.AppointmentHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppointmentHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppointmentHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.AppointmentHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppointmentHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.AppointmentHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppointmentHistory>
+        }
+        groupBy: {
+          args: Prisma.AppointmentHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppointmentHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppointmentHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppointmentHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
     Payment: {
       payload: Prisma.$PaymentPayload<ExtArgs>
       fields: Prisma.PaymentFieldRefs
@@ -1616,6 +1692,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Grievance: {
+      payload: Prisma.$GrievancePayload<ExtArgs>
+      fields: Prisma.GrievanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GrievanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GrievanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>
+        }
+        findFirst: {
+          args: Prisma.GrievanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GrievanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>
+        }
+        findMany: {
+          args: Prisma.GrievanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>[]
+        }
+        create: {
+          args: Prisma.GrievanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>
+        }
+        createMany: {
+          args: Prisma.GrievanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GrievanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>[]
+        }
+        delete: {
+          args: Prisma.GrievanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>
+        }
+        update: {
+          args: Prisma.GrievanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>
+        }
+        deleteMany: {
+          args: Prisma.GrievanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GrievanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GrievanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>[]
+        }
+        upsert: {
+          args: Prisma.GrievanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GrievancePayload>
+        }
+        aggregate: {
+          args: Prisma.GrievanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGrievance>
+        }
+        groupBy: {
+          args: Prisma.GrievanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GrievanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GrievanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GrievanceCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1761,6 +1911,7 @@ export const ApplicationScalarFieldEnum = {
   prevIssueDate: 'prevIssueDate',
   prevExpiryDate: 'prevExpiryDate',
   prevPlaceOfIssue: 'prevPlaceOfIssue',
+  reissueReason: 'reissueReason',
   hasCriminalRecord: 'hasCriminalRecord',
   criminalRecordDetails: 'criminalRecordDetails',
   hasPendingProceedings: 'hasPendingProceedings',
@@ -1768,6 +1919,13 @@ export const ApplicationScalarFieldEnum = {
   hasLostPassport: 'hasLostPassport',
   lostPassportDetails: 'lostPassportDetails',
   confirmedDeclaration: 'confirmedDeclaration',
+  isMinor: 'isMinor',
+  parentConsent: 'parentConsent',
+  priority: 'priority',
+  draftStep: 'draftStep',
+  pskLocation: 'pskLocation',
+  pskToken: 'pskToken',
+  pskStatus: 'pskStatus',
   clarificationReason: 'clarificationReason',
   clarificationRequestedAt: 'clarificationRequestedAt',
   clarificationResponse: 'clarificationResponse',
@@ -1829,6 +1987,23 @@ export const AppointmentScalarFieldEnum = {
 } as const
 
 export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
+
+export const AppointmentHistoryScalarFieldEnum = {
+  id: 'id',
+  appointmentId: 'appointmentId',
+  applicationId: 'applicationId',
+  previousDate: 'previousDate',
+  previousSlot: 'previousSlot',
+  newDate: 'newDate',
+  newSlot: 'newSlot',
+  location: 'location',
+  rescheduledAt: 'rescheduledAt',
+  rescheduledBy: 'rescheduledBy',
+  reason: 'reason'
+} as const
+
+export type AppointmentHistoryScalarFieldEnum = (typeof AppointmentHistoryScalarFieldEnum)[keyof typeof AppointmentHistoryScalarFieldEnum]
 
 
 export const PaymentScalarFieldEnum = {
@@ -1932,6 +2107,25 @@ export const LoginHistoryScalarFieldEnum = {
 } as const
 
 export type LoginHistoryScalarFieldEnum = (typeof LoginHistoryScalarFieldEnum)[keyof typeof LoginHistoryScalarFieldEnum]
+
+
+export const GrievanceScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  category: 'category',
+  subject: 'subject',
+  description: 'description',
+  attachmentUrl: 'attachmentUrl',
+  status: 'status',
+  response: 'response',
+  respondedAt: 'respondedAt',
+  respondedBy: 'respondedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type GrievanceScalarFieldEnum = (typeof GrievanceScalarFieldEnum)[keyof typeof GrievanceScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2186,6 +2380,7 @@ export type GlobalOmitConfig = {
   applicationStatusHistory?: Prisma.ApplicationStatusHistoryOmit
   document?: Prisma.DocumentOmit
   appointment?: Prisma.AppointmentOmit
+  appointmentHistory?: Prisma.AppointmentHistoryOmit
   payment?: Prisma.PaymentOmit
   policeReport?: Prisma.PoliceReportOmit
   passport?: Prisma.PassportOmit
@@ -2193,6 +2388,7 @@ export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
   passwordResetToken?: Prisma.PasswordResetTokenOmit
   loginHistory?: Prisma.LoginHistoryOmit
+  grievance?: Prisma.GrievanceOmit
 }
 
 /* Types for Logging */

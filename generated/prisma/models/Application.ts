@@ -28,12 +28,14 @@ export type AggregateApplication = {
 
 export type ApplicationAvgAggregateOutputType = {
   id: number | null
+  draftStep: number | null
   applicantId: number | null
   officerId: number | null
 }
 
 export type ApplicationSumAggregateOutputType = {
   id: number | null
+  draftStep: number | null
   applicantId: number | null
   officerId: number | null
 }
@@ -86,6 +88,7 @@ export type ApplicationMinAggregateOutputType = {
   prevIssueDate: Date | null
   prevExpiryDate: Date | null
   prevPlaceOfIssue: string | null
+  reissueReason: string | null
   hasCriminalRecord: boolean | null
   criminalRecordDetails: string | null
   hasPendingProceedings: boolean | null
@@ -93,6 +96,13 @@ export type ApplicationMinAggregateOutputType = {
   hasLostPassport: boolean | null
   lostPassportDetails: string | null
   confirmedDeclaration: boolean | null
+  isMinor: boolean | null
+  parentConsent: boolean | null
+  priority: string | null
+  draftStep: number | null
+  pskLocation: string | null
+  pskToken: string | null
+  pskStatus: string | null
   clarificationReason: string | null
   clarificationRequestedAt: Date | null
   clarificationResponse: string | null
@@ -151,6 +161,7 @@ export type ApplicationMaxAggregateOutputType = {
   prevIssueDate: Date | null
   prevExpiryDate: Date | null
   prevPlaceOfIssue: string | null
+  reissueReason: string | null
   hasCriminalRecord: boolean | null
   criminalRecordDetails: string | null
   hasPendingProceedings: boolean | null
@@ -158,6 +169,13 @@ export type ApplicationMaxAggregateOutputType = {
   hasLostPassport: boolean | null
   lostPassportDetails: string | null
   confirmedDeclaration: boolean | null
+  isMinor: boolean | null
+  parentConsent: boolean | null
+  priority: string | null
+  draftStep: number | null
+  pskLocation: string | null
+  pskToken: string | null
+  pskStatus: string | null
   clarificationReason: string | null
   clarificationRequestedAt: Date | null
   clarificationResponse: string | null
@@ -216,6 +234,7 @@ export type ApplicationCountAggregateOutputType = {
   prevIssueDate: number
   prevExpiryDate: number
   prevPlaceOfIssue: number
+  reissueReason: number
   hasCriminalRecord: number
   criminalRecordDetails: number
   hasPendingProceedings: number
@@ -223,6 +242,13 @@ export type ApplicationCountAggregateOutputType = {
   hasLostPassport: number
   lostPassportDetails: number
   confirmedDeclaration: number
+  isMinor: number
+  parentConsent: number
+  priority: number
+  draftStep: number
+  pskLocation: number
+  pskToken: number
+  pskStatus: number
   clarificationReason: number
   clarificationRequestedAt: number
   clarificationResponse: number
@@ -237,12 +263,14 @@ export type ApplicationCountAggregateOutputType = {
 
 export type ApplicationAvgAggregateInputType = {
   id?: true
+  draftStep?: true
   applicantId?: true
   officerId?: true
 }
 
 export type ApplicationSumAggregateInputType = {
   id?: true
+  draftStep?: true
   applicantId?: true
   officerId?: true
 }
@@ -295,6 +323,7 @@ export type ApplicationMinAggregateInputType = {
   prevIssueDate?: true
   prevExpiryDate?: true
   prevPlaceOfIssue?: true
+  reissueReason?: true
   hasCriminalRecord?: true
   criminalRecordDetails?: true
   hasPendingProceedings?: true
@@ -302,6 +331,13 @@ export type ApplicationMinAggregateInputType = {
   hasLostPassport?: true
   lostPassportDetails?: true
   confirmedDeclaration?: true
+  isMinor?: true
+  parentConsent?: true
+  priority?: true
+  draftStep?: true
+  pskLocation?: true
+  pskToken?: true
+  pskStatus?: true
   clarificationReason?: true
   clarificationRequestedAt?: true
   clarificationResponse?: true
@@ -360,6 +396,7 @@ export type ApplicationMaxAggregateInputType = {
   prevIssueDate?: true
   prevExpiryDate?: true
   prevPlaceOfIssue?: true
+  reissueReason?: true
   hasCriminalRecord?: true
   criminalRecordDetails?: true
   hasPendingProceedings?: true
@@ -367,6 +404,13 @@ export type ApplicationMaxAggregateInputType = {
   hasLostPassport?: true
   lostPassportDetails?: true
   confirmedDeclaration?: true
+  isMinor?: true
+  parentConsent?: true
+  priority?: true
+  draftStep?: true
+  pskLocation?: true
+  pskToken?: true
+  pskStatus?: true
   clarificationReason?: true
   clarificationRequestedAt?: true
   clarificationResponse?: true
@@ -425,6 +469,7 @@ export type ApplicationCountAggregateInputType = {
   prevIssueDate?: true
   prevExpiryDate?: true
   prevPlaceOfIssue?: true
+  reissueReason?: true
   hasCriminalRecord?: true
   criminalRecordDetails?: true
   hasPendingProceedings?: true
@@ -432,6 +477,13 @@ export type ApplicationCountAggregateInputType = {
   hasLostPassport?: true
   lostPassportDetails?: true
   confirmedDeclaration?: true
+  isMinor?: true
+  parentConsent?: true
+  priority?: true
+  draftStep?: true
+  pskLocation?: true
+  pskToken?: true
+  pskStatus?: true
   clarificationReason?: true
   clarificationRequestedAt?: true
   clarificationResponse?: true
@@ -577,6 +629,7 @@ export type ApplicationGroupByOutputType = {
   prevIssueDate: Date | null
   prevExpiryDate: Date | null
   prevPlaceOfIssue: string | null
+  reissueReason: string | null
   hasCriminalRecord: boolean
   criminalRecordDetails: string | null
   hasPendingProceedings: boolean
@@ -584,6 +637,13 @@ export type ApplicationGroupByOutputType = {
   hasLostPassport: boolean
   lostPassportDetails: string | null
   confirmedDeclaration: boolean
+  isMinor: boolean
+  parentConsent: boolean
+  priority: string
+  draftStep: number
+  pskLocation: string | null
+  pskToken: string | null
+  pskStatus: string | null
   clarificationReason: string | null
   clarificationRequestedAt: Date | null
   clarificationResponse: string | null
@@ -665,6 +725,7 @@ export type ApplicationWhereInput = {
   prevIssueDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   prevExpiryDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   prevPlaceOfIssue?: Prisma.StringNullableFilter<"Application"> | string | null
+  reissueReason?: Prisma.StringNullableFilter<"Application"> | string | null
   hasCriminalRecord?: Prisma.BoolFilter<"Application"> | boolean
   criminalRecordDetails?: Prisma.StringNullableFilter<"Application"> | string | null
   hasPendingProceedings?: Prisma.BoolFilter<"Application"> | boolean
@@ -672,6 +733,13 @@ export type ApplicationWhereInput = {
   hasLostPassport?: Prisma.BoolFilter<"Application"> | boolean
   lostPassportDetails?: Prisma.StringNullableFilter<"Application"> | string | null
   confirmedDeclaration?: Prisma.BoolFilter<"Application"> | boolean
+  isMinor?: Prisma.BoolFilter<"Application"> | boolean
+  parentConsent?: Prisma.BoolFilter<"Application"> | boolean
+  priority?: Prisma.StringFilter<"Application"> | string
+  draftStep?: Prisma.IntFilter<"Application"> | number
+  pskLocation?: Prisma.StringNullableFilter<"Application"> | string | null
+  pskToken?: Prisma.StringNullableFilter<"Application"> | string | null
+  pskStatus?: Prisma.StringNullableFilter<"Application"> | string | null
   clarificationReason?: Prisma.StringNullableFilter<"Application"> | string | null
   clarificationRequestedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   clarificationResponse?: Prisma.StringNullableFilter<"Application"> | string | null
@@ -738,6 +806,7 @@ export type ApplicationOrderByWithRelationInput = {
   prevIssueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   prevExpiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
   prevPlaceOfIssue?: Prisma.SortOrderInput | Prisma.SortOrder
+  reissueReason?: Prisma.SortOrderInput | Prisma.SortOrder
   hasCriminalRecord?: Prisma.SortOrder
   criminalRecordDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   hasPendingProceedings?: Prisma.SortOrder
@@ -745,6 +814,13 @@ export type ApplicationOrderByWithRelationInput = {
   hasLostPassport?: Prisma.SortOrder
   lostPassportDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   confirmedDeclaration?: Prisma.SortOrder
+  isMinor?: Prisma.SortOrder
+  parentConsent?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
+  pskLocation?: Prisma.SortOrderInput | Prisma.SortOrder
+  pskToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  pskStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   clarificationReason?: Prisma.SortOrderInput | Prisma.SortOrder
   clarificationRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clarificationResponse?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -814,6 +890,7 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   prevIssueDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   prevExpiryDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   prevPlaceOfIssue?: Prisma.StringNullableFilter<"Application"> | string | null
+  reissueReason?: Prisma.StringNullableFilter<"Application"> | string | null
   hasCriminalRecord?: Prisma.BoolFilter<"Application"> | boolean
   criminalRecordDetails?: Prisma.StringNullableFilter<"Application"> | string | null
   hasPendingProceedings?: Prisma.BoolFilter<"Application"> | boolean
@@ -821,6 +898,13 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   hasLostPassport?: Prisma.BoolFilter<"Application"> | boolean
   lostPassportDetails?: Prisma.StringNullableFilter<"Application"> | string | null
   confirmedDeclaration?: Prisma.BoolFilter<"Application"> | boolean
+  isMinor?: Prisma.BoolFilter<"Application"> | boolean
+  parentConsent?: Prisma.BoolFilter<"Application"> | boolean
+  priority?: Prisma.StringFilter<"Application"> | string
+  draftStep?: Prisma.IntFilter<"Application"> | number
+  pskLocation?: Prisma.StringNullableFilter<"Application"> | string | null
+  pskToken?: Prisma.StringNullableFilter<"Application"> | string | null
+  pskStatus?: Prisma.StringNullableFilter<"Application"> | string | null
   clarificationReason?: Prisma.StringNullableFilter<"Application"> | string | null
   clarificationRequestedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   clarificationResponse?: Prisma.StringNullableFilter<"Application"> | string | null
@@ -887,6 +971,7 @@ export type ApplicationOrderByWithAggregationInput = {
   prevIssueDate?: Prisma.SortOrderInput | Prisma.SortOrder
   prevExpiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
   prevPlaceOfIssue?: Prisma.SortOrderInput | Prisma.SortOrder
+  reissueReason?: Prisma.SortOrderInput | Prisma.SortOrder
   hasCriminalRecord?: Prisma.SortOrder
   criminalRecordDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   hasPendingProceedings?: Prisma.SortOrder
@@ -894,6 +979,13 @@ export type ApplicationOrderByWithAggregationInput = {
   hasLostPassport?: Prisma.SortOrder
   lostPassportDetails?: Prisma.SortOrderInput | Prisma.SortOrder
   confirmedDeclaration?: Prisma.SortOrder
+  isMinor?: Prisma.SortOrder
+  parentConsent?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
+  pskLocation?: Prisma.SortOrderInput | Prisma.SortOrder
+  pskToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  pskStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   clarificationReason?: Prisma.SortOrderInput | Prisma.SortOrder
   clarificationRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clarificationResponse?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -960,6 +1052,7 @@ export type ApplicationScalarWhereWithAggregatesInput = {
   prevIssueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
   prevExpiryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
   prevPlaceOfIssue?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  reissueReason?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   hasCriminalRecord?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
   criminalRecordDetails?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   hasPendingProceedings?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
@@ -967,6 +1060,13 @@ export type ApplicationScalarWhereWithAggregatesInput = {
   hasLostPassport?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
   lostPassportDetails?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   confirmedDeclaration?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  isMinor?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  parentConsent?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  priority?: Prisma.StringWithAggregatesFilter<"Application"> | string
+  draftStep?: Prisma.IntWithAggregatesFilter<"Application"> | number
+  pskLocation?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  pskToken?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  pskStatus?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   clarificationReason?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   clarificationRequestedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
   clarificationResponse?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
@@ -1024,6 +1124,7 @@ export type ApplicationCreateInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -1031,6 +1132,13 @@ export type ApplicationCreateInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -1095,6 +1203,7 @@ export type ApplicationUncheckedCreateInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -1102,6 +1211,13 @@ export type ApplicationUncheckedCreateInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -1165,6 +1281,7 @@ export type ApplicationUpdateInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1172,6 +1289,13 @@ export type ApplicationUpdateInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1236,6 +1360,7 @@ export type ApplicationUncheckedUpdateInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1243,6 +1368,13 @@ export type ApplicationUncheckedUpdateInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1307,6 +1439,7 @@ export type ApplicationCreateManyInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -1314,6 +1447,13 @@ export type ApplicationCreateManyInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -1371,6 +1511,7 @@ export type ApplicationUpdateManyMutationInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1378,6 +1519,13 @@ export type ApplicationUpdateManyMutationInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1434,6 +1582,7 @@ export type ApplicationUncheckedUpdateManyInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1441,6 +1590,13 @@ export type ApplicationUncheckedUpdateManyInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1509,6 +1665,7 @@ export type ApplicationCountOrderByAggregateInput = {
   prevIssueDate?: Prisma.SortOrder
   prevExpiryDate?: Prisma.SortOrder
   prevPlaceOfIssue?: Prisma.SortOrder
+  reissueReason?: Prisma.SortOrder
   hasCriminalRecord?: Prisma.SortOrder
   criminalRecordDetails?: Prisma.SortOrder
   hasPendingProceedings?: Prisma.SortOrder
@@ -1516,6 +1673,13 @@ export type ApplicationCountOrderByAggregateInput = {
   hasLostPassport?: Prisma.SortOrder
   lostPassportDetails?: Prisma.SortOrder
   confirmedDeclaration?: Prisma.SortOrder
+  isMinor?: Prisma.SortOrder
+  parentConsent?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
+  pskLocation?: Prisma.SortOrder
+  pskToken?: Prisma.SortOrder
+  pskStatus?: Prisma.SortOrder
   clarificationReason?: Prisma.SortOrder
   clarificationRequestedAt?: Prisma.SortOrder
   clarificationResponse?: Prisma.SortOrder
@@ -1528,6 +1692,7 @@ export type ApplicationCountOrderByAggregateInput = {
 
 export type ApplicationAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -1580,6 +1745,7 @@ export type ApplicationMaxOrderByAggregateInput = {
   prevIssueDate?: Prisma.SortOrder
   prevExpiryDate?: Prisma.SortOrder
   prevPlaceOfIssue?: Prisma.SortOrder
+  reissueReason?: Prisma.SortOrder
   hasCriminalRecord?: Prisma.SortOrder
   criminalRecordDetails?: Prisma.SortOrder
   hasPendingProceedings?: Prisma.SortOrder
@@ -1587,6 +1753,13 @@ export type ApplicationMaxOrderByAggregateInput = {
   hasLostPassport?: Prisma.SortOrder
   lostPassportDetails?: Prisma.SortOrder
   confirmedDeclaration?: Prisma.SortOrder
+  isMinor?: Prisma.SortOrder
+  parentConsent?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
+  pskLocation?: Prisma.SortOrder
+  pskToken?: Prisma.SortOrder
+  pskStatus?: Prisma.SortOrder
   clarificationReason?: Prisma.SortOrder
   clarificationRequestedAt?: Prisma.SortOrder
   clarificationResponse?: Prisma.SortOrder
@@ -1645,6 +1818,7 @@ export type ApplicationMinOrderByAggregateInput = {
   prevIssueDate?: Prisma.SortOrder
   prevExpiryDate?: Prisma.SortOrder
   prevPlaceOfIssue?: Prisma.SortOrder
+  reissueReason?: Prisma.SortOrder
   hasCriminalRecord?: Prisma.SortOrder
   criminalRecordDetails?: Prisma.SortOrder
   hasPendingProceedings?: Prisma.SortOrder
@@ -1652,6 +1826,13 @@ export type ApplicationMinOrderByAggregateInput = {
   hasLostPassport?: Prisma.SortOrder
   lostPassportDetails?: Prisma.SortOrder
   confirmedDeclaration?: Prisma.SortOrder
+  isMinor?: Prisma.SortOrder
+  parentConsent?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
+  pskLocation?: Prisma.SortOrder
+  pskToken?: Prisma.SortOrder
+  pskStatus?: Prisma.SortOrder
   clarificationReason?: Prisma.SortOrder
   clarificationRequestedAt?: Prisma.SortOrder
   clarificationResponse?: Prisma.SortOrder
@@ -1664,6 +1845,7 @@ export type ApplicationMinOrderByAggregateInput = {
 
 export type ApplicationSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  draftStep?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -1896,6 +2078,7 @@ export type ApplicationCreateWithoutApplicantInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -1903,6 +2086,13 @@ export type ApplicationCreateWithoutApplicantInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -1966,6 +2156,7 @@ export type ApplicationUncheckedCreateWithoutApplicantInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -1973,6 +2164,13 @@ export type ApplicationUncheckedCreateWithoutApplicantInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2065,6 +2263,7 @@ export type ApplicationScalarWhereInput = {
   prevIssueDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   prevExpiryDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   prevPlaceOfIssue?: Prisma.StringNullableFilter<"Application"> | string | null
+  reissueReason?: Prisma.StringNullableFilter<"Application"> | string | null
   hasCriminalRecord?: Prisma.BoolFilter<"Application"> | boolean
   criminalRecordDetails?: Prisma.StringNullableFilter<"Application"> | string | null
   hasPendingProceedings?: Prisma.BoolFilter<"Application"> | boolean
@@ -2072,6 +2271,13 @@ export type ApplicationScalarWhereInput = {
   hasLostPassport?: Prisma.BoolFilter<"Application"> | boolean
   lostPassportDetails?: Prisma.StringNullableFilter<"Application"> | string | null
   confirmedDeclaration?: Prisma.BoolFilter<"Application"> | boolean
+  isMinor?: Prisma.BoolFilter<"Application"> | boolean
+  parentConsent?: Prisma.BoolFilter<"Application"> | boolean
+  priority?: Prisma.StringFilter<"Application"> | string
+  draftStep?: Prisma.IntFilter<"Application"> | number
+  pskLocation?: Prisma.StringNullableFilter<"Application"> | string | null
+  pskToken?: Prisma.StringNullableFilter<"Application"> | string | null
+  pskStatus?: Prisma.StringNullableFilter<"Application"> | string | null
   clarificationReason?: Prisma.StringNullableFilter<"Application"> | string | null
   clarificationRequestedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   clarificationResponse?: Prisma.StringNullableFilter<"Application"> | string | null
@@ -2129,6 +2335,7 @@ export type ApplicationCreateWithoutOfficerInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2136,6 +2343,13 @@ export type ApplicationCreateWithoutOfficerInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2199,6 +2413,7 @@ export type ApplicationUncheckedCreateWithoutOfficerInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2206,6 +2421,13 @@ export type ApplicationUncheckedCreateWithoutOfficerInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2294,6 +2516,7 @@ export type ApplicationCreateWithoutStatusHistoryInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2301,6 +2524,13 @@ export type ApplicationCreateWithoutStatusHistoryInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2364,6 +2594,7 @@ export type ApplicationUncheckedCreateWithoutStatusHistoryInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2371,6 +2602,13 @@ export type ApplicationUncheckedCreateWithoutStatusHistoryInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2449,6 +2687,7 @@ export type ApplicationUpdateWithoutStatusHistoryInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2456,6 +2695,13 @@ export type ApplicationUpdateWithoutStatusHistoryInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2519,6 +2765,7 @@ export type ApplicationUncheckedUpdateWithoutStatusHistoryInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2526,6 +2773,13 @@ export type ApplicationUncheckedUpdateWithoutStatusHistoryInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2588,6 +2842,7 @@ export type ApplicationCreateWithoutDocumentsInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2595,6 +2850,13 @@ export type ApplicationCreateWithoutDocumentsInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2658,6 +2920,7 @@ export type ApplicationUncheckedCreateWithoutDocumentsInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2665,6 +2928,13 @@ export type ApplicationUncheckedCreateWithoutDocumentsInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2743,6 +3013,7 @@ export type ApplicationUpdateWithoutDocumentsInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2750,6 +3021,13 @@ export type ApplicationUpdateWithoutDocumentsInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2813,6 +3091,7 @@ export type ApplicationUncheckedUpdateWithoutDocumentsInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2820,6 +3099,13 @@ export type ApplicationUncheckedUpdateWithoutDocumentsInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2882,6 +3168,7 @@ export type ApplicationCreateWithoutAppointmentInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2889,6 +3176,13 @@ export type ApplicationCreateWithoutAppointmentInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -2952,6 +3246,7 @@ export type ApplicationUncheckedCreateWithoutAppointmentInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -2959,6 +3254,13 @@ export type ApplicationUncheckedCreateWithoutAppointmentInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3037,6 +3339,7 @@ export type ApplicationUpdateWithoutAppointmentInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3044,6 +3347,13 @@ export type ApplicationUpdateWithoutAppointmentInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3107,6 +3417,7 @@ export type ApplicationUncheckedUpdateWithoutAppointmentInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3114,6 +3425,13 @@ export type ApplicationUncheckedUpdateWithoutAppointmentInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3176,6 +3494,7 @@ export type ApplicationCreateWithoutPaymentsInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -3183,6 +3502,13 @@ export type ApplicationCreateWithoutPaymentsInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3246,6 +3572,7 @@ export type ApplicationUncheckedCreateWithoutPaymentsInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -3253,6 +3580,13 @@ export type ApplicationUncheckedCreateWithoutPaymentsInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3331,6 +3665,7 @@ export type ApplicationUpdateWithoutPaymentsInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3338,6 +3673,13 @@ export type ApplicationUpdateWithoutPaymentsInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3401,6 +3743,7 @@ export type ApplicationUncheckedUpdateWithoutPaymentsInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3408,6 +3751,13 @@ export type ApplicationUncheckedUpdateWithoutPaymentsInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3470,6 +3820,7 @@ export type ApplicationCreateWithoutPoliceReportsInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -3477,6 +3828,13 @@ export type ApplicationCreateWithoutPoliceReportsInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3540,6 +3898,7 @@ export type ApplicationUncheckedCreateWithoutPoliceReportsInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -3547,6 +3906,13 @@ export type ApplicationUncheckedCreateWithoutPoliceReportsInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3625,6 +3991,7 @@ export type ApplicationUpdateWithoutPoliceReportsInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3632,6 +3999,13 @@ export type ApplicationUpdateWithoutPoliceReportsInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3695,6 +4069,7 @@ export type ApplicationUncheckedUpdateWithoutPoliceReportsInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3702,6 +4077,13 @@ export type ApplicationUncheckedUpdateWithoutPoliceReportsInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3764,6 +4146,7 @@ export type ApplicationCreateWithoutPassportInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -3771,6 +4154,13 @@ export type ApplicationCreateWithoutPassportInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3834,6 +4224,7 @@ export type ApplicationUncheckedCreateWithoutPassportInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -3841,6 +4232,13 @@ export type ApplicationUncheckedCreateWithoutPassportInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -3919,6 +4317,7 @@ export type ApplicationUpdateWithoutPassportInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3926,6 +4325,13 @@ export type ApplicationUpdateWithoutPassportInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3989,6 +4395,7 @@ export type ApplicationUncheckedUpdateWithoutPassportInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3996,6 +4403,13 @@ export type ApplicationUncheckedUpdateWithoutPassportInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4059,6 +4473,7 @@ export type ApplicationCreateManyApplicantInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -4066,6 +4481,13 @@ export type ApplicationCreateManyApplicantInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -4122,6 +4544,7 @@ export type ApplicationUpdateWithoutApplicantInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4129,6 +4552,13 @@ export type ApplicationUpdateWithoutApplicantInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4192,6 +4622,7 @@ export type ApplicationUncheckedUpdateWithoutApplicantInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4199,6 +4630,13 @@ export type ApplicationUncheckedUpdateWithoutApplicantInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4262,6 +4700,7 @@ export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4269,6 +4708,13 @@ export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4326,6 +4772,7 @@ export type ApplicationCreateManyOfficerInput = {
   prevIssueDate?: Date | string | null
   prevExpiryDate?: Date | string | null
   prevPlaceOfIssue?: string | null
+  reissueReason?: string | null
   hasCriminalRecord?: boolean
   criminalRecordDetails?: string | null
   hasPendingProceedings?: boolean
@@ -4333,6 +4780,13 @@ export type ApplicationCreateManyOfficerInput = {
   hasLostPassport?: boolean
   lostPassportDetails?: string | null
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: string
+  draftStep?: number
+  pskLocation?: string | null
+  pskToken?: string | null
+  pskStatus?: string | null
   clarificationReason?: string | null
   clarificationRequestedAt?: Date | string | null
   clarificationResponse?: string | null
@@ -4389,6 +4843,7 @@ export type ApplicationUpdateWithoutOfficerInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4396,6 +4851,13 @@ export type ApplicationUpdateWithoutOfficerInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4459,6 +4921,7 @@ export type ApplicationUncheckedUpdateWithoutOfficerInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4466,6 +4929,13 @@ export type ApplicationUncheckedUpdateWithoutOfficerInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4529,6 +4999,7 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerInput = {
   prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reissueReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
   criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4536,6 +5007,13 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerInput = {
   hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isMinor?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  draftStep?: Prisma.IntFieldUpdateOperationsInput | number
+  pskLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pskStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4651,6 +5129,7 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   prevIssueDate?: boolean
   prevExpiryDate?: boolean
   prevPlaceOfIssue?: boolean
+  reissueReason?: boolean
   hasCriminalRecord?: boolean
   criminalRecordDetails?: boolean
   hasPendingProceedings?: boolean
@@ -4658,6 +5137,13 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   hasLostPassport?: boolean
   lostPassportDetails?: boolean
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: boolean
+  draftStep?: boolean
+  pskLocation?: boolean
+  pskToken?: boolean
+  pskStatus?: boolean
   clarificationReason?: boolean
   clarificationRequestedAt?: boolean
   clarificationResponse?: boolean
@@ -4725,6 +5211,7 @@ export type ApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   prevIssueDate?: boolean
   prevExpiryDate?: boolean
   prevPlaceOfIssue?: boolean
+  reissueReason?: boolean
   hasCriminalRecord?: boolean
   criminalRecordDetails?: boolean
   hasPendingProceedings?: boolean
@@ -4732,6 +5219,13 @@ export type ApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   hasLostPassport?: boolean
   lostPassportDetails?: boolean
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: boolean
+  draftStep?: boolean
+  pskLocation?: boolean
+  pskToken?: boolean
+  pskStatus?: boolean
   clarificationReason?: boolean
   clarificationRequestedAt?: boolean
   clarificationResponse?: boolean
@@ -4792,6 +5286,7 @@ export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   prevIssueDate?: boolean
   prevExpiryDate?: boolean
   prevPlaceOfIssue?: boolean
+  reissueReason?: boolean
   hasCriminalRecord?: boolean
   criminalRecordDetails?: boolean
   hasPendingProceedings?: boolean
@@ -4799,6 +5294,13 @@ export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   hasLostPassport?: boolean
   lostPassportDetails?: boolean
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: boolean
+  draftStep?: boolean
+  pskLocation?: boolean
+  pskToken?: boolean
+  pskStatus?: boolean
   clarificationReason?: boolean
   clarificationRequestedAt?: boolean
   clarificationResponse?: boolean
@@ -4859,6 +5361,7 @@ export type ApplicationSelectScalar = {
   prevIssueDate?: boolean
   prevExpiryDate?: boolean
   prevPlaceOfIssue?: boolean
+  reissueReason?: boolean
   hasCriminalRecord?: boolean
   criminalRecordDetails?: boolean
   hasPendingProceedings?: boolean
@@ -4866,6 +5369,13 @@ export type ApplicationSelectScalar = {
   hasLostPassport?: boolean
   lostPassportDetails?: boolean
   confirmedDeclaration?: boolean
+  isMinor?: boolean
+  parentConsent?: boolean
+  priority?: boolean
+  draftStep?: boolean
+  pskLocation?: boolean
+  pskToken?: boolean
+  pskStatus?: boolean
   clarificationReason?: boolean
   clarificationRequestedAt?: boolean
   clarificationResponse?: boolean
@@ -4876,7 +5386,7 @@ export type ApplicationSelectScalar = {
   officerId?: boolean
 }
 
-export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "passportType" | "serviceType" | "applicationCategory" | "bookletType" | "rpoLocation" | "status" | "submissionDate" | "createdAt" | "updatedAt" | "givenName" | "surname" | "gender" | "dob" | "placeOfBirth" | "maritalStatus" | "citizenship" | "pan" | "voterId" | "employmentType" | "educationalQualification" | "visibleIdentificationMark" | "aadhaarNumber" | "fatherName" | "motherName" | "spouseName" | "legalGuardianName" | "presentAddressLine1" | "presentAddressLine2" | "presentCity" | "presentDistrict" | "presentState" | "presentPinCode" | "policeStation" | "isPermanentSame" | "permanentAddress" | "emergencyName" | "emergencyRelationship" | "emergencyMobile" | "emergencyEmail" | "emergencyAddress" | "hasPreviousPassport" | "prevPassportNumber" | "prevIssueDate" | "prevExpiryDate" | "prevPlaceOfIssue" | "hasCriminalRecord" | "criminalRecordDetails" | "hasPendingProceedings" | "pendingProceedingsDetails" | "hasLostPassport" | "lostPassportDetails" | "confirmedDeclaration" | "clarificationReason" | "clarificationRequestedAt" | "clarificationResponse" | "clarificationRespondedAt" | "officerChecklist" | "rejectionReason" | "applicantId" | "officerId", ExtArgs["result"]["application"]>
+export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "passportType" | "serviceType" | "applicationCategory" | "bookletType" | "rpoLocation" | "status" | "submissionDate" | "createdAt" | "updatedAt" | "givenName" | "surname" | "gender" | "dob" | "placeOfBirth" | "maritalStatus" | "citizenship" | "pan" | "voterId" | "employmentType" | "educationalQualification" | "visibleIdentificationMark" | "aadhaarNumber" | "fatherName" | "motherName" | "spouseName" | "legalGuardianName" | "presentAddressLine1" | "presentAddressLine2" | "presentCity" | "presentDistrict" | "presentState" | "presentPinCode" | "policeStation" | "isPermanentSame" | "permanentAddress" | "emergencyName" | "emergencyRelationship" | "emergencyMobile" | "emergencyEmail" | "emergencyAddress" | "hasPreviousPassport" | "prevPassportNumber" | "prevIssueDate" | "prevExpiryDate" | "prevPlaceOfIssue" | "reissueReason" | "hasCriminalRecord" | "criminalRecordDetails" | "hasPendingProceedings" | "pendingProceedingsDetails" | "hasLostPassport" | "lostPassportDetails" | "confirmedDeclaration" | "isMinor" | "parentConsent" | "priority" | "draftStep" | "pskLocation" | "pskToken" | "pskStatus" | "clarificationReason" | "clarificationRequestedAt" | "clarificationResponse" | "clarificationRespondedAt" | "officerChecklist" | "rejectionReason" | "applicantId" | "officerId", ExtArgs["result"]["application"]>
 export type ApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
   officer?: boolean | Prisma.Application$officerArgs<ExtArgs>
@@ -4957,6 +5467,7 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     prevIssueDate: Date | null
     prevExpiryDate: Date | null
     prevPlaceOfIssue: string | null
+    reissueReason: string | null
     hasCriminalRecord: boolean
     criminalRecordDetails: string | null
     hasPendingProceedings: boolean
@@ -4964,6 +5475,13 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     hasLostPassport: boolean
     lostPassportDetails: string | null
     confirmedDeclaration: boolean
+    isMinor: boolean
+    parentConsent: boolean
+    priority: string
+    draftStep: number
+    pskLocation: string | null
+    pskToken: string | null
+    pskStatus: string | null
     clarificationReason: string | null
     clarificationRequestedAt: Date | null
     clarificationResponse: string | null
@@ -5450,6 +5968,7 @@ export interface ApplicationFieldRefs {
   readonly prevIssueDate: Prisma.FieldRef<"Application", 'DateTime'>
   readonly prevExpiryDate: Prisma.FieldRef<"Application", 'DateTime'>
   readonly prevPlaceOfIssue: Prisma.FieldRef<"Application", 'String'>
+  readonly reissueReason: Prisma.FieldRef<"Application", 'String'>
   readonly hasCriminalRecord: Prisma.FieldRef<"Application", 'Boolean'>
   readonly criminalRecordDetails: Prisma.FieldRef<"Application", 'String'>
   readonly hasPendingProceedings: Prisma.FieldRef<"Application", 'Boolean'>
@@ -5457,6 +5976,13 @@ export interface ApplicationFieldRefs {
   readonly hasLostPassport: Prisma.FieldRef<"Application", 'Boolean'>
   readonly lostPassportDetails: Prisma.FieldRef<"Application", 'String'>
   readonly confirmedDeclaration: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly isMinor: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly parentConsent: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly priority: Prisma.FieldRef<"Application", 'String'>
+  readonly draftStep: Prisma.FieldRef<"Application", 'Int'>
+  readonly pskLocation: Prisma.FieldRef<"Application", 'String'>
+  readonly pskToken: Prisma.FieldRef<"Application", 'String'>
+  readonly pskStatus: Prisma.FieldRef<"Application", 'String'>
   readonly clarificationReason: Prisma.FieldRef<"Application", 'String'>
   readonly clarificationRequestedAt: Prisma.FieldRef<"Application", 'DateTime'>
   readonly clarificationResponse: Prisma.FieldRef<"Application", 'String'>

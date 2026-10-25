@@ -93,15 +93,27 @@ export default function ApplicantAppointmentPage() {
     setBooking(true);
 
     try {
-      const res = await fetch("/api/applicant/appointment", {
+      const endpoint = isRescheduling
+        ? "/api/applicant/appointment/reschedule"
+        : "/api/applicant/appointment";
+
+      const payload = isRescheduling
+        ? {
+            newDate: selectedDate,
+            newSlot: selectedSlot,
+            reason: "Rescheduled by applicant through citizen portal",
+          }
+        : {
+            date: selectedDate,
+            timeSlot: selectedSlot,
+            location: selectedLocation,
+            quota: application?.applicationCategory || "NORMAL",
+          };
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          date: selectedDate,
-          timeSlot: selectedSlot,
-          location: selectedLocation,
-          quota: application?.applicationCategory || "NORMAL",
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -387,19 +399,27 @@ export default function ApplicantAppointmentPage() {
                   Print Appointment Slip
                 </button>
 
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                  <Link
+                    href="/applicant/psk-simulation"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-700 text-white text-sm font-bold rounded-md hover:bg-emerald-800 transition shadow-sm"
+                  >
+                    <Building className="w-4 h-4" />
+                    <span>Start Simulated PSK Visit</span>
+                  </Link>
+
                   <button
                     onClick={() => setIsRescheduling(true)}
-                    disabled={appointment.rescheduleCount >= 2}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-900 text-sm font-semibold rounded-md hover:bg-blue-100 disabled:opacity-50 transition"
+                    disabled={appointment.rescheduleCount >= 3}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 text-blue-900 text-sm font-semibold rounded-md hover:bg-blue-100 disabled:opacity-50 transition"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
-                    Reschedule Slot {appointment.rescheduleCount >= 2 && "(Limit reached)"}
+                    Reschedule Slot {appointment.rescheduleCount >= 3 && "(Limit reached)"}
                   </button>
 
                   <button
                     onClick={handleCancel}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-rose-50 border border-rose-200 text-rose-700 text-sm font-semibold rounded-md hover:bg-rose-100 transition"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-rose-50 border border-rose-200 text-rose-700 text-sm font-semibold rounded-md hover:bg-rose-100 transition"
                   >
                     <XCircle className="w-3.5 h-3.5" />
                     Cancel Slot

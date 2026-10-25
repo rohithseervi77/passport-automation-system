@@ -87,6 +87,11 @@ export type Document = Prisma.DocumentModel
  */
 export type Appointment = Prisma.AppointmentModel
 /**
+ * Model AppointmentHistory
+ * 
+ */
+export type AppointmentHistory = Prisma.AppointmentHistoryModel
+/**
  * Model Payment
  * 
  */
@@ -121,3 +126,8 @@ export type PasswordResetToken = Prisma.PasswordResetTokenModel
  * 
  */
 export type LoginHistory = Prisma.LoginHistoryModel
+/**
+ * Model Grievance
+ * 
+ */
+export type Grievance = Prisma.GrievanceModel

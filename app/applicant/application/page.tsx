@@ -109,8 +109,25 @@ export default function ApplicantApplicationPage() {
   // Step 9: Declaration
   const [confirmedDeclaration, setConfirmedDeclaration] = useState(false);
 
+  // Upgraded PAS Workflows: Minor, Re-issue reason, Tatkaal
+  const [reissueReason, setReissueReason] = useState("EXPIRING_SOON");
+  const [isMinor, setIsMinor] = useState(false);
+  const [parentConsent, setParentConsent] = useState(false);
+
   // Clarification reply if required
   const [clarificationResponse, setClarificationResponse] = useState("");
+
+  // Auto-detect Minor applicant (< 18 years)
+  useEffect(() => {
+    if (dob) {
+      const birthDate = new Date(dob);
+      const now = new Date();
+      if (!isNaN(birthDate.getTime())) {
+        const age = (now.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        setIsMinor(age < 18);
+      }
+    }
+  }, [dob]);
 
   // Load existing application if available
   useEffect(() => {
@@ -195,6 +212,13 @@ export default function ApplicantApplicationPage() {
           if (app.lostPassportDetails) setLostPassportDetails(app.lostPassportDetails);
           if (app.confirmedDeclaration !== undefined) setConfirmedDeclaration(app.confirmedDeclaration);
           if (app.clarificationResponse) setClarificationResponse(app.clarificationResponse);
+          // Resume saved draft step and upgraded attributes
+          if (app.reissueReason) setReissueReason(app.reissueReason);
+          if (app.isMinor !== undefined) setIsMinor(app.isMinor);
+          if (app.parentConsent !== undefined) setParentConsent(app.parentConsent);
+          if (app.draftStep && app.status === "DRAFT") {
+            setCurrentStep(Math.min(Math.max(app.draftStep, 1), 9));
+          }
         }
       } catch (err) {
         console.error("Load application error:", err);
@@ -272,6 +296,13 @@ export default function ApplicantApplicationPage() {
           setError("Previous Passport Number is required for Re-issue applications.");
           return false;
         }
+      }
+      return true;
+    }
+    if (step === 7) {
+      if (isMinor && !parentConsent) {
+        setError("Parental consent (Annexure D undertaking) is mandatory for minor applicants.");
+        return false;
       }
       return true;
     }
@@ -366,6 +397,11 @@ export default function ApplicantApplicationPage() {
         lostPassportDetails,
         confirmedDeclaration,
         clarificationResponse,
+        // Upgraded state fields
+        draftStep: currentStep,
+        reissueReason: serviceType === "REISSUE" ? reissueReason : null,
+        isMinor,
+        parentConsent,
       };
 
       const res = await fetch("/api/applicant/application", {
@@ -435,6 +471,10 @@ export default function ApplicantApplicationPage() {
     { num: 8, title: "Documents" },
     { num: 9, title: "Preview & Submit" },
   ];
+
+  const filledBlocks = Math.round((currentStep / 9) * 16);
+  const asciiBar = "█".repeat(filledBlocks) + "░".repeat(16 - filledBlocks);
+  const progressPercent = Math.round((currentStep / 9) * 100);
 
   if (loading) {
     return (
@@ -575,6 +615,37 @@ export default function ApplicantApplicationPage() {
             </div>
           )}
 
+          {/* Visual Application Progress Bar */}
+          <div className="bg-slate-900 text-white rounded-lg p-3.5 border border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-semibold text-slate-300">Application Progress:</span>
+              <span className="font-mono text-emerald-400 font-bold tracking-widest text-sm bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                {asciiBar}
+              </span>
+              <span className="font-bold text-amber-400">{progressPercent}%</span>
+              <span className="text-slate-400 hidden sm:inline">
+                (Step {currentStep} of 9 — {stepsList[currentStep - 1]?.title})
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {isMinor && (
+                <span className="bg-purple-900/80 text-purple-200 border border-purple-500/40 text-[10px] font-bold px-2 py-0.5 rounded">
+                  Minor Applicant (&lt;18)
+                </span>
+              )}
+              {applicationCategory === "TATKAAL" && (
+                <span className="bg-amber-900/80 text-amber-200 border border-amber-500/40 text-[10px] font-bold px-2 py-0.5 rounded">
+                  ⚡ Tatkaal Priority
+                </span>
+              )}
+              {serviceType === "REISSUE" && (
+                <span className="bg-blue-900/80 text-blue-200 border border-blue-500/40 text-[10px] font-bold px-2 py-0.5 rounded">
+                  Re-issue
+                </span>
+              )}
+            </div>
+          </div>
+
           {/* Wizard Step Progression Bar */}
           <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-xs overflow-x-auto">
             <div className="flex items-center min-w-[720px] justify-between">
@@ -677,6 +748,30 @@ export default function ApplicantApplicationPage() {
                       </div>
                     </label>
                   </div>
+
+                  {serviceType === "REISSUE" && (
+                    <div className="mt-3 bg-amber-50/80 border border-amber-200 rounded-lg p-4 space-y-2">
+                      <label className="block text-xs font-bold text-amber-950">
+                        Reason for Re-issue of Passport *
+                      </label>
+                      <select
+                        value={reissueReason}
+                        onChange={(e) => setReissueReason(e.target.value)}
+                        className="w-full rounded border border-amber-300 p-2.5 text-xs bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      >
+                        <option value="EXPIRING_SOON">Validity Expired within 3 years / Due to Expire</option>
+                        <option value="EXPIRED">Validity Expired more than 3 years ago</option>
+                        <option value="PAGES_EXHAUSTED">Exhaustion of Pages in Booklet</option>
+                        <option value="LOST">Lost / Stolen Passport Booklet (Requires Police Report)</option>
+                        <option value="DAMAGED">Damaged / Mutilated Passport Booklet</option>
+                        <option value="CHANGE_OF_ADDRESS">Change in Existing Personal Particulars (Name / Address / Marital Status)</option>
+                        <option value="OTHER">Other Reasons</option>
+                      </select>
+                      <span className="text-[11px] text-amber-800 block">
+                        Note: Existing old passport booklet must be surrendered for cancellation at the PSK counter during physical verification.
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Application Scheme */}
@@ -719,6 +814,18 @@ export default function ApplicantApplicationPage() {
                       </p>
                     </label>
                   </div>
+
+                  {applicationCategory === "TATKAAL" && (
+                    <div className="mt-3 bg-amber-50 border border-amber-300 rounded-lg p-3.5 text-xs text-amber-950 flex items-start gap-2.5">
+                      <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold">Tatkaal Fast-Track Processing Notice:</span>
+                        <p className="mt-0.5 text-amber-900 leading-relaxed">
+                          Under the Tatkaal scheme, application review is expedited on a post-police verification basis. You will be required to submit Annexure F or 3 standard identity proofs at the PSK.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Booklet Type & RPO */}
@@ -775,6 +882,17 @@ export default function ApplicantApplicationPage() {
                     Provide exact legal names matching your municipal birth record or school matriculation marksheet.
                   </p>
                 </div>
+
+                {isMinor && (
+                  <div className="bg-purple-50 border border-purple-300 rounded-lg p-3 text-xs text-purple-950 flex items-center gap-2.5">
+                    <span className="font-bold bg-purple-200 text-purple-900 px-2 py-0.5 rounded text-[10px] uppercase shrink-0">
+                      Minor Applicant (&lt;18)
+                    </span>
+                    <span>
+                      Applicant is under 18 years of age. Father/Mother/Guardian particulars are mandatory in Step 3 and Annexure D parental consent is required in Step 7.
+                    </span>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -1468,6 +1586,49 @@ export default function ApplicantApplicationPage() {
                       />
                     )}
                   </div>
+
+                  {/* Minor Applicant: Annexure D Undertaking */}
+                  {isMinor && (
+                    <div className="p-4 rounded border-2 border-purple-300 bg-purple-50/70 space-y-3">
+                      <div className="flex items-start gap-2.5">
+                        <CheckSquare className="w-5 h-5 text-purple-700 shrink-0 mt-0.5" />
+                        <div className="space-y-2">
+                          <p className="font-bold text-sm text-purple-950">
+                            Annexure D — Parental / Legal Guardian Consent Declaration (Mandatory for Minors)
+                          </p>
+                          <p className="text-purple-900 leading-relaxed text-xs">
+                            I/we, the parents/legal guardian of the minor applicant, solemnly affirm that the particulars given in this application are true and correct. I/we give our irrevocable consent to the issuance of an Indian passport to the minor.
+                          </p>
+                          <label className="flex items-center gap-2 font-bold text-purple-950 cursor-pointer pt-1">
+                            <input
+                              type="checkbox"
+                              checked={parentConsent}
+                              onChange={(e) => setParentConsent(e.target.checked)}
+                              className="h-4 w-4 rounded border-purple-400 text-purple-900 focus:ring-purple-500"
+                            />
+                            <span>I/we confirm parental consent under Annexure D *</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tatkaal Applicant: Annexure F Undertaking */}
+                  {applicationCategory === "TATKAAL" && (
+                    <div className="p-4 rounded border border-amber-300 bg-amber-50/70 space-y-2">
+                      <div className="flex items-start gap-2.5">
+                        <ShieldAlert className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-bold text-sm text-amber-950">
+                            Annexure F — Tatkaal Scheme Expedited Processing Undertaking
+                          </p>
+                          <p className="text-amber-900 mt-1 leading-relaxed text-xs">
+                            I confirm that I urgently require this passport under the Tatkaal scheme and affirm that no criminal proceedings or adverse reports are pending against me. I will submit Annexure F verification certificate or 3 prescribed standard identity proofs at the PSK.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

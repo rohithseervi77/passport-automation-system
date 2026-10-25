@@ -60,13 +60,15 @@ export const ModelName = {
   ApplicationStatusHistory: 'ApplicationStatusHistory',
   Document: 'Document',
   Appointment: 'Appointment',
+  AppointmentHistory: 'AppointmentHistory',
   Payment: 'Payment',
   PoliceReport: 'PoliceReport',
   Passport: 'Passport',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
   PasswordResetToken: 'PasswordResetToken',
-  LoginHistory: 'LoginHistory'
+  LoginHistory: 'LoginHistory',
+  Grievance: 'Grievance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -191,6 +193,7 @@ export const ApplicationScalarFieldEnum = {
   prevIssueDate: 'prevIssueDate',
   prevExpiryDate: 'prevExpiryDate',
   prevPlaceOfIssue: 'prevPlaceOfIssue',
+  reissueReason: 'reissueReason',
   hasCriminalRecord: 'hasCriminalRecord',
   criminalRecordDetails: 'criminalRecordDetails',
   hasPendingProceedings: 'hasPendingProceedings',
@@ -198,6 +201,13 @@ export const ApplicationScalarFieldEnum = {
   hasLostPassport: 'hasLostPassport',
   lostPassportDetails: 'lostPassportDetails',
   confirmedDeclaration: 'confirmedDeclaration',
+  isMinor: 'isMinor',
+  parentConsent: 'parentConsent',
+  priority: 'priority',
+  draftStep: 'draftStep',
+  pskLocation: 'pskLocation',
+  pskToken: 'pskToken',
+  pskStatus: 'pskStatus',
   clarificationReason: 'clarificationReason',
   clarificationRequestedAt: 'clarificationRequestedAt',
   clarificationResponse: 'clarificationResponse',
@@ -259,6 +269,23 @@ export const AppointmentScalarFieldEnum = {
 } as const
 
 export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
+
+
+export const AppointmentHistoryScalarFieldEnum = {
+  id: 'id',
+  appointmentId: 'appointmentId',
+  applicationId: 'applicationId',
+  previousDate: 'previousDate',
+  previousSlot: 'previousSlot',
+  newDate: 'newDate',
+  newSlot: 'newSlot',
+  location: 'location',
+  rescheduledAt: 'rescheduledAt',
+  rescheduledBy: 'rescheduledBy',
+  reason: 'reason'
+} as const
+
+export type AppointmentHistoryScalarFieldEnum = (typeof AppointmentHistoryScalarFieldEnum)[keyof typeof AppointmentHistoryScalarFieldEnum]
 
 
 export const PaymentScalarFieldEnum = {
@@ -362,6 +389,25 @@ export const LoginHistoryScalarFieldEnum = {
 } as const
 
 export type LoginHistoryScalarFieldEnum = (typeof LoginHistoryScalarFieldEnum)[keyof typeof LoginHistoryScalarFieldEnum]
+
+
+export const GrievanceScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  category: 'category',
+  subject: 'subject',
+  description: 'description',
+  attachmentUrl: 'attachmentUrl',
+  status: 'status',
+  response: 'response',
+  respondedAt: 'respondedAt',
+  respondedBy: 'respondedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type GrievanceScalarFieldEnum = (typeof GrievanceScalarFieldEnum)[keyof typeof GrievanceScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import { 
   Search, 
   Compass, 
@@ -75,6 +76,7 @@ export default function PublicTrackPage() {
         <div className="flex-1 bg-white"></div>
         <div className="flex-1 bg-[#138808]"></div>
       </div>
+      <AcademicDisclaimer />
 
       {/* Public Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40 print:hidden shadow-xs">

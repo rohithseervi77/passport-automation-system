@@ -92,6 +92,12 @@ export async function POST(req: Request) {
       applicationCategory = "NORMAL",
       bookletType = "36_PAGES",
       rpoLocation = "RPO Chennai",
+      priority: customPriority,
+      draftStep = 1,
+      reissueReason,
+      isMinor: clientIsMinor,
+      parentConsent = false,
+      pskLocation,
       // Personal
       givenName,
       surname,
@@ -145,6 +151,28 @@ export async function POST(req: Request) {
       clarificationResponse,
     } = body;
 
+    // Auto-detect Minor applicant status (<18 years)
+    let isMinor = Boolean(clientIsMinor);
+    let ageInYears: number | null = null;
+    if (dob) {
+      const birthDate = new Date(dob);
+      const now = new Date();
+      if (!isNaN(birthDate.getTime())) {
+        ageInYears = (now.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        if (ageInYears < 18) {
+          isMinor = true;
+        }
+      }
+    }
+
+    // Auto-derive application SLA priority
+    let priority = customPriority || "NORMAL";
+    if (applicationCategory === "TATKAAL") {
+      priority = "URGENT";
+    } else if (hasLostPassport || reissueReason === "LOST" || reissueReason === "DAMAGED") {
+      priority = "HIGH";
+    }
+
     // Server-side validation for submission
     if (isSubmit) {
       if (!givenName || givenName.trim().length < 2) {
@@ -158,9 +186,14 @@ export async function POST(req: Request) {
       if (isNaN(birthDate.getTime()) || birthDate >= now) {
         return NextResponse.json({ error: "Date of Birth cannot be in the future." }, { status: 400 });
       }
-      const ageInYears = (now.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-      if (ageInYears > 120) {
+      if (ageInYears && ageInYears > 120) {
         return NextResponse.json({ error: "Please provide a realistic Date of Birth." }, { status: 400 });
+      }
+      if (isMinor && !parentConsent) {
+        return NextResponse.json({ error: "Parent/Legal Guardian consent (Annexure D) is required for minor applicants." }, { status: 400 });
+      }
+      if (isMinor && !fatherName && !motherName && !legalGuardianName) {
+        return NextResponse.json({ error: "At least one parent or legal guardian name is mandatory for minors." }, { status: 400 });
       }
       if (!presentAddressLine1 || !presentCity || !presentPinCode) {
         return NextResponse.json({ error: "Complete present address with City and PIN Code is required." }, { status: 400 });
@@ -252,6 +285,13 @@ export async function POST(req: Request) {
       hasLostPassport: Boolean(hasLostPassport),
       lostPassportDetails,
       confirmedDeclaration: Boolean(confirmedDeclaration),
+      // Upgraded Workflow Details
+      reissueReason: serviceType === "REISSUE" ? (reissueReason || "EXPIRING_SOON") : null,
+      isMinor: Boolean(isMinor),
+      parentConsent: Boolean(parentConsent),
+      priority,
+      draftStep: typeof draftStep === "number" ? draftStep : 1,
+      pskLocation: pskLocation || null,
     };
 
     let application;

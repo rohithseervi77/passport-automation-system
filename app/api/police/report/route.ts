@@ -30,6 +30,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "applicationId and clearanceStatus are required." }, { status: 400 });
     }
 
+    // Hard Rule: Police Authority can only CLEAR, ADVERSE, PENDING, or CLARIFICATION_REQUIRED
+    // Police must NEVER be able to grant or approve passport issuance
+    const ALLOWED_POLICE_STATUSES = ["CLEAR", "CLEARED", "ADVERSE", "PENDING", "CLARIFICATION_REQUIRED"];
+    if (!ALLOWED_POLICE_STATUSES.includes(clearanceStatus)) {
+      return NextResponse.json({ 
+        error: "Invalid police verification outcome. Permitted values are CLEAR, ADVERSE, PENDING, or CLARIFICATION_REQUIRED. Police Authority does not possess statutory authority to approve or grant passports." 
+      }, { status: 400 });
+    }
+
     const application = await prisma.application.findUnique({
       where: { applicationId },
     });
@@ -38,17 +47,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Application not found in police enquiry registry." }, { status: 404 });
     }
 
+    const normalizedClearance = clearanceStatus === "CLEAR" ? "CLEARED" : clearanceStatus;
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
     const reportId = `PVR${dateStr}${Math.floor(1000 + Math.random() * 9000)}`;
 
     const report = await prisma.policeReport.create({
       data: {
         reportId,
-        clearanceStatus,
-        remarks: remarks || (clearanceStatus === "CLEARED" 
+        clearanceStatus: normalizedClearance,
+        remarks: remarks || (normalizedClearance === "CLEARED" 
           ? "Physical residential enquiry conducted. Local residents interviewed. Clean CCTNS records with no adverse criminal history." 
           : "Adverse background report registered."),
-        adverseReason: clearanceStatus === "ADVERSE" ? (adverseReason || "Adverse criminal background detected in police jurisdiction.") : null,
+        adverseReason: normalizedClearance === "ADVERSE" ? (adverseReason || "Adverse criminal background detected in police jurisdiction.") : null,
         stationCode: stationCode || police.stationCode || "PS-CENTRAL",
         verifiedAt: new Date(),
         applicationId: application.id,
@@ -57,13 +67,14 @@ export async function POST(req: Request) {
     });
 
     // Update application status based on police verification outcome
+    // Police report transmits to Regional Passport Office for final Officer decision
     let nextStatus: import("@/lib/fsm").ApplicationStatus;
-    if (clearanceStatus === "CLEARED") {
+    if (normalizedClearance === "CLEARED" || normalizedClearance === "ADVERSE") {
       nextStatus = "POLICE_VERIFICATION_COMPLETED";
-    } else if (clearanceStatus === "CLARIFICATION_REQUIRED") {
+    } else if (normalizedClearance === "CLARIFICATION_REQUIRED") {
       nextStatus = "CLARIFICATION_REQUIRED";
     } else {
-      nextStatus = "REJECTED";
+      nextStatus = "POLICE_VERIFICATION_PENDING";
     }
 
     await logAuditEvent({

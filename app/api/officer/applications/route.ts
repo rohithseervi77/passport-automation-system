@@ -21,6 +21,8 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const statusFilter = searchParams.get("status");
     const quotaFilter = searchParams.get("quota");
+    const priorityFilter = searchParams.get("priority");
+    const typeFilter = searchParams.get("type");
     const searchQuery = searchParams.get("q");
 
     const page = parseInt(searchParams.get("page") || "1");
@@ -32,6 +34,12 @@ export async function GET(req: Request) {
     }
     if (quotaFilter && quotaFilter !== "ALL") {
       whereClause.applicationCategory = quotaFilter;
+    }
+    if (priorityFilter && priorityFilter !== "ALL") {
+      whereClause.priority = priorityFilter;
+    }
+    if (typeFilter && typeFilter !== "ALL") {
+      whereClause.serviceType = typeFilter;
     }
     if (searchQuery && searchQuery.trim()) {
       const q = searchQuery.trim();

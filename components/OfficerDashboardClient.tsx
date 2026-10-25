@@ -47,6 +47,8 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [filterQuota, setFilterQuota] = useState("ALL");
+  const [filterPriority, setFilterPriority] = useState("ALL");
+  const [filterType, setFilterType] = useState("ALL");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -83,6 +85,8 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
       const query = new URLSearchParams();
       if (filterStatus !== "ALL") query.append("status", filterStatus);
       if (filterQuota !== "ALL") query.append("quota", filterQuota);
+      if (filterPriority !== "ALL") query.append("priority", filterPriority);
+      if (filterType !== "ALL") query.append("type", filterType);
       if (search.trim()) query.append("q", search.trim());
       query.append("page", page.toString());
 
@@ -113,7 +117,7 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
 
   useEffect(() => {
     fetchApplications();
-  }, [filterStatus, filterQuota, page]);
+  }, [filterStatus, filterQuota, filterPriority, filterType, page]);
 
   function handleSelectApplication(app: any) {
     setSelectedApp(app);
@@ -267,10 +271,10 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-bold text-slate-500 uppercase flex items-center gap-1">
-              <Filter className="w-3.5 h-3.5" /> Status:
+              <Filter className="w-3.5 h-3.5" /> Filter:
             </span>
             {[
-              { key: "ALL", label: "All" },
+              { key: "ALL", label: "All Status" },
               { key: "SUBMITTED", label: "Submitted" },
               { key: "APPOINTMENT_BOOKED", label: "Appointment Booked" },
               { key: "POLICE_VERIFICATION_PENDING", label: "Police Enquiry" },
@@ -293,6 +297,30 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                 {f.label}
               </button>
             ))}
+
+            {/* Priority Filter */}
+            <select
+              value={filterPriority}
+              onChange={(e) => { setFilterPriority(e.target.value); setPage(1); }}
+              className="px-2 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-900"
+            >
+              <option value="ALL">All Priorities</option>
+              <option value="URGENT">Urgent Priority (Tatkaal)</option>
+              <option value="HIGH">High Priority (Lost/Damaged)</option>
+              <option value="NORMAL">Normal Priority</option>
+              <option value="LOW">Low Priority</option>
+            </select>
+
+            {/* Service Type Filter */}
+            <select
+              value={filterType}
+              onChange={(e) => { setFilterType(e.target.value); setPage(1); }}
+              className="px-2 py-1 rounded text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-900"
+            >
+              <option value="ALL">All Services</option>
+              <option value="FRESH">Fresh Passport</option>
+              <option value="REISSUE">Re-issue Passport</option>
+            </select>
           </div>
 
           <div className="flex items-center gap-2">
@@ -338,10 +366,12 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-100 text-slate-700 uppercase font-semibold">
                       <tr>
+                        <th className="p-3">Priority</th>
                         <th className="p-3">ARN / Date</th>
-                        <th className="p-3">Applicant Name</th>
-                        <th className="p-3">Quota</th>
+                        <th className="p-3">Applicant & Age</th>
+                        <th className="p-3">Type & Quota</th>
                         <th className="p-3">Status</th>
+                        <th className="p-3">SLA / Age</th>
                         <th className="p-3">Police Report</th>
                         <th className="p-3 text-right">Action</th>
                       </tr>
@@ -351,6 +381,27 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                         const meta = getStatusMeta(app.status as any);
                         const isSelected = selectedApp?.id === app.id;
                         const policeClear = app.policeReports?.[0]?.clearanceStatus;
+                        const isTatkaal = app.applicationCategory === "TATKAAL";
+                        const priority = app.priority || (isTatkaal ? "URGENT" : "NORMAL");
+
+                        const priorityStyles: Record<string, string> = {
+                          URGENT: "bg-red-100 text-red-900 border-red-300 font-extrabold",
+                          HIGH: "bg-amber-100 text-amber-900 border-amber-300 font-bold",
+                          NORMAL: "bg-blue-50 text-blue-800 border-blue-200 font-medium",
+                          LOW: "bg-slate-100 text-slate-700 border-slate-200",
+                        };
+
+                        const submittedAt = new Date(app.submissionDate || app.createdAt);
+                        const daysPending = Math.max(0, Math.floor((Date.now() - submittedAt.getTime()) / (1000 * 60 * 60 * 24)));
+                        const slaLimit = isTatkaal ? 3 : 30;
+                        const isSlaBreached = daysPending > slaLimit;
+
+                        let ageStr = "";
+                        if (app.dob) {
+                          const birth = new Date(app.dob);
+                          const age = Math.floor((Date.now() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+                          ageStr = `${age} yrs`;
+                        }
 
                         return (
                           <tr
@@ -361,25 +412,47 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                             }`}
                           >
                             <td className="p-3">
+                              <span className={`px-2 py-0.5 rounded text-[10px] border ${priorityStyles[priority] || priorityStyles.NORMAL}`}>
+                                {priority}
+                              </span>
+                            </td>
+                            <td className="p-3">
                               <span className="font-mono font-bold text-blue-950 block">{app.applicationId}</span>
                               <span className="text-[10px] text-slate-400">
                                 {new Date(app.submissionDate || app.createdAt).toLocaleDateString("en-IN")}
                               </span>
                             </td>
                             <td className="p-3">
-                              <span className="font-bold text-slate-900 block">
-                                {app.givenName ? `${app.givenName} ${app.surname || ""}` : app.applicant?.name}
-                              </span>
-                              <span className="text-[10px] text-slate-500">{app.presentCity || "Chennai"}, {app.presentState || "Tamil Nadu"}</span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-bold text-slate-900">
+                                  {app.givenName ? `${app.givenName} ${app.surname || ""}` : app.applicant?.name}
+                                </span>
+                                {ageStr && (
+                                  <span className="text-[10px] text-slate-500 font-mono">({ageStr})</span>
+                                )}
+                              </div>
+                              <span className="text-[10px] text-slate-500 block">{app.presentCity || "Chennai"}, {app.presentState || "Tamil Nadu"}</span>
                             </td>
                             <td className="p-3">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                app.applicationCategory === "TATKAAL"
-                                  ? "bg-amber-100 text-amber-900"
-                                  : "bg-slate-100 text-slate-700"
-                              }`}>
-                                {app.applicationCategory || "NORMAL"}
-                              </span>
+                              <div className="flex flex-col gap-0.5">
+                                <span className="font-semibold text-slate-800 text-[11px]">
+                                  {app.serviceType || "FRESH"}
+                                </span>
+                                <div className="flex items-center gap-1">
+                                  <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold ${
+                                    isTatkaal
+                                      ? "bg-amber-100 text-amber-900 border border-amber-300"
+                                      : "bg-slate-100 text-slate-700"
+                                  }`}>
+                                    {app.applicationCategory || "NORMAL"}
+                                  </span>
+                                  {app.isMinor && (
+                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                                      Minor
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             </td>
                             <td className="p-3">
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
@@ -392,6 +465,14 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                                   : "bg-blue-100 text-blue-900"
                               }`}>
                                 {meta.label}
+                              </span>
+                            </td>
+                            <td className="p-3">
+                              <span className={`block font-mono font-bold text-xs ${isSlaBreached ? "text-red-700" : "text-slate-800"}`}>
+                                {daysPending}d pending {isSlaBreached && "⚠️"}
+                              </span>
+                              <span className="text-[10px] text-slate-500 block">
+                                SLA: {slaLimit}d target
                               </span>
                             </td>
                             <td className="p-3">
@@ -474,16 +555,41 @@ export default function OfficerDashboardClient({ initialOfficer }: OfficerDashbo
                   </button>
                 </div>
 
-                {/* Status Bar */}
-                <div className="my-3 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs flex items-center justify-between">
+                {/* Status & Priority Bar */}
+                <div className="my-3 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Current Lifecycle State</span>
+                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Lifecycle State</span>
                     <span className="font-bold text-blue-950 text-xs">{selectedApp.status}</span>
                   </div>
-                  <span className="text-[11px] text-slate-600 font-medium">
-                    {selectedApp.applicationCategory} • {selectedApp.bookletType === "60_PAGES" ? "60 Pgs" : "36 Pgs"}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      selectedApp.priority === "URGENT" || selectedApp.applicationCategory === "TATKAAL"
+                        ? "bg-red-100 text-red-900 border border-red-300"
+                        : "bg-blue-100 text-blue-900 border border-blue-200"
+                    }`}>
+                      Priority: {selectedApp.priority || (selectedApp.applicationCategory === "TATKAAL" ? "URGENT" : "NORMAL")}
+                    </span>
+                    {selectedApp.isMinor && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-900 border border-purple-200">
+                        Minor Applicant
+                      </span>
+                    )}
+                    <span className="text-[11px] text-slate-600 font-medium bg-white px-2 py-0.5 rounded border border-slate-200">
+                      {selectedApp.serviceType || "FRESH"} • {selectedApp.applicationCategory}
+                    </span>
+                  </div>
                 </div>
+
+                {/* Reissue Reason Banner if Re-issue */}
+                {selectedApp.serviceType === "REISSUE" && (
+                  <div className="mb-3 p-2.5 bg-amber-50 rounded border border-amber-200 text-xs text-amber-950">
+                    <span className="font-bold">Re-issue Particulars: </span>
+                    <span>Reason: {selectedApp.reissueReason || "Expiring / Expired"}</span>
+                    {selectedApp.prevPassportNumber && (
+                      <span className="ml-2 font-mono font-bold">Old Booklet: {selectedApp.prevPassportNumber}</span>
+                    )}
+                  </div>
+                )}
 
                 {/* Particulars Tabs / Content */}
                 <div className="space-y-4 text-xs max-h-[460px] overflow-y-auto pr-1">

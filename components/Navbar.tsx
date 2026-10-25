@@ -3,8 +3,27 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
+import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import { useState, useEffect, useRef } from "react";
-import { Bell, Menu, X, CheckCircle, AlertCircle, Info, Shield, User, FileText, Calendar, CreditCard, Search } from "lucide-react";
+import { 
+  Bell, 
+  Menu, 
+  X, 
+  CheckCircle, 
+  AlertCircle, 
+  Info, 
+  Shield, 
+  User, 
+  FileText, 
+  Calendar, 
+  CreditCard, 
+  Search, 
+  MapPin, 
+  Calculator, 
+  HelpCircle,
+  FileCheck2,
+  Building
+} from "lucide-react";
 
 interface NavbarProps {
   role: "APPLICANT" | "OFFICER" | "POLICE" | "ADMIN";
@@ -22,20 +41,23 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
 
   const applicantLinks = [
     { href: "/applicant/dashboard", label: "Dashboard", icon: User },
+    { href: "/services", label: "Services", icon: FileText },
     { href: "/applicant/application", label: "Apply / Edit", icon: FileText },
-    { href: "/applicant/documents", label: "Documents", icon: FileText },
+    { href: "/applicant/documents", label: "Documents", icon: FileCheck2 },
     { href: "/applicant/payment", label: "Payment", icon: CreditCard },
     { href: "/applicant/appointment", label: "Appointment", icon: Calendar },
+    { href: "/applicant/psk-simulation", label: "PSK Visit", icon: Building },
     { href: "/applicant/status", label: "Status Track", icon: Search },
   ];
 
   const officerLinks = [
     { href: "/officer/dashboard", label: "Officer Console", icon: Shield },
+    { href: "/grievance", label: "Grievances", icon: HelpCircle },
     { href: "/track", label: "Public Tracker", icon: Search },
   ];
 
   const policeLinks = [
-    { href: "/police/dashboard", label: "Police Verification Queue", icon: Shield },
+    { href: "/police/dashboard", label: "Police Enquiry Queue", icon: Shield },
     { href: "/track", label: "Public Tracker", icon: Search },
   ];
 
@@ -43,6 +65,7 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
     { href: "/admin/dashboard", label: "System Console", icon: Shield },
     { href: "/officer/dashboard", label: "Officer Console", icon: Shield },
     { href: "/police/dashboard", label: "Police Console", icon: Shield },
+    { href: "/grievance", label: "Grievances", icon: HelpCircle },
   ];
 
   const navLinks = 
@@ -114,15 +137,35 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
       {/* Top Tricolor Ribbon */}
       <div className="h-1 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600 border-b border-slate-200" />
 
+      {/* Academic Disclaimer & Language Selector */}
+      <AcademicDisclaimer />
+
       {/* Institutional Top Bar */}
-      <div className="bg-slate-900 text-white px-4 sm:px-6 py-1.5 text-xs flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-slate-200">Passport Automation System</span>
-          <span className="text-slate-500">|</span>
-          <span className="text-slate-300 hidden md:inline">Academic Demonstration Portal (Not Official Gov Service)</span>
+      <div className="bg-slate-900 text-white px-4 sm:px-6 py-1 text-xs flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <Link href="/services" className="text-slate-300 hover:text-white transition hidden md:inline">
+            Services
+          </Link>
+          <span className="text-slate-600 hidden md:inline">|</span>
+          <Link href="/document-advisor" className="text-slate-300 hover:text-white transition hidden md:inline">
+            Doc Advisor
+          </Link>
+          <span className="text-slate-600 hidden md:inline">|</span>
+          <Link href="/fee-calculator" className="text-slate-300 hover:text-white transition hidden md:inline">
+            Fee Calculator
+          </Link>
+          <span className="text-slate-600 hidden md:inline">|</span>
+          <Link href="/locate-centre" className="text-slate-300 hover:text-white transition flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-amber-400" />
+            <span>Locate Centre</span>
+          </Link>
+          <span className="text-slate-600 hidden sm:inline">|</span>
+          <Link href="/grievance" className="text-slate-300 hover:text-white transition hidden sm:inline">
+            Grievances
+          </Link>
         </div>
         <div className="flex items-center gap-4 text-slate-300">
-          <Link href="/track" className="hover:text-white transition flex items-center gap-1">
+          <Link href="/track" className="hover:text-white transition flex items-center gap-1 font-medium text-amber-300">
             <Search className="w-3 h-3" />
             <span>Public Tracking</span>
           </Link>
@@ -302,6 +345,23 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
                 </Link>
               );
             })}
+            <div className="pt-2 border-t border-slate-100 flex flex-col gap-1 text-xs">
+              <Link href="/services" onClick={() => setMobileMenuOpen(false)} className="px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded">
+                Service Directory
+              </Link>
+              <Link href="/document-advisor" onClick={() => setMobileMenuOpen(false)} className="px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded">
+                Document Advisor
+              </Link>
+              <Link href="/fee-calculator" onClick={() => setMobileMenuOpen(false)} className="px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded">
+                Fee Calculator
+              </Link>
+              <Link href="/locate-centre" onClick={() => setMobileMenuOpen(false)} className="px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded">
+                Locate PSK / POPSK
+              </Link>
+              <Link href="/grievance" onClick={() => setMobileMenuOpen(false)} className="px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded">
+                Citizen Grievance
+              </Link>
+            </div>
           </div>
         )}
       </div>

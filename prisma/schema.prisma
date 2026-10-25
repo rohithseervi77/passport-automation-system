@@ -37,6 +37,7 @@ model User {
   auditLogs           AuditLog[]
   resetTokens         PasswordResetToken[]
   loginHistories      LoginHistory[]
+  grievances          Grievance[]
 
   @@index([authUserId])
   @@index([email])
@@ -169,6 +170,7 @@ model Application {
   prevIssueDate              DateTime?
   prevExpiryDate             DateTime?
   prevPlaceOfIssue           String?
+  reissueReason              String?   // EXPIRED, EXPIRING_SOON, PAGES_EXHAUSTED, LOST, DAMAGED, CHANGE_OF_ADDRESS, OTHER
 
   // Step 7: Other Details & Declarations
   hasCriminalRecord          Boolean   @default(false)
@@ -178,6 +180,17 @@ model Application {
   hasLostPassport            Boolean   @default(false)
   lostPassportDetails        String?
   confirmedDeclaration       Boolean   @default(false)
+
+  // Minor Workflow & Priority
+  isMinor                    Boolean   @default(false)
+  parentConsent              Boolean   @default(false)
+  priority                   String    @default("NORMAL") // LOW, NORMAL, HIGH, URGENT
+  draftStep                  Int       @default(1)
+
+  // PSK Visit Simulation
+  pskLocation                String?
+  pskToken                   String?
+  pskStatus                  String?   @default("NOT_ARRIVED") // NOT_ARRIVED, TOKEN_ISSUED, COUNTER_A_DONE, COUNTER_B_DONE, COUNTER_C_DONE
 
   // Review & Clarification workflow
   clarificationReason        String?
@@ -270,10 +283,30 @@ model Appointment {
 
   applicationId Int      @unique
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  history       AppointmentHistory[]
 
   @@index([applicationId])
   @@index([date, timeSlot])
   @@index([status])
+}
+
+model AppointmentHistory {
+  id            Int      @id @default(autoincrement())
+  appointmentId Int
+  applicationId Int
+  previousDate  DateTime
+  previousSlot  String
+  newDate       DateTime
+  newSlot       String
+  location      String
+  rescheduledAt DateTime @default(now())
+  rescheduledBy String?
+  reason        String?
+
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@index([appointmentId])
+  @@index([applicationId])
 }
 
 // =====================================================
@@ -418,4 +451,31 @@ model LoginHistory {
   @@index([email])
   @@index([loginTime])
   @@index([success])
+}
+
+// =====================================================
+// GRIEVANCE & FEEDBACK (Citizen Support Tickets)
+// =====================================================
+
+model Grievance {
+  id            Int      @id @default(autoincrement())
+  ticketId      String   @unique
+  category      String   // DELAYED_PROCESSING, APPOINTMENT_ISSUE, POLICE_VERIFICATION, DOCUMENT_ISSUE, OTHER
+  subject       String
+  description   String
+  attachmentUrl String?
+  status        String   @default("OPEN") // OPEN, IN_REVIEW, RESPONDED, RESOLVED, CLOSED
+  response      String?
+  respondedAt   DateTime?
+  respondedBy   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([ticketId])
+  @@index([status])
+  @@index([createdAt])
 }

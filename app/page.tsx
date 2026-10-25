@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Script from "next/script";
+import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 import { 
   FileText, 
   Search, 
@@ -103,19 +104,9 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Top Ministry / Disclaimer Banner */}
+      {/* Top Academic Disclaimer & Language Selector */}
       <div className="h-1 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600 border-b border-slate-200" />
-      <div className="bg-slate-900 text-slate-200 px-4 py-2 text-xs flex flex-col sm:flex-row justify-between items-center gap-2">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-white">Passport Automation System</span>
-          <span className="text-slate-500">|</span>
-          <span className="text-slate-300">Software Engineering Academic Demonstration</span>
-        </div>
-        <div className="text-[11px] text-amber-300 flex items-center gap-1.5">
-          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-          <span>Academic Project. Not an official Government of India website.</span>
-        </div>
-      </div>
+      <AcademicDisclaimer />
 
       {/* Institutional Header / Navigation */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
@@ -136,13 +127,14 @@ export default function Home() {
           </Link>
 
           {/* Nav Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-700">
+          <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-700">
             <Link href="/" className="text-blue-900 hover:text-blue-700">Home</Link>
-            <a href="#services" className="hover:text-blue-900 transition">Services</a>
-            <Link href="/track" className="hover:text-blue-900 transition">Track Application</Link>
-            <a href="#appointment-info" className="hover:text-blue-900 transition">Appointment</a>
-            <a href="#fee-calculator" className="hover:text-blue-900 transition">Fee Structure</a>
-            <a href="#faq" className="hover:text-blue-900 transition">Help</a>
+            <Link href="/services" className="hover:text-blue-900 transition">Services</Link>
+            <Link href="/document-advisor" className="hover:text-blue-900 transition">Doc Advisor</Link>
+            <Link href="/fee-calculator" className="hover:text-blue-900 transition">Fee Calculator</Link>
+            <Link href="/locate-centre" className="hover:text-blue-900 transition">Locate Centre</Link>
+            <Link href="/track" className="hover:text-blue-900 transition font-medium text-amber-700">Track Application</Link>
+            <Link href="/grievance" className="hover:text-blue-900 transition">Grievance</Link>
           </nav>
 
           {/* Auth Action Buttons */}
