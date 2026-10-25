@@ -1,4 +1,6 @@
 import { SignJWT, jwtVerify } from "jose";
+import { cookies } from "next/headers";
+import { prisma } from "./prisma";
 
 const secret = process.env.AUTH_SECRET;
 
@@ -29,7 +31,6 @@ export async function verifySessionToken(token: string) {
     return null;
   }
 }
-import { cookies } from "next/headers";
 
 export async function getCurrentUserId() {
   const cookieStore = await cookies();
@@ -42,4 +43,35 @@ export async function getCurrentUserId() {
   const session = await verifySessionToken(token);
 
   return session?.userId ?? null;
+}
+
+export async function getCurrentUser() {
+  const userId = await getCurrentUserId();
+  if (!userId) return null;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        applicant: true,
+        passportOfficer: true,
+        police: true,
+        admin: true,
+      },
+    });
+    return user;
+  } catch {
+    return null;
+  }
+}
+
+export async function requireUserWithRole(allowedRoles: string[]) {
+  const user = await getCurrentUser();
+  if (!user || !user.isActive) {
+    return null;
+  }
+  if (!allowedRoles.includes(user.role)) {
+    return null;
+  }
+  return user;
 }

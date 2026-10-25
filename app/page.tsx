@@ -1,341 +1,540 @@
 import Link from "next/link";
 import Script from "next/script";
-import ShinyText from "@/components/ShinyText";
-import GlowCursor from "@/components/GlowCursor";
-import { TextEffect } from "@/components/TextEffect";
-import { InView } from "@/components/InView";
-import { TricolorRibbon, PortalStats, WorkflowRoadmap, CitizenFAQ } from "@/components/LandingEnhancements";
-import PassportCover from "@/components/PassportCover";
-import PassportIndexExplorer from "@/components/PassportIndexExplorer";
+import { 
+  FileText, 
+  Search, 
+  Calendar, 
+  Calculator, 
+  Clock, 
+  ShieldCheck, 
+  CreditCard, 
+  UserCheck, 
+  MapPin, 
+  ArrowRight, 
+  CheckCircle2, 
+  HelpCircle,
+  Building2,
+  PhoneCall,
+  AlertTriangle
+} from "lucide-react";
 
 export default function Home() {
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'GovernmentOrganization',
-    name: 'Passport Automation System',
-    url: process.env.NEXT_PUBLIC_BASE_URL || 'https://passport-automation-system.vercel.app',
-    description: 'Centralized, digitized Passport Seva Automation Platform.',
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Passport Automation System",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: "Academic end-to-end digital passport issuance simulation and workflow portal.",
   };
 
+  const processSteps = [
+    { step: 1, title: "Register", desc: "Create your citizen account with valid credentials." },
+    { step: 2, title: "Apply", desc: "Fill applicant, family, address, and document details." },
+    { step: 3, title: "Pay", desc: "Pay the prescribed application fee through simulated gateway." },
+    { step: 4, title: "Schedule", desc: "Book an appointment slot at your nearest PSK / POPSK." },
+    { step: 5, title: "Verify", desc: "Complete PSK document scrutiny and Police verification." },
+    { step: 6, title: "Track", desc: "Track dispatch and delivery of your passport in real time." },
+  ];
+
+  const serviceCards = [
+    {
+      title: "Fresh Passport",
+      desc: "For citizens applying for a new Indian passport for the first time with standard 10-year validity.",
+      icon: FileText,
+      tag: "Most Popular",
+    },
+    {
+      title: "Passport Re-issue",
+      desc: "Renew expired passports, replace damaged booklets, or apply for change of personal particulars.",
+      icon: Clock,
+      tag: "Renewal",
+    },
+    {
+      title: "Tatkaal Application",
+      desc: "Expedited fast-track processing for urgent travel requirements with priority PSK appointment slots.",
+      icon: ShieldCheck,
+      tag: "Fast Track",
+    },
+    {
+      title: "Police Verification",
+      desc: "Simulated station-level residential address enquiry, criminal record checks, and clearance reporting.",
+      icon: UserCheck,
+      tag: "Verification",
+    },
+    {
+      title: "Application Tracking",
+      desc: "Instant public tracking with Application Reference Number (ARN) showing complete chronological milestones.",
+      icon: Search,
+      tag: "Real-time",
+    },
+    {
+      title: "Appointment Management",
+      desc: "Schedule, view, or reschedule biometric and physical document appointments across demo regional centres.",
+      icon: Calendar,
+      tag: "Self-Service",
+    },
+  ];
+
+  const faqs = [
+    {
+      q: "What is the standard processing fee for a Fresh Passport?",
+      a: "The standard fee for a 36-page Fresh adult passport (Normal quota) is ₹1,500. A 60-page jumbo booklet incurs an additional ₹500, while Tatkaal fast-track adds an urgent processing fee of ₹2,000.",
+    },
+    {
+      q: "What documents are required for physical verification at the PSK?",
+      a: "Mandatory documents include Identity Proof (Aadhaar Card, Voter ID, or PAN), Proof of Address (Utility Bill or Bank Passbook), and Proof of Date of Birth (Municipal Birth Certificate or Matriculation Marksheet).",
+    },
+    {
+      q: "How does the Police Verification simulation work in this project?",
+      a: "When an applicant completes physical document verification, the application transitions to the jurisdictional Police Authority console. Police officers can review the address, verify local records, and submit a clearance or adverse report.",
+    },
+    {
+      q: "Can I track an application without logging into the portal?",
+      a: "Yes. Public Application Tracking (/track) allows anyone to track status using an Application Reference Number (ARN) and Date of Birth without exposing sensitive personal information.",
+    },
+  ];
+
   return (
-    <main className="min-h-screen bg-slate-950 text-white relative">
-      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full hidden md:block">
-        <GlowCursor color="#3b82f6" secondaryColor="#93c5fd" />
-      </div>
-      <div className="relative z-10">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       <Script
         id="schema-org"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <TricolorRibbon />
-      {/* Navigation Bar */}
-      <nav className="border-b border-slate-800 bg-slate-950/95 sticky top-0 z-50 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+
+      {/* Top Ministry / Disclaimer Banner */}
+      <div className="h-1 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600 border-b border-slate-200" />
+      <div className="bg-slate-900 text-slate-200 px-4 py-2 text-xs flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-white">Passport Automation System</span>
+          <span className="text-slate-500">|</span>
+          <span className="text-slate-300">Software Engineering Academic Demonstration</span>
+        </div>
+        <div className="text-[11px] text-amber-300 flex items-center gap-1.5">
+          <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+          <span>Academic Project. Not an official Government of India website.</span>
+        </div>
+      </div>
+
+      {/* Institutional Header / Navigation */}
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 font-bold shadow-lg shadow-blue-600/30">
+            <div className="flex h-10 w-10 items-center justify-center rounded bg-blue-900 font-bold text-white text-base shadow-sm">
               PAS
             </div>
-
             <div>
-              <span className="block font-bold text-base leading-tight">Passport Automation System</span>
-              <p className="text-xs text-slate-400">
-                Government Digitized Processing Portal
+              <span className="block font-bold text-base text-slate-900 leading-tight">
+                Passport Automation System
+              </span>
+              <p className="text-xs text-slate-500 font-medium">
+                Digitized Citizen Services Portal
               </p>
             </div>
           </Link>
 
-          {/* Navigation Links */}
-          <div className="hidden gap-8 md:flex">
-            <Link href="#home" className="text-sm text-slate-300 hover:text-white">
-              Home
-            </Link>
+          {/* Nav Links */}
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-700">
+            <Link href="/" className="text-blue-900 hover:text-blue-700">Home</Link>
+            <a href="#services" className="hover:text-blue-900 transition">Services</a>
+            <Link href="/track" className="hover:text-blue-900 transition">Track Application</Link>
+            <a href="#appointment-info" className="hover:text-blue-900 transition">Appointment</a>
+            <a href="#fee-calculator" className="hover:text-blue-900 transition">Fee Structure</a>
+            <a href="#faq" className="hover:text-blue-900 transition">Help</a>
+          </nav>
 
-            <Link href="/track" className="text-sm text-blue-400 font-medium hover:text-blue-300">
-              🔍 Track Status
-            </Link>
-
-            <Link
-              href="#features"
-              className="text-sm text-slate-300 hover:text-white"
-            >
-              Features
-            </Link>
-
-            <Link
-              href="#roles"
-              className="text-sm text-slate-300 hover:text-white"
-            >
-              Roles
-            </Link>
-
-            <Link
-              href="#about"
-              className="text-sm text-slate-300 hover:text-white"
-            >
-              About
-            </Link>
-          </div>
-
-          {/* Authentication Buttons */}
-          <div className="flex gap-3">
-            <Link
-              href="/track"
-              className="hidden sm:inline-block rounded-lg border border-blue-500/30 bg-blue-500/10 px-3.5 py-2 text-xs font-semibold text-blue-300 hover:bg-blue-500/20"
-            >
-              Track Application
-            </Link>
-
+          {/* Auth Action Buttons */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="rounded-lg border border-slate-700 px-4 py-2 text-xs font-medium hover:bg-slate-800"
+              className="rounded border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:border-slate-400 transition shadow-xs"
             >
-              Login
+              Portal Login
             </Link>
-
             <Link
               href="/register"
-              className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold hover:bg-blue-700 shadow-md shadow-blue-600/20"
+              className="rounded bg-blue-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-800 transition shadow-xs"
             >
-              Register
+              New Citizen Register
             </Link>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <section id="home" className="mx-auto max-w-7xl px-6 py-16 md:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs text-amber-300 font-semibold shadow-inner">
-              <span>🇮🇳</span> Centralized Sovereign Passport Seva Platform
+      <section className="bg-gradient-to-b from-blue-950 via-slate-900 to-blue-900 text-white py-14 sm:py-20 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-8 space-y-5">
+              <div className="inline-flex items-center gap-2 rounded-full bg-blue-800/60 border border-blue-700 px-3 py-1 text-xs text-blue-200">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Simulated End-to-End Passport Seva Workflow</span>
+              </div>
+              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Passport Services, Simplified
+              </h1>
+              <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+                Apply, manage appointments, complete verification and track your passport application through one secure platform.
+              </p>
+
+              {/* Primary Action Buttons */}
+              <div className="pt-2 flex flex-wrap gap-3">
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-2 rounded bg-amber-500 hover:bg-amber-400 px-5 py-2.5 text-sm font-bold text-slate-950 shadow transition"
+                >
+                  <span>Apply for Passport</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/track"
+                  className="inline-flex items-center gap-2 rounded bg-white hover:bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-900 shadow transition"
+                >
+                  <Search className="w-4 h-4 text-blue-900" />
+                  <span>Track Application</span>
+                </Link>
+              </div>
+
+              {/* Secondary Navigation Links */}
+              <div className="pt-4 flex flex-wrap items-center gap-5 text-xs text-slate-300 font-medium border-t border-blue-800/80">
+                <a href="#appointment-info" className="hover:text-amber-300 transition flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Check Appointment</span>
+                </a>
+                <span className="text-blue-700">•</span>
+                <a href="#fee-calculator" className="hover:text-amber-300 transition flex items-center gap-1.5">
+                  <Calculator className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Calculate Fee</span>
+                </a>
+                <span className="text-blue-700">•</span>
+                <a href="#services" className="hover:text-amber-300 transition flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>View Services</span>
+                </a>
+              </div>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
-              Sovereign passport issuance,
-              <span className="passport-gold-gradient block sm:inline-block font-serif italic">
-                {" "}digitized & refined.
-              </span>
-            </h1>
-
-            <TextEffect
-              as="p"
-              per="word"
-              preset="fade-in-blur"
-              speedReveal={1.5}
-              className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-slate-400"
-            >
-              Passport Automation System (PAS) digitizes the complete passport issuance lifecycle: online applicant registration, document verification, biometric appointment booking, statutory fee processing, police background enquiry, booklet printing, and Speed Post tracking.
-            </TextEffect>
-
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            {/* Quick Demo Access Card */}
+            <div className="lg:col-span-4 bg-white/95 text-slate-900 rounded-lg p-6 shadow-xl border border-slate-200">
+              <h3 className="font-bold text-sm uppercase tracking-wide text-blue-950 border-b border-slate-200 pb-2 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-blue-900" />
+                <span>Academic Evaluation Logins</span>
+              </h3>
+              <p className="text-xs text-slate-600 mt-2 mb-4">
+                Instant pre-seeded accounts for evaluators to test all stakeholder roles:
+              </p>
+              <div className="space-y-2.5 text-xs">
+                <div className="p-2.5 rounded bg-blue-50 border border-blue-200">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-blue-950">Applicant</span>
+                    <span className="text-[10px] text-blue-700 font-mono">applicant_demo</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mt-1">Pass: <code className="bg-white px-1 py-0.5 rounded border border-blue-200">Applicant@123</code></p>
+                </div>
+                <div className="p-2.5 rounded bg-amber-50 border border-amber-200">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-amber-950">Passport Officer</span>
+                    <span className="text-[10px] text-amber-700 font-mono">officer_demo</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mt-1">Pass: <code className="bg-white px-1 py-0.5 rounded border border-amber-200">Officer@123</code></p>
+                </div>
+                <div className="p-2.5 rounded bg-emerald-50 border border-emerald-200">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-emerald-950">Police Authority</span>
+                    <span className="text-[10px] text-emerald-700 font-mono">police_demo</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mt-1">Pass: <code className="bg-white px-1 py-0.5 rounded border border-emerald-200">Police@123</code></p>
+                </div>
+              </div>
               <Link
-                href="/register"
-                className="rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-xl shadow-blue-600/30"
+                href="/login"
+                className="mt-4 block w-full text-center py-2 bg-blue-900 hover:bg-blue-800 text-white rounded text-xs font-semibold transition"
               >
-                Start New Application →
-              </Link>
-
-              <Link
-                href="/track"
-                className="rounded-xl border border-blue-500/40 bg-blue-950/40 px-6 py-3.5 text-sm font-semibold text-blue-300 hover:bg-blue-900/50 transition"
-              >
-                🔍 Track Application Status
-              </Link>
-
-              <Link
-                href="#passport-explorer"
-                className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-3.5 text-sm font-semibold text-amber-300 hover:bg-amber-500/20 transition flex items-center gap-2"
-              >
-                <span>📘</span>
-                <span>Passport Index Explorer</span>
+                Go to Login Page →
               </Link>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Right Column: Hero Physical 3D Passport Cover */}
-          <div className="lg:col-span-5 hidden lg:flex flex-col items-center justify-center relative">
-            <div className="absolute -inset-6 bg-gradient-to-r from-blue-600/20 via-amber-500/20 to-indigo-600/20 rounded-3xl blur-3xl opacity-50 pointer-events-none" />
-            <div className="relative group">
-              <PassportCover type="REGULAR" size="lg" interactive={true} />
-              <div className="mt-5 text-center">
-                <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-amber-300 bg-slate-900/90 border border-slate-800 px-4 py-1.5 rounded-full shadow-2xl">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Republic of India • Type P e-Passport Booklet
-                </span>
+      {/* 6-Step Process Flow Section */}
+      <section className="py-12 bg-white border-b border-slate-200 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-900 bg-blue-50 px-2.5 py-1 rounded">
+              Standard Procedure
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+              6-Step Passport Issuance Process
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5">
+              Structured lifecycle from online registration through dispatch of the physical booklet.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+            {processSteps.map((p) => (
+              <div
+                key={p.step}
+                className="p-4 rounded border border-slate-200 bg-slate-50 hover:bg-white hover:shadow-md transition text-center relative"
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-900 text-white font-bold text-xs mx-auto mb-3">
+                  {p.step}
+                </div>
+                <h3 className="font-bold text-sm text-slate-900 mb-1">{p.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Service Cards Section */}
+      <section id="services" className="py-14 bg-slate-50 border-b border-slate-200 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-900">
+                Services Offered
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
+                Citizen Passport Services
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                Explore the complete range of simulated passport application and processing facilities.
+              </p>
+            </div>
+            <Link
+              href="/register"
+              className="mt-4 md:mt-0 text-xs font-bold text-blue-900 hover:text-blue-700 flex items-center gap-1"
+            >
+              <span>Start an application</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {serviceCards.map((service) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={service.title}
+                  className="bg-white rounded border border-slate-200 p-6 hover:shadow-md transition flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2.5 rounded bg-blue-50 text-blue-900">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                        {service.tag}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-base text-slate-900 mb-1.5">{service.title}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">{service.desc}</p>
+                  </div>
+                  <div className="mt-5 pt-3 border-t border-slate-100">
+                    <Link
+                      href="/login"
+                      className="text-xs font-semibold text-blue-900 hover:text-blue-700 flex items-center gap-1"
+                    >
+                      <span>Access service</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Appointment Information Section */}
+      <section id="appointment-info" className="py-14 bg-white border-b border-slate-200 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-6 space-y-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-900 bg-blue-50 px-2.5 py-1 rounded">
+                Passport Seva Kendras
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                Demo Regional PSK & POPSK Centres
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Appointment booking is simulated across regional Passport Seva Kendras (PSK) and Post Office Passport Seva Kendras (POPSK). Citizens book specific time slots for physical biometrics and document verification.
+              </p>
+              <div className="grid grid-cols-2 gap-3 text-xs pt-2">
+                {[
+                  { name: "Chennai PSK - Saligramam", type: "Main PSK", quota: "Normal & Tatkaal" },
+                  { name: "Chennai POPSK - Anna Nagar", type: "Post Office PSK", quota: "Normal Quota" },
+                  { name: "Coimbatore PSK", type: "Main PSK", quota: "Normal & Tatkaal" },
+                  { name: "Vellore PSK", type: "District PSK", quota: "Normal Quota" },
+                  { name: "Madurai PSK", type: "Regional PSK", quota: "Normal & Tatkaal" },
+                  { name: "Bengaluru PSK - Lalbagh", type: "Main PSK", quota: "Normal & Tatkaal" },
+                ].map((c) => (
+                  <div key={c.name} className="p-2.5 rounded border border-slate-200 bg-slate-50">
+                    <p className="font-bold text-slate-900 text-xs">{c.name}</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">{c.type} • {c.quota}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Fee Calculator Section */}
+            <div id="fee-calculator" className="lg:col-span-6 bg-slate-50 rounded border border-slate-200 p-6 shadow-xs">
+              <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 mb-1">
+                <Calculator className="w-4 h-4 text-blue-900" />
+                <span>Passport Fee Calculator (Academic Standard)</span>
+              </h3>
+              <p className="text-xs text-slate-600 mb-4">
+                Transparent fee structure based on applicant category, booklet size, and urgency scheme:
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-slate-300 text-slate-700 font-semibold">
+                      <th className="py-2">Service Scheme</th>
+                      <th className="py-2">Booklet</th>
+                      <th className="py-2">Validity</th>
+                      <th className="py-2 text-right">Fee (₹)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-slate-700">
+                    <tr>
+                      <td className="py-2 font-medium">Fresh / Re-issue (Normal)</td>
+                      <td className="py-2">36 Pages</td>
+                      <td className="py-2">10 Years</td>
+                      <td className="py-2 text-right font-bold text-slate-900">₹1,500</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 font-medium">Fresh / Re-issue (Normal)</td>
+                      <td className="py-2">60 Pages</td>
+                      <td className="py-2">10 Years</td>
+                      <td className="py-2 text-right font-bold text-slate-900">₹2,000</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 font-medium text-amber-900">Tatkaal Fast-Track</td>
+                      <td className="py-2">36 Pages</td>
+                      <td className="py-2">10 Years</td>
+                      <td className="py-2 text-right font-bold text-amber-900">₹3,500</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 font-medium text-amber-900">Tatkaal Fast-Track</td>
+                      <td className="py-2">60 Pages</td>
+                      <td className="py-2">10 Years</td>
+                      <td className="py-2 text-right font-bold text-amber-900">₹4,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
+                <span className="text-slate-500">Fees simulated via demo payment gateway.</span>
+                <Link href="/register" className="font-semibold text-blue-900 hover:underline">
+                  Apply Online Now →
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <PortalStats />
-
-      <WorkflowRoadmap />
-
-      <PassportIndexExplorer />
-
-      {/* Features Section */}
-      <section
-        id="features"
-        className="border-y border-slate-800 bg-slate-900/40"
-      >
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="mb-12">
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
-              End-to-End Digital Workflow
-            </p>
-
-            <h2 className="mt-2 text-3xl font-bold">
-              Complete OOAD Architectural Modules
+      {/* FAQ Accordion Section */}
+      <section id="faq" className="py-14 bg-slate-50 border-b border-slate-200 px-4 sm:px-6">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-center mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-900">
+              Frequently Asked Questions
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
+              Help & Citizen Guidance
             </h2>
-
-            <p className="mt-2 max-w-2xl text-sm text-slate-400">
-              All 8 core modules from the OOAD blueprint integrated into a unified full-stack system.
-            </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* Feature 1 */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
-              <div className="mb-4 text-3xl">📝</div>
-              <h3 className="text-lg font-semibold">1. Online Application Form</h3>
-              <p className="mt-2 text-xs leading-6 text-slate-400">
-                Fresh & renewal passport applications with booklet choices (36/60 pages, Tatkaal) and draft auto-saving.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
-              <div className="mb-4 text-3xl">📄</div>
-              <h3 className="text-lg font-semibold">2. Document Repository</h3>
-              <p className="mt-2 text-xs leading-6 text-slate-400">
-                Upload Identity, Address, and DOB proof documents with authenticity review by Passport Officers.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
-              <div className="mb-4 text-3xl">📅</div>
-              <h3 className="text-lg font-semibold">3. Appointment Scheduler</h3>
-              <p className="mt-2 text-xs leading-6 text-slate-400">
-                Book physical biometric slots at Regional Passport Seva Kendra (PSK) with printable appointment acknowledgment slips.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
-              <div className="mb-4 text-3xl">💳</div>
-              <h3 className="text-lg font-semibold">4. Payment Gateway</h3>
-              <p className="mt-2 text-xs leading-6 text-slate-400">
-                Online fee processing (Card, UPI, NetBanking) with instant transaction ID and printable GST receipts.
-              </p>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
-              <div className="mb-4 text-3xl">👮</div>
-              <h3 className="text-lg font-semibold">5. Police Verification Enquiry</h3>
-              <p className="mt-2 text-xs leading-6 text-slate-400">
-                Police personnel console for conducting residential checks, criminal records check, and issuing clearance certificates.
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6">
-              <div className="mb-4 text-3xl">📦</div>
-              <h3 className="text-lg font-semibold">6. Passport Issuance & Dispatch</h3>
-              <p className="mt-2 text-xs leading-6 text-slate-400">
-                Quality control, booklet printing, unique passport number assignment, and Speed Post consignment tracking.
-              </p>
-            </div>
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => (
+              <details
+                key={idx}
+                className="group rounded border border-slate-200 bg-white p-4 shadow-2xs open:border-blue-300"
+              >
+                <summary className="cursor-pointer font-semibold text-xs sm:text-sm text-slate-900 list-none flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-blue-900 shrink-0" />
+                    <span>{faq.q}</span>
+                  </span>
+                  <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p className="mt-3 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Roles Section */}
-      <section id="roles" className="mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-12">
-          <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
-            System Actors
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold">
-            Role-Based Access Control
-          </h2>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {/* Applicant */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7">
-            <div className="text-4xl">👤</div>
-            <h3 className="mt-4 text-lg font-bold">Applicant Persona</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              Submit application, upload verification docs, schedule PSK appointments, pay fees, and track live status.
+      {/* Mandatory Academic Disclaimer Banner */}
+      <section className="bg-amber-50 border-y border-amber-200 py-6 px-4 sm:px-6">
+        <div className="mx-auto max-w-5xl flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+          <div className="text-xs text-amber-950 leading-relaxed">
+            <p className="font-bold text-amber-900 uppercase tracking-wide">
+              Academic Project Disclaimer
             </p>
-            <Link
-              href="/login"
-              className="mt-6 inline-block rounded-lg bg-blue-600/20 border border-blue-500/30 px-4 py-1.5 text-xs font-semibold text-blue-300 hover:bg-blue-600/30"
-            >
-              Applicant Login →
-            </Link>
-          </div>
-
-          {/* Passport Officer */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7">
-            <div className="text-4xl">🧑‍💼</div>
-            <h3 className="mt-4 text-lg font-bold">Passport Officer Persona</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              Document verification, biometric validation, forward to police, approve/reject, generate passport, and dispatch.
+            <p className="mt-1">
+              This is an academic Passport Automation System developed for demonstration and educational purposes. It is not an official Government of India service. No real personal data, monetary payments, or legal passport issuances occur through this portal.
             </p>
-            <Link
-              href="/login"
-              className="mt-6 inline-block rounded-lg bg-amber-600/20 border border-amber-500/30 px-4 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-600/30"
-            >
-              Officer Login →
-            </Link>
-          </div>
-
-          {/* Police */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-7">
-            <div className="text-4xl">👮</div>
-            <h3 className="mt-4 text-lg font-bold">Police Authority Persona</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              Inspect residential address, perform criminal background and court record checks, and submit clearance reports.
-            </p>
-            <Link
-              href="/login"
-              className="mt-6 inline-block rounded-lg bg-emerald-600/20 border border-emerald-500/30 px-4 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-600/30"
-            >
-              Police Login →
-            </Link>
           </div>
         </div>
       </section>
 
-      <CitizenFAQ />
-
-      {/* Footer */}
-      <footer className="border-t border-slate-800">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="font-semibold text-sm">Passport Automation System (PAS)</p>
-            <p className="text-xs text-slate-500">
-              Secure • Standardized • Deployed OOAD Architecture
-            </p>
+      {/* Institutional Footer */}
+      <footer className="bg-slate-900 text-slate-400 text-xs py-10 px-4 sm:px-6 mt-auto">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-slate-800 pb-8">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded bg-blue-600 font-bold text-white text-xs">
+                  PAS
+                </div>
+                <span className="font-bold text-white text-sm">Passport Automation System</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Academic software engineering prototype simulating the comprehensive citizen-to-officer passport workflow.
+              </p>
+            </div>
+            <div>
+              <p className="font-bold text-white mb-2">Citizen Services</p>
+              <ul className="space-y-1.5 text-[11px]">
+                <li><Link href="/register" className="hover:text-white">Apply for Fresh Passport</Link></li>
+                <li><Link href="/register" className="hover:text-white">Passport Re-issue</Link></li>
+                <li><Link href="/track" className="hover:text-white">Public Status Tracker</Link></li>
+                <li><a href="#fee-calculator" className="hover:text-white">Fee Structure</a></li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-bold text-white mb-2">Portal Consoles</p>
+              <ul className="space-y-1.5 text-[11px]">
+                <li><Link href="/login" className="hover:text-white">Applicant Dashboard</Link></li>
+                <li><Link href="/login" className="hover:text-white">Passport Officer Console</Link></li>
+                <li><Link href="/login" className="hover:text-white">Police Enquiry Terminal</Link></li>
+                <li><Link href="/track" className="hover:text-white">Public Verification</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-bold text-white mb-2">Academic Information</p>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Developed as a Software Engineering laboratory capstone demonstrating UML realizations, role-based security, statechart FSM models, and multi-tier architecture.
+              </p>
+            </div>
           </div>
-
-          <div className="flex flex-wrap gap-4 sm:gap-6 text-xs text-slate-400">
-            <Link href="/track" className="hover:text-white">Public Tracker</Link>
-            <Link href="/login" className="hover:text-white">Sign In</Link>
-            <Link href="/register" className="hover:text-white">Register</Link>
-            <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white">Terms of Service</Link>
+          <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+            <p>© 2026 Passport Automation System (Academic Simulation). All rights reserved.</p>
+            <p>Built with Next.js 16 • React 19 • TypeScript • Prisma • SQLite</p>
           </div>
         </div>
       </footer>
-      </div>
-    </main>
+    </div>
   );
 }

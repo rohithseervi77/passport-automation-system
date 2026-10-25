@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { User, Lock, Mail, Building, ShieldCheck, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function RegisterPage() {
   const [address, setAddress] = useState("");
 
   // Officer fields
-  const [branchLocation, setBranchLocation] = useState("RPO Central Processing Center");
+  const [branchLocation, setBranchLocation] = useState("RPO Central Processing Center - Chennai");
   const [officerId, setOfficerId] = useState("");
 
   // Police fields
@@ -60,362 +61,320 @@ export default function RegisterPage() {
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Registration failed.");
+        setError(data.error || "Account registration failed.");
         setLoading(false);
         return;
       }
 
-      let successMsg = `Account created successfully for ${username}!`;
-      if (data.applicantId) successMsg += ` Your Applicant ID is ${data.applicantId}.`;
-      if (data.officerId) successMsg += ` Your Officer ID is ${data.officerId}.`;
-      if (data.badgeNumber) successMsg += ` Your Badge Number is ${data.badgeNumber}.`;
-
-      setSuccess(successMsg);
-
+      setSuccess("Account registered successfully! Redirecting to secure login...");
       setTimeout(() => {
         router.push("/login");
-      }, 2000);
-    } catch {
-      setError("Unable to connect to the server. Please try again.");
-    } finally {
+      }, 1500);
+    } catch (err) {
+      console.error("Registration error:", err);
+      setError("Unable to connect to registration server.");
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col justify-between">
+      {/* Tricolor Ribbon */}
+      <div className="h-1.5 w-full flex">
+        <div className="flex-1 bg-[#FF9933]"></div>
+        <div className="flex-1 bg-white"></div>
+        <div className="flex-1 bg-[#138808]"></div>
+      </div>
+
       {/* Header */}
-      <header className="border-b border-slate-800">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <header className="bg-white border-b border-slate-200">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 py-3.5">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 font-bold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-950 text-white font-bold text-sm shadow-xs">
               PAS
             </div>
-
             <div>
-              <h1 className="font-bold">Passport Automation System</h1>
-              <p className="text-xs text-slate-400">
-                Government of India • Ministry of External Affairs
-              </p>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-base text-slate-900 tracking-tight">Passport Automation System</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold uppercase">Academic</span>
+              </div>
+              <p className="text-xs text-slate-500">Citizen Registration Portal</p>
             </div>
           </Link>
 
           <Link
             href="/login"
-            className="text-xs text-blue-400 hover:text-blue-300 font-medium"
+            className="text-xs font-semibold text-blue-950 hover:underline"
           >
-            Already have an account? Login →
+            Already registered? Sign In →
           </Link>
         </div>
       </header>
 
-      {/* Registration Form */}
-      <section className="px-6 py-12">
-        <div className="mx-auto max-w-2xl">
-          <div className="mb-8 text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-blue-400 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30">
-              New User Onboarding
-            </span>
-
-            <h2 className="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight">
-              Create Your Digital Identity
-            </h2>
-
-            <p className="mt-2 text-xs md:text-sm text-slate-400">
-              Register as a Citizen Applicant, Passport Verification Officer, or Police Authority.
+      {/* Main Registration Form */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12">
+        <div className="w-full max-w-lg">
+          <div className="mb-6 text-center">
+            <h1 className="text-2xl font-bold text-slate-900">Create Portal Account</h1>
+            <p className="text-xs text-slate-500 mt-1">
+              Select your role and provide account particulars to access passport digital services.
             </p>
           </div>
 
           {/* Role Selection Tabs */}
-          <div className="mb-6 grid grid-cols-3 gap-2 rounded-2xl border border-slate-800 bg-slate-900 p-1.5 shadow-lg">
+          <div className="grid grid-cols-3 gap-2 mb-6">
             <button
               type="button"
               onClick={() => setRole("APPLICANT")}
-              className={`rounded-xl py-3 px-2 text-xs font-bold transition flex flex-col items-center gap-1 ${
+              className={`py-2 px-3 rounded-lg border text-xs font-bold text-center transition ${
                 role === "APPLICANT"
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-600/40"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800"
+                  ? "bg-blue-950 text-white border-blue-950 shadow-xs"
+                  : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
               }`}
             >
-              <span className="text-base">🧑‍💼</span>
-              <span>Citizen Applicant</span>
+              👤 Citizen Applicant
             </button>
-
             <button
               type="button"
               onClick={() => setRole("OFFICER")}
-              className={`rounded-xl py-3 px-2 text-xs font-bold transition flex flex-col items-center gap-1 ${
+              className={`py-2 px-3 rounded-lg border text-xs font-bold text-center transition ${
                 role === "OFFICER"
-                  ? "bg-amber-600 text-white shadow-md shadow-amber-600/40"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800"
+                  ? "bg-blue-950 text-white border-blue-950 shadow-xs"
+                  : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
               }`}
             >
-              <span className="text-base">🛂</span>
-              <span>Passport Officer</span>
+              🧑‍💼 Passport Officer
             </button>
-
             <button
               type="button"
               onClick={() => setRole("POLICE")}
-              className={`rounded-xl py-3 px-2 text-xs font-bold transition flex flex-col items-center gap-1 ${
+              className={`py-2 px-3 rounded-lg border text-xs font-bold text-center transition ${
                 role === "POLICE"
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-600/40"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800"
+                  ? "bg-blue-950 text-white border-blue-950 shadow-xs"
+                  : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
               }`}
             >
-              <span className="text-base">👮</span>
-              <span>Police Authority</span>
+              👮 Police Authority
             </button>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5 rounded-3xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl"
-          >
-            {/* Account Credentials */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="username"
-                  className="mb-1.5 block text-xs font-medium text-slate-300"
-                >
-                  Username / Portal Login ID *
-                </label>
+          {/* Feedback Messages */}
+          {error && (
+            <div className="mb-6 p-3 rounded-lg bg-rose-50 border border-rose-300 text-rose-800 text-xs font-semibold flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
 
+          {success && (
+            <div className="mb-6 p-3 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <span>{success}</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
+            {/* Account Credentials */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Username <span className="text-rose-600">*</span>
+                </label>
                 <input
-                  id="username"
                   name="username"
                   type="text"
-                  placeholder="e.g. rahul_sharma99"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-blue-500"
+                  placeholder="e.g. rohit_kumar"
                   required
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="mb-1.5 block text-xs font-medium text-slate-300"
-                >
-                  Email Address *
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Email Address <span className="text-rose-600">*</span>
                 </label>
-
                 <input
-                  id="email"
                   name="email"
                   type="email"
-                  placeholder="name@example.gov.in"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-blue-500"
+                  placeholder="e.g. citizen@example.com"
                   required
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-xs font-medium text-slate-300"
-              >
-                Account Password *
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Password <span className="text-rose-600">*</span>
               </label>
-
               <input
-                id="password"
                 name="password"
                 type="password"
-                placeholder="Choose a strong password (min 6 characters)"
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-blue-500"
+                placeholder="At least 6 characters"
                 required
                 minLength={6}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
               />
             </div>
 
-            {/* Role-Specific Fields */}
+            {/* Role Specific Fields */}
             {role === "APPLICANT" && (
-              <div className="space-y-4 pt-4 border-t border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-blue-500"></span>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                    Applicant Personal Particulars
-                  </h3>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-4 pt-3 border-t border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                      Full Legal Name *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                      Full Legal Name <span className="text-rose-600">*</span>
                     </label>
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="As per Aadhaar / Birth Record"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-blue-500"
+                      placeholder="As per School / Birth certificate"
                       required
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
                     />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                      Date of Birth *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                      Date of Birth <span className="text-rose-600">*</span>
                     </label>
                     <input
                       type="date"
                       value={dob}
                       onChange={(e) => setDob(e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-blue-500"
                       required
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                    Present Residential Address *
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                    Present Residential Address <span className="text-rose-600">*</span>
                   </label>
                   <textarea
-                    rows={3}
+                    rows={2}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="House / Flat No, Street, Landmark, City, State, PIN"
-                    className="w-full resize-none rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-blue-500"
+                    placeholder="Door No, Street, City, State, PIN Code"
                     required
-                  />
+                    className="w-full p-2.5 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  ></textarea>
                 </div>
               </div>
             )}
 
             {role === "OFFICER" && (
-              <div className="space-y-4 pt-4 border-t border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-amber-500"></span>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                    Passport Officer Credentials
-                  </h3>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-4 pt-3 border-t border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                      Designated Officer ID (Optional)
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                      Officer Badge / Employee ID
                     </label>
                     <input
                       type="text"
                       value={officerId}
                       onChange={(e) => setOfficerId(e.target.value)}
-                      placeholder="e.g. OFF-8821 (auto-generated if blank)"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-amber-500 font-mono"
+                      placeholder="e.g. OFF-CHENNAI-01"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-900"
                     />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                      Regional Passport Office Branch *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                      Branch / RPO Location
                     </label>
-                    <select
+                    <input
+                      type="text"
                       value={branchLocation}
                       onChange={(e) => setBranchLocation(e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-amber-500"
-                    >
-                      <option>RPO Central Processing Center</option>
-                      <option>RPO Delhi Regional Headquarters</option>
-                      <option>RPO Mumbai Western Division</option>
-                      <option>RPO Bengaluru South Division</option>
-                    </select>
+                      placeholder="RPO Chennai - Rayala Towers"
+                      required
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
+                    />
                   </div>
                 </div>
               </div>
             )}
 
             {role === "POLICE" && (
-              <div className="space-y-4 pt-4 border-t border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-purple-500"></span>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                    Police Station Authority Details
-                  </h3>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-4 pt-3 border-t border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                      Jurisdiction Police Station Code *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                      Station Code / Division
                     </label>
-                    <select
+                    <input
+                      type="text"
                       value={stationCode}
                       onChange={(e) => setStationCode(e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-purple-500 font-mono"
-                    >
-                      <option value="PS-CENTRAL">PS-CENTRAL (Central Division)</option>
-                      <option value="PS-NORTH">PS-NORTH (North District)</option>
-                      <option value="PS-SOUTH">PS-SOUTH (South Division)</option>
-                    </select>
+                      placeholder="e.g. PS-SALIGRAMAM"
+                      required
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-900"
+                    />
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-slate-300">
-                      Enquiry Officer Badge Number *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                      Officer Designation / Badge No.
                     </label>
                     <input
                       type="text"
                       value={badgeNumber}
                       onChange={(e) => setBadgeNumber(e.target.value)}
-                      placeholder="e.g. POL-9924"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white outline-none transition focus:border-purple-500 font-mono"
-                      required
+                      placeholder="e.g. SI-4829"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-900"
                     />
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Error message */}
-            {error && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-400">
-                {error}
-              </div>
-            )}
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 px-4 bg-blue-950 text-white font-semibold text-sm rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-xs flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Registering Account...
+                  </>
+                ) : (
+                  <>
+                    Complete Registration
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </div>
 
-            {/* Success message */}
-            {success && (
-              <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-xs text-green-400">
-                {success}
-                <p className="mt-1 text-[11px] text-green-500">
-                  Redirecting to official login page...
-                </p>
-              </div>
-            )}
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full rounded-xl px-6 py-3 text-xs font-bold transition shadow-lg disabled:cursor-not-allowed disabled:opacity-50 ${
-                role === "OFFICER"
-                  ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/30"
-                  : role === "POLICE"
-                  ? "bg-purple-600 hover:bg-purple-700 shadow-purple-600/30"
-                  : "bg-blue-600 hover:bg-blue-700 shadow-blue-600/30"
-              }`}
-            >
-              {loading ? "Registering & Persisting Data..." : `Complete ${role} Registration →`}
-            </button>
-
-            <p className="text-center text-[11px] text-slate-500">
-              By submitting this form, you confirm that all entered details are accurate under the Passports Act, 1967.
-            </p>
+            <div className="text-center pt-2 border-t border-slate-100">
+              <p className="text-xs text-slate-500">
+                Already registered?{" "}
+                <Link href="/login" className="font-semibold text-blue-950 hover:underline">
+                  Sign In to Portal
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
-      </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        <p>Passport Automation System (PAS) • Academic Software Engineering Project</p>
+      </footer>
     </main>
   );
 }

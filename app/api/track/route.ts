@@ -1,14 +1,26 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getStatusMeta } from "@/lib/fsm";
+
+function maskName(fullName: string): string {
+  if (!fullName) return "A*******t";
+  return fullName
+    .split(" ")
+    .map((word) => {
+      if (word.length <= 2) return word;
+      return word[0] + "*".repeat(word.length - 2) + word[word.length - 1];
+    })
+    .join(" ");
+}
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { applicationId, dob } = body;
 
-    if (!applicationId || !dob) {
+    if (!applicationId || !applicationId.trim()) {
       return NextResponse.json(
-        { error: "Application Reference ID and Date of Birth are required." },
+        { error: "Application Reference Number (ARN) is required." },
         { status: 400 }
       );
     }
@@ -19,64 +31,66 @@ export async function POST(req: Request) {
       },
       include: {
         applicant: true,
-        documents: true,
         appointment: true,
-        policeReports: {
-          include: {
-            police: true,
-          },
-        },
         passport: true,
-        officer: true,
+        statusHistory: {
+          orderBy: { changedAt: "asc" },
+        },
       },
     });
 
     if (!application) {
       return NextResponse.json(
-        { error: "No application found with the provided Reference ID." },
+        { error: "No passport application found matching the provided Application Reference Number (ARN)." },
         { status: 404 }
       );
     }
 
-    // Verify date of birth matching
-    const parsedDob = new Date(dob);
-    if (isNaN(parsedDob.getTime())) {
-      return NextResponse.json(
-        { error: "Invalid Date of Birth format. Please select a valid date." },
-        { status: 400 }
-      );
-    }
-    const inputDob = parsedDob.toISOString().split("T")[0];
-    const recordDob = new Date(application.applicant.dob).toISOString().split("T")[0];
+    // Optional DOB validation
+    if (dob && dob.trim()) {
+      const inputDob = new Date(dob).toISOString().split("T")[0];
+      const appDob = application.dob ? new Date(application.dob).toISOString().split("T")[0] : null;
+      const userDob = application.applicant.dob ? new Date(application.applicant.dob).toISOString().split("T")[0] : null;
 
-    if (inputDob !== recordDob) {
-      return NextResponse.json(
-        { error: "Date of Birth does not match records for this Application ID." },
-        { status: 401 }
-      );
+      if (appDob && inputDob !== appDob && inputDob !== userDob) {
+        return NextResponse.json(
+          { error: "Date of Birth does not match department records for this Application Reference Number." },
+          { status: 401 }
+        );
+      }
     }
 
-    const stages = [
-      { key: "DRAFT", label: "Draft Application", desc: "Application created by applicant" },
-      { key: "SUBMITTED", label: "Application Submitted", desc: "Submitted with required details" },
-      { key: "APPOINTMENT_SCHEDULED", label: "Appointment Booked", desc: "Slot booked for document verification" },
-      { key: "UNDER_OFFICER_VERIFICATION", label: "Officer Verification", desc: "Passport Officer verifying documents" },
-      { key: "POLICE_VERIFICATION_PENDING", label: "Police Enquiry", desc: "Forwarded to local Police Station for background check" },
-      { key: "POLICE_CLEARED", label: "Police Clearance Granted", desc: "Clearance report submitted by Police authority" },
-      { key: "APPROVED", label: "Application Approved", desc: "Passport Officer approved the application" },
-      { key: "PASSPORT_ISSUED", label: "Passport Issued", desc: "Passport printed and booklet generated" },
-      { key: "PASSPORT_DISPATCHED", label: "Passport Dispatched", desc: "Dispatched via Speed Post tracking" },
-    ];
+    const fullName = application.givenName 
+      ? `${application.givenName} ${application.surname || ""}`.trim()
+      : application.applicant.name;
+
+    const maskedName = maskName(fullName);
+    const meta = getStatusMeta(application.status as any);
+
+    // Filter public-safe milestone timeline
+    const publicTimeline = (application.statusHistory || []).map((h: any) => ({
+      status: h.toStatus,
+      date: h.changedAt,
+      label: getStatusMeta(h.toStatus as any).label,
+    }));
 
     return NextResponse.json({
-      application,
-      applicant: {
-        name: application.applicant.name,
-        applicantId: application.applicant.applicantId,
-        dob: application.applicant.dob,
-        address: application.applicant.address,
-      },
-      stages,
+      applicationId: application.applicationId,
+      maskedName,
+      serviceType: application.serviceType,
+      applicationCategory: application.applicationCategory,
+      rpoLocation: application.rpoLocation,
+      submissionDate: application.submissionDate || application.createdAt,
+      currentStatus: application.status,
+      statusLabel: meta.label,
+      statusDescription: meta.desc,
+      stageNumber: meta.stageIndex + 1,
+      badgeColor: meta.badgeClass,
+      appointmentDate: application.appointment?.status === "BOOKED" ? application.appointment.date : null,
+      appointmentLocation: application.appointment?.status === "BOOKED" ? application.appointment.location : null,
+      passportNumber: application.passport ? `P${application.passport.passportNumber.slice(1, 3)}****${application.passport.passportNumber.slice(-2)}` : null,
+      trackingNumber: application.passport?.trackingNumber || (application.status.includes("DISPATCH") ? `IN${application.applicationId.slice(-6)}TRK` : null),
+      publicTimeline,
     });
   } catch (error) {
     console.error("Public track error:", error);

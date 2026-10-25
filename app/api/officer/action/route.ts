@@ -16,12 +16,12 @@ export async function POST(req: Request) {
     });
 
     if (!user || user.role !== "OFFICER" || !user.passportOfficer) {
-      return NextResponse.json({ error: "Access denied. Officer role required." }, { status: 403 });
+      return NextResponse.json({ error: "Access denied. Passport Officer privileges required." }, { status: 403 });
     }
 
     const officer = user.passportOfficer;
     const body = await req.json();
-    const { applicationId, action, remarks } = body;
+    const { applicationId, action, remarks, reason, checklist } = body;
 
     if (!applicationId || !action) {
       return NextResponse.json({ error: "applicationId and action are required." }, { status: 400 });
@@ -33,71 +33,85 @@ export async function POST(req: Request) {
         documents: true,
         appointment: true,
         passport: true,
+        policeReports: true,
       },
     });
 
     if (!application) {
-      return NextResponse.json({ error: "Application not found." }, { status: 404 });
+      return NextResponse.json({ error: "Application not found in RPO records." }, { status: 404 });
+    }
+
+    // Save checklist if provided
+    if (checklist) {
+      await prisma.application.update({
+        where: { id: application.id },
+        data: {
+          officerChecklist: JSON.stringify(checklist),
+          officerId: officer.id,
+        },
+      });
     }
 
     let updatedApplication;
 
     switch (action) {
       case "VERIFY_DOCS": {
+        // Mark documents as verified
         await prisma.document.updateMany({
           where: { applicationId: application.id },
           data: { fileStatus: "VERIFIED" },
         });
 
-        // E.g. transition DRAFT -> SUBMITTED -> DOCUMENT_REVIEW -> DOCUMENT_VERIFIED
-        // The frontend might pass the app in various states. Let's force it if it's currently SUBMITTED.
-        // Actually, just use the service. But for simplicity, we assume the frontend ensures current state.
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "DOCUMENT_VERIFIED", user.id, remarks);
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
-        }
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "DOCUMENT_VERIFIED",
+          user.id,
+          remarks || "All uploaded supporting documents verified by Verifying Officer at Counter B."
+        );
         break;
       }
 
       case "INITIATE_POLICE": {
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "POLICE_VERIFICATION_PENDING", user.id, remarks);
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "POLICE_VERIFICATION_PENDING",
+          user.id,
+          remarks || `Police background & address enquiry initiated with ${application.policeStation || "Local Police Station"}.`
+        );
+        break;
+      }
+
+      case "REQUEST_CLARIFICATION": {
+        if (!reason || !reason.trim()) {
+          return NextResponse.json({ error: "A specific clarification reason is mandatory." }, { status: 400 });
         }
+
+        await prisma.application.update({
+          where: { id: application.id },
+          data: {
+            clarificationReason: reason.trim(),
+            clarificationRequestedAt: new Date(),
+            clarificationResponse: null,
+            clarificationRespondedAt: null,
+          },
+        });
+
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "CLARIFICATION_REQUIRED",
+          user.id,
+          `Clarification requested: ${reason.trim()}`
+        );
         break;
       }
 
       case "APPROVE": {
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "APPROVED", user.id, remarks);
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
-        }
-        break;
-      }
-
-      case "REJECT": {
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "REJECTED", user.id, remarks);
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
-        }
-        break;
-      }
-
-      case "REQUEST_CORRECTION": {
-        await prisma.document.updateMany({
-          where: { applicationId: application.id },
-          data: { fileStatus: "REJECTED" },
-        });
-
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "DOCUMENT_CORRECTION_REQUIRED", user.id, remarks || "Documents rejected, correction required");
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
-        }
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "APPROVED",
+          user.id,
+          remarks || "Application scrutinized and granted final approval by Granting Officer."
+        );
         break;
       }
 
@@ -132,44 +146,87 @@ export async function POST(req: Request) {
           });
         }
 
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "PASSPORT_PRINTING", user.id, remarks);
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
-        }
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "PRINTING",
+          user.id,
+          remarks || `Passport booklet generated with Number ${passportNumber}. Sent for high-security laser printing.`
+        );
         break;
       }
 
       case "DISPATCH_PASSPORT": {
         if (!application.passport) {
-          return NextResponse.json({ error: "Cannot dispatch: Passport not issued yet." }, { status: 400 });
+          // If passport record doesn't exist, generate one first
+          const randomNum = Math.floor(1000000 + Math.random() * 9000000);
+          const passportNumber = `P${randomNum}`;
+          const issueDate = new Date();
+          const expiryDate = new Date();
+          expiryDate.setFullYear(expiryDate.getFullYear() + 10);
+          const trackingNumber = `IN${new Date().toISOString().slice(0, 10).replace(/-/g, "")}${Math.floor(1000 + Math.random() * 9000)}`;
+
+          await prisma.passport.create({
+            data: {
+              passportNumber,
+              issueDate,
+              expiryDate,
+              dispatchStatus: "DISPATCHED",
+              trackingNumber,
+              applicationId: application.id,
+              officerId: officer.id,
+            },
+          });
+        } else {
+          const trackingNumber = `IN${new Date().toISOString().slice(0, 10).replace(/-/g, "")}${Math.floor(1000 + Math.random() * 9000)}`;
+          await prisma.passport.update({
+            where: { id: application.passport.id },
+            data: {
+              dispatchStatus: "DISPATCHED",
+              trackingNumber,
+            },
+          });
         }
 
-        await prisma.passport.update({
-          where: { id: application.passport.id },
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "DISPATCHED",
+          user.id,
+          remarks || "Passport booklet dispatched via India Post Speed Post service."
+        );
+        break;
+      }
+
+      case "REJECT": {
+        if (!reason || !reason.trim()) {
+          return NextResponse.json({ error: "A statutory rejection reason is mandatory." }, { status: 400 });
+        }
+
+        await prisma.application.update({
+          where: { id: application.id },
           data: {
-            dispatchStatus: "DISPATCHED",
+            rejectionReason: reason.trim(),
           },
         });
 
-        try {
-          updatedApplication = await transitionApplicationStatus(application.id, "PASSPORT_DISPATCHED", user.id, remarks);
-        } catch (e: any) {
-          return NextResponse.json({ error: e.message }, { status: 400 });
-        }
+        updatedApplication = await transitionApplicationStatus(
+          application.id,
+          "REJECTED",
+          user.id,
+          `Application rejected under Passports Act, 1967: ${reason.trim()}`
+        );
         break;
       }
 
       default:
-        return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
+        return NextResponse.json({ error: `Unknown scrutiny action: ${action}` }, { status: 400 });
     }
 
     return NextResponse.json({
-      message: `Action ${action} completed successfully`,
+      message: `Action '${action}' recorded successfully!`,
       application: updatedApplication,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Officer action error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
   }
 }

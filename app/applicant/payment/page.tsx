@@ -4,24 +4,41 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { 
+  CreditCard, 
+  Smartphone, 
+  Building2, 
+  CheckCircle2, 
+  Printer, 
+  ArrowRight, 
+  AlertCircle, 
+  ShieldCheck, 
+  Receipt,
+  QrCode,
+  Lock
+} from "lucide-react";
 
 export default function ApplicantPaymentPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
-  const [applicant, setApplicant] = useState<any>(null);
-  const [applicationId, setApplicationId] = useState<string | null>(null);
-  const [passportType, setPassportType] = useState("REGULAR (36 Pages)");
-  const [feeAmount, setFeeAmount] = useState(1500);
-  const [paymentMethod, setPaymentMethod] = useState("Card");
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [data, setData] = useState<any>(null);
+  
+  // Payment methods
+  const [paymentMethod, setPaymentMethod] = useState<"UPI" | "DEBIT_CARD" | "CREDIT_CARD" | "NET_BANKING">("UPI");
+  
+  // Form fields
+  const [upiId, setUpiId] = useState("applicant@upi");
   const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8910");
-  const [upiId, setUpiId] = useState("applicant@okaxis");
+  const [cardExpiry, setCardExpiry] = useState("12/28");
+  const [cardCvv, setCardCvv] = useState("888");
+  const [cardName, setCardName] = useState("");
   const [selectedBank, setSelectedBank] = useState("State Bank of India");
+
   const [receipt, setReceipt] = useState<any | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
-  const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPaymentDetails() {
@@ -31,12 +48,15 @@ export default function ApplicantPaymentPage() {
           router.push("/login");
           return;
         }
-        const data = await res.json();
-        if (data.applicant) setApplicant(data.applicant);
-        if (data.applicationId) setApplicationId(data.applicationId);
-        if (data.passportType) setPassportType(data.passportType);
-        if (data.feeAmount !== undefined) setFeeAmount(data.feeAmount);
-        if (data.status) setApplicationStatus(data.status);
+        const json = await res.json();
+        setData(json);
+        if (json.applicant?.name) {
+          setCardName(json.applicant.name.toUpperCase());
+        }
+        if (json.latestPayment && json.latestPayment.status === "SUCCESS") {
+          setReceipt(json.latestPayment);
+          setPaymentSuccess(true);
+        }
       } catch (err) {
         console.error("Payment load error:", err);
       } finally {
@@ -53,31 +73,32 @@ export default function ApplicantPaymentPage() {
     setPaying(true);
 
     try {
+      const breakdown = data?.feeBreakdown;
       const res = await fetch("/api/applicant/payment", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Idempotency-Key": crypto.randomUUID()
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           paymentMethod,
-          amount: feeAmount,
+          amount: breakdown?.totalAmount || 1500,
+          baseFee: breakdown?.baseFee || 1500,
+          additionalFee: breakdown?.additionalFee || 0,
+          paymentReference: paymentMethod === "UPI" ? upiId : `${selectedBank}-NET`,
         }),
       });
 
-      const data = await res.json();
+      const resData = await res.json();
       if (!res.ok) {
-        setError(data.error || "Payment transaction failed");
+        setError(resData.error || "Payment transaction failed. Please retry.");
         setPaying(false);
         return;
       }
 
-      setReceipt(data.transaction);
-      setApplicationStatus("PAYMENT_COMPLETED");
-      setMessage("Fee payment processed successfully! Transaction confirmed.");
+      setReceipt(resData.transaction);
+      setPaymentSuccess(true);
+      setMessage(resData.message || "Fee payment processed successfully! Transaction confirmed.");
     } catch (err) {
       console.error("Payment error:", err);
-      setError("Payment gateway connection error");
+      setError("Payment gateway connection error. Please try again.");
     } finally {
       setPaying(false);
     }
@@ -89,321 +110,582 @@ export default function ApplicantPaymentPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        <p className="text-slate-400">Loading payment gateway...</p>
+      <main className="min-h-screen bg-slate-50 text-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-3 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-sm font-medium text-slate-600">Connecting to Government Payment Gateway...</p>
+        </div>
       </main>
     );
   }
 
+  const app = data?.application;
+  const breakdown = data?.feeBreakdown;
+  const isTatkaal = app?.applicationCategory === "TATKAAL";
+  const is60 = app?.bookletType === "60_PAGES";
+
   return (
-    <main className="min-h-screen bg-slate-950 text-white pb-16">
+    <main className="min-h-screen bg-slate-50 text-slate-800 pb-16 font-sans">
       <Navbar
         role="APPLICANT"
-        userName={applicant?.name || "Applicant"}
-        badgeLabel={applicationId ? `App: ${applicationId}` : "PAS"}
+        userName={data?.applicant?.name || "Applicant"}
+        badgeLabel={app?.applicationId ? `ARN: ${app.applicationId}` : "PAS"}
       />
 
-      <div className="mx-auto max-w-4xl px-6 py-10">
-        <div className="flex items-center justify-between mb-8 print:hidden">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+        {/* Breadcrumb Navigation */}
+        <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6 print:hidden">
+          <Link href="/applicant/dashboard" className="hover:text-blue-900 hover:underline">
+            Applicant Dashboard
+          </Link>
+          <span>/</span>
+          <span className="text-slate-800 font-semibold">Fee Payment</span>
+        </nav>
+
+        {/* Page Title */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200 mb-8 print:hidden">
           <div>
-            <Link
-              href="/applicant/dashboard"
-              className="text-xs text-blue-400 hover:text-blue-300 mb-2 inline-block"
-            >
-              ← Back to Dashboard
-            </Link>
-            <h2 className="text-3xl font-bold">Government Fee Payment Gateway</h2>
-            <p className="text-sm text-slate-400 mt-1">
-              Secure online processing of statutory passport application & booklet charges.
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-blue-100 text-blue-900 text-xs font-semibold mb-2">
+              <Lock className="w-3.5 h-3.5" />
+              Statutory Fee Payment Gateway
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
+              Government Passport Fee Payment
+            </h1>
+            <p className="text-sm text-slate-600 mt-1">
+              Secure digital collection of statutory passport application, booklet, and processing charges.
             </p>
           </div>
 
-          {applicationId && (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 px-4 py-2 text-right">
-              <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                Application ID
-              </span>
-              <span className="font-mono text-sm font-semibold text-blue-400">
-                {applicationId}
-              </span>
+          {app?.applicationId && (
+            <div className="mt-4 sm:mt-0 p-3 bg-white border border-slate-200 rounded-lg text-right shadow-sm">
+              <div className="text-[11px] uppercase tracking-wider text-slate-500 font-medium">Application Reference Number</div>
+              <div className="text-base font-bold font-mono text-blue-950">{app.applicationId}</div>
             </div>
           )}
         </div>
 
-        {/* Notifications */}
+        {/* Alert Messages */}
         {message && (
-          <div className="mb-6 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-4 text-sm text-emerald-300 print:hidden">
-            ✓ {message}
-          </div>
-        )}
-        {error && (
-          <div className="mb-6 rounded-xl border border-red-500/40 bg-red-950/40 p-4 text-sm text-red-300 print:hidden">
-            ✗ {error}
+          <div className="mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-sm flex items-start gap-3 print:hidden">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold">Transaction Successful</p>
+              <p className="text-xs text-emerald-700 mt-0.5">{message}</p>
+            </div>
           </div>
         )}
 
-        {/* Payment Confirmation Receipt */}
-        {!applicationId ? (
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-12 text-center shadow-xl">
-            <p className="text-4xl mb-3">💳</p>
-            <h3 className="text-lg font-bold text-white">No active application found for fee payment</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-              Please submit your passport application form before proceeding to fee payment and receipt generation.
+        {error && (
+          <div className="mb-6 p-4 rounded-lg bg-rose-50 border border-rose-300 text-rose-800 text-sm flex items-start gap-3 print:hidden">
+            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold">Payment Notice</p>
+              <p className="text-xs text-rose-700 mt-0.5">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {!app ? (
+          <div className="bg-white border border-slate-200 rounded-xl p-12 text-center shadow-sm">
+            <Receipt className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+            <h2 className="text-lg font-bold text-slate-800">No active application ready for payment</h2>
+            <p className="text-sm text-slate-500 max-w-md mx-auto mt-1 mb-6">
+              You must complete and submit your passport application before proceeding with statutory fee payment.
             </p>
             <Link
               href="/applicant/application"
-              className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-950 text-white text-sm font-semibold rounded-md hover:bg-blue-900 transition"
             >
-              Start Application Now →
+              Fill Passport Application Form →
             </Link>
           </div>
-        ) : receipt ? (
-          <div className="rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-slate-900 via-emerald-950/20 to-slate-900 p-8 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 font-bold text-white">
-                  ✓
+        ) : paymentSuccess && receipt ? (
+          /* ========================================================
+             PAYMENT SUCCESS / OFFICIAL RECEIPT SLIP
+             ======================================================== */
+          <div className="space-y-6">
+            <div className="bg-white border-2 border-slate-300 rounded-xl shadow-md p-6 sm:p-8 relative">
+              {/* Receipt Header */}
+              <div className="border-b-2 border-slate-800 pb-5 mb-6 text-center">
+                <div className="inline-block px-3 py-1 bg-blue-900 text-white text-xs font-bold uppercase tracking-wider rounded mb-2">
+                  Passport Automation System • Official Fee Receipt
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 uppercase">
+                  Statutory Passport Fee Payment Challan
+                </h2>
+                <p className="text-xs text-slate-500 mt-1">
+                  Electronic Receipt for Central Passport Organisation Application Processing
+                </p>
+                <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  PAYMENT STATUS: CONFIRMED & RECONCILED
+                </div>
+              </div>
+
+              {/* Receipt Key Metadata Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6 text-xs">
+                <div>
+                  <span className="text-slate-500 block">Transaction Reference:</span>
+                  <span className="font-mono font-bold text-slate-900 text-sm">{receipt.transactionId}</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-emerald-300">
-                    Payment Confirmation Receipt
-                  </h3>
-                  <p className="text-xs text-slate-400">
-                    Passport Seva Official Payment Acknowledgment
-                  </p>
+                  <span className="text-slate-500 block">Application Reference (ARN):</span>
+                  <span className="font-mono font-bold text-blue-950 text-sm">{app.applicationId}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Date & Timestamp:</span>
+                  <span className="font-medium text-slate-800">
+                    {receipt.createdAt
+                      ? new Date(receipt.createdAt).toLocaleString("en-IN", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })
+                      : "Recently Reconciled"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Payment Mode:</span>
+                  <span className="font-semibold text-slate-900">{receipt.paymentMethod || "Online Gateway"}</span>
                 </div>
               </div>
 
-              <span className="rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-400">
-                TRANSACTION SUCCESS
-              </span>
-            </div>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4">
-                <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                  Transaction Reference
-                </span>
-                <span className="font-mono text-sm font-bold text-white mt-1 block">
-                  {receipt.txnId}
-                </span>
+              {/* Applicant Particulars */}
+              <div className="mb-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                  Applicant Particulars
+                </h3>
+                <div className="border border-slate-200 rounded-lg overflow-hidden text-sm">
+                  <div className="grid grid-cols-2 divide-x divide-slate-200 border-b border-slate-200">
+                    <div className="p-3 bg-slate-50 font-medium text-slate-600">Applicant Full Name</div>
+                    <div className="p-3 font-semibold text-slate-900">
+                      {app.givenName ? `${app.givenName} ${app.surname || ""}` : data.applicant?.name}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-slate-200 border-b border-slate-200">
+                    <div className="p-3 bg-slate-50 font-medium text-slate-600">Service Category</div>
+                    <div className="p-3 text-slate-800">
+                      {app.serviceType || "FRESH"} Passport • {app.applicationCategory || "NORMAL"} Quota
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-slate-200 border-b border-slate-200">
+                    <div className="p-3 bg-slate-50 font-medium text-slate-600">Booklet Type</div>
+                    <div className="p-3 text-slate-800">
+                      {app.bookletType === "60_PAGES" ? "60 Pages (Jumbo Booklet)" : "36 Pages (Standard Booklet)"}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 divide-x divide-slate-200">
+                    <div className="p-3 bg-slate-50 font-medium text-slate-600">Regional Passport Office (RPO)</div>
+                    <div className="p-3 text-slate-800 font-medium">{app.rpoLocation || "RPO Chennai"}</div>
+                  </div>
+                </div>
               </div>
 
-              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4">
-                <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                  Amount Paid
-                </span>
-                <span className="text-base font-bold text-emerald-400 mt-1 block">
-                  ₹{receipt.amount}.00
-                </span>
+              {/* Statutory Fee Itemised Table */}
+              <div className="mb-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                  Fee Calculation Breakdown
+                </h3>
+                <table className="w-full text-left text-sm border border-slate-200 rounded-lg overflow-hidden">
+                  <thead className="bg-slate-100 text-slate-700 text-xs uppercase font-semibold">
+                    <tr>
+                      <th className="p-3">Component Description</th>
+                      <th className="p-3 text-right">Statutory Charge (INR)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr>
+                      <td className="p-3">
+                        <span className="font-semibold text-slate-800">Base Passport Application Fee</span>
+                        <span className="block text-xs text-slate-500">Includes biometric capture, scrutiny and booklet charges (36 pages)</span>
+                      </td>
+                      <td className="p-3 text-right font-mono text-slate-900">₹{receipt.baseFee || 1500}.00</td>
+                    </tr>
+                    {is60 && (
+                      <tr>
+                        <td className="p-3">
+                          <span className="font-semibold text-slate-800">Additional Booklet Pages Surcharge</span>
+                          <span className="block text-xs text-slate-500">60-page Jumbo booklet option</span>
+                        </td>
+                        <td className="p-3 text-right font-mono text-slate-900">₹500.00</td>
+                      </tr>
+                    )}
+                    {isTatkaal && (
+                      <tr>
+                        <td className="p-3">
+                          <span className="font-semibold text-slate-800">Tatkaal Expedited Processing Surcharge</span>
+                          <span className="block text-xs text-slate-500">Fast-track verification and out-of-turn printing</span>
+                        </td>
+                        <td className="p-3 text-right font-mono text-slate-900">₹2000.00</td>
+                      </tr>
+                    )}
+                    <tr className="bg-slate-50 font-bold">
+                      <td className="p-3 text-slate-900 text-base">Total Amount Paid</td>
+                      <td className="p-3 text-right font-mono text-blue-950 text-base">₹{receipt.amount}.00</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
-              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4">
-                <span className="text-[10px] uppercase font-bold text-slate-500 block">
-                  Payment Mode
-                </span>
-                <span className="text-sm font-semibold text-slate-200 mt-1 block">
-                  {receipt.paymentMethod}
-                </span>
+              {/* Instructions and Security Stamp */}
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 mb-6">
+                <p className="font-bold flex items-center gap-1.5 mb-1">
+                  <ShieldCheck className="w-4 h-4 text-amber-700" />
+                  Important Instructions for Applicant:
+                </p>
+                <ul className="list-disc pl-5 space-y-1 text-amber-800">
+                  <li>Please carry a printed copy of this receipt along with your Appointment Confirmation Letter to the PSK.</li>
+                  <li>No cash transaction is permitted at the Passport Seva Kendra counter.</li>
+                  <li>Appointment slot booking is now unlocked. You must book a physical biometric appointment slot to proceed.</li>
+                </ul>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200 print:hidden">
+                <button
+                  onClick={handlePrintReceipt}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-semibold rounded-md hover:bg-slate-50 transition shadow-sm"
+                >
+                  <Printer className="w-4 h-4 text-slate-500" />
+                  Print Fee Challan / Receipt
+                </button>
+
+                <Link
+                  href="/applicant/appointment"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-950 text-white text-sm font-semibold rounded-md hover:bg-blue-900 transition shadow-sm"
+                >
+                  Proceed to Book PSK Appointment
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
-
-            <div className="mt-6 pt-6 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4 print:hidden">
-              <button
-                type="button"
-                onClick={handlePrintReceipt}
-                className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition"
-              >
-                🖨️ Print Payment Receipt
-              </button>
-
-              <Link
-                href={
-                  ["PAYMENT_COMPLETED", "APPOINTMENT_PENDING"].includes(applicationStatus || "")
-                    ? "/applicant/appointment"
-                    : "/applicant/dashboard"
-                }
-                className="rounded-lg bg-blue-600 px-6 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition"
-              >
-                {["PAYMENT_COMPLETED", "APPOINTMENT_PENDING"].includes(applicationStatus || "")
-                  ? "Continue to Appointment Scheduling →"
-                  : "Return to Dashboard →"}
-              </Link>
-            </div>
-          </div>
-        ) : applicationStatus && !["DRAFT", "SUBMITTED", "PAYMENT_PENDING", "PAYMENT_FAILED"].includes(applicationStatus) ? (
-          <div className="rounded-2xl border border-emerald-500/40 bg-slate-900/80 p-12 text-center shadow-xl">
-            <p className="text-4xl mb-3">✅</p>
-            <h3 className="text-lg font-bold text-white">Payment Already Processed</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-              Your application fee has already been paid and verified by the system.
-            </p>
-            <Link
-              href="/applicant/dashboard"
-              className="mt-6 inline-block rounded-xl bg-slate-800 border border-slate-700 px-6 py-2.5 text-xs font-bold text-white hover:bg-slate-700 transition shadow-lg shadow-slate-900/30"
-            >
-              Return to Dashboard
-            </Link>
           </div>
         ) : (
-          /* Payment Processing Form */
-          <div className="grid gap-8 md:grid-cols-12">
-            {/* Fee Summary (Left 5 Cols) */}
-            <div className="md:col-span-5 rounded-2xl border border-slate-800 bg-slate-900 p-6">
-              <h3 className="text-base font-semibold border-b border-slate-800 pb-3 mb-4">
-                Fee Breakdown
-              </h3>
-
-              <div className="space-y-3 text-xs">
-                <div className="flex justify-between text-slate-400">
-                  <span>Application Type</span>
-                  <span className="text-white font-medium">{passportType}</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Standard Application Fee</span>
-                  <span className="text-white font-medium">₹1,500.00</span>
-                </div>
-                {feeAmount > 1500 && (
-                  <div className="flex justify-between text-slate-400">
-                    <span>Tatkaal / Extra Pages Charge</span>
-                    <span className="text-white font-medium">₹{feeAmount - 1500}.00</span>
+          /* ========================================================
+             FEE PAYMENT BREAKDOWN & SIMULATION FORM
+             ======================================================== */
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left Column: Fee Breakdown & Particulars (5 cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              {/* Application Summary Card */}
+              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                  Application Summary
+                </h2>
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Applicant Name</span>
+                    <span className="font-semibold text-slate-800">
+                      {app.givenName ? `${app.givenName} ${app.surname || ""}` : data.applicant?.name}
+                    </span>
                   </div>
-                )}
-                <div className="flex justify-between text-slate-400">
-                  <span>GST & Gateway Charges</span>
-                  <span className="text-emerald-400 font-medium">₹0.00 (Exempt)</span>
-                </div>
-
-                <div className="pt-4 border-t border-slate-800 flex justify-between text-sm font-bold">
-                  <span>Total Payable Amount</span>
-                  <span className="text-emerald-400 text-lg">₹{feeAmount}.00</span>
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Passport Service</span>
+                    <span className="font-semibold text-slate-800">{app.serviceType || "FRESH"}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Processing Quota</span>
+                    <span className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
+                      isTatkaal ? "bg-amber-100 text-amber-800" : "bg-blue-50 text-blue-800"
+                    }`}>
+                      {app.applicationCategory || "NORMAL"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-slate-100">
+                    <span className="text-slate-500">Booklet Pages</span>
+                    <span className="font-semibold text-slate-800">
+                      {is60 ? "60 Pages (Jumbo)" : "36 Pages (Standard)"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-1.5">
+                    <span className="text-slate-500">Jurisdiction RPO</span>
+                    <span className="font-semibold text-slate-800">{app.rpoLocation || "RPO Chennai"}</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950 p-4 text-[11px] text-slate-400">
-                🔒 256-Bit SSL Encrypted Government Payment Gateway Simulation.
+              {/* Fee Breakdown Table */}
+              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                  Statutory Fee Calculation
+                </h2>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between text-slate-700">
+                    <span>Base Application Fee (36 Pgs)</span>
+                    <span className="font-mono font-medium">₹{breakdown?.baseFee || 1500}.00</span>
+                  </div>
+                  {is60 && (
+                    <div className="flex justify-between text-slate-700">
+                      <div>
+                        <span>60 Pages Booklet Surcharge</span>
+                        <span className="block text-[11px] text-slate-400">Jumbo booklet extra pages</span>
+                      </div>
+                      <span className="font-mono font-medium">₹500.00</span>
+                    </div>
+                  )}
+                  {isTatkaal && (
+                    <div className="flex justify-between text-slate-700">
+                      <div>
+                        <span>Tatkaal Priority Surcharge</span>
+                        <span className="block text-[11px] text-slate-400">Expedited processing</span>
+                      </div>
+                      <span className="font-mono font-medium">₹2000.00</span>
+                    </div>
+                  )}
+                  <div className="pt-3 border-t-2 border-slate-100 flex justify-between items-baseline">
+                    <span className="font-bold text-slate-900">Total Payable</span>
+                    <span className="font-mono font-extrabold text-2xl text-blue-950">
+                      ₹{breakdown?.totalAmount || 1500}.00
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Statutory fee is fixed under Passport Act, 1967. Non-refundable.</span>
+                </div>
               </div>
             </div>
 
-            {/* Payment Method Selector & Form (Right 7 Cols) */}
-            <form
-              onSubmit={handleProcessPayment}
-              className="md:col-span-7 rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-6"
-            >
-              <h3 className="text-base font-semibold border-b border-slate-800 pb-3">
-                Select Payment Mode
-              </h3>
-
-              {/* Payment Tabs */}
-              <div className="grid grid-cols-3 gap-2">
-                {["Card", "UPI", "NetBanking"].map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => setPaymentMethod(m)}
-                    className={`rounded-xl border py-2.5 text-xs font-semibold transition text-center ${
-                      paymentMethod === m
-                        ? "border-blue-500 bg-blue-500/20 text-blue-300"
-                        : "border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    {m === "Card" ? "💳 Card" : m === "UPI" ? "📱 UPI" : "🏛️ Net Banking"}
-                  </button>
-                ))}
-              </div>
-
-              {/* Card Inputs */}
-              {paymentMethod === "Card" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Card Number
-                    </label>
-                    <input
-                      type="text"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 outline-none font-mono"
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1">
-                        Expiry Date
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="12/28"
-                        className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 outline-none"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1">
-                        CVV
-                      </label>
-                      <input
-                        type="password"
-                        defaultValue="842"
-                        maxLength={3}
-                        className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 outline-none"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* UPI Inputs */}
-              {paymentMethod === "UPI" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Virtual Payment Address (VPA / UPI ID)
-                    </label>
-                    <input
-                      type="text"
-                      value={upiId}
-                      onChange={(e) => setUpiId(e.target.value)}
-                      placeholder="username@okhdfcbank"
-                      className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 outline-none"
-                      required
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* NetBanking Inputs */}
-              {paymentMethod === "NetBanking" && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Select Financial Institution
-                    </label>
-                    <select
-                      value={selectedBank}
-                      onChange={(e) => setSelectedBank(e.target.value)}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-blue-500 outline-none"
+            {/* Right Column: Payment Methods & Gateway Form (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                {/* Payment Method Selector Tabs */}
+                <div className="p-4 bg-slate-50 border-b border-slate-200">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-3">
+                    Choose Electronic Payment Mode
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("UPI")}
+                      className={`p-3 rounded-lg border text-left flex flex-col items-center justify-center gap-1.5 transition text-xs font-semibold ${
+                        paymentMethod === "UPI"
+                          ? "bg-blue-900 text-white border-blue-900 shadow-sm"
+                          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                      }`}
                     >
-                      <option>State Bank of India (SBI)</option>
-                      <option>HDFC Bank</option>
-                      <option>ICICI Bank</option>
-                      <option>Axis Bank</option>
-                      <option>Punjab National Bank</option>
-                    </select>
+                      <Smartphone className="w-4 h-4" />
+                      <span>UPI / QR</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("DEBIT_CARD")}
+                      className={`p-3 rounded-lg border text-left flex flex-col items-center justify-center gap-1.5 transition text-xs font-semibold ${
+                        paymentMethod === "DEBIT_CARD"
+                          ? "bg-blue-900 text-white border-blue-900 shadow-sm"
+                          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                      }`}
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span>Debit Card</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("CREDIT_CARD")}
+                      className={`p-3 rounded-lg border text-left flex flex-col items-center justify-center gap-1.5 transition text-xs font-semibold ${
+                        paymentMethod === "CREDIT_CARD"
+                          ? "bg-blue-900 text-white border-blue-900 shadow-sm"
+                          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                      }`}
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span>Credit Card</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod("NET_BANKING")}
+                      className={`p-3 rounded-lg border text-left flex flex-col items-center justify-center gap-1.5 transition text-xs font-semibold ${
+                        paymentMethod === "NET_BANKING"
+                          ? "bg-blue-900 text-white border-blue-900 shadow-sm"
+                          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                      }`}
+                    >
+                      <Building2 className="w-4 h-4" />
+                      <span>Net Banking</span>
+                    </button>
                   </div>
                 </div>
-              )}
 
-              <button
-                type="submit"
-                disabled={paying}
-                className="w-full rounded-lg bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition disabled:opacity-50 shadow-lg shadow-emerald-600/30"
-              >
-                {paying ? "Processing Transaction..." : `Pay ₹${feeAmount}.00 & Confirm`}
-              </button>
-            </form>
+                {/* Method-specific Form Fields */}
+                <form onSubmit={handleProcessPayment} className="p-6 space-y-5">
+                  {paymentMethod === "UPI" && (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-center">
+                        <div className="w-32 h-32 mx-auto bg-white border border-slate-300 rounded flex items-center justify-center shadow-inner mb-2">
+                          <QrCode className="w-24 h-24 text-slate-800" />
+                        </div>
+                        <p className="text-xs font-medium text-slate-700">Scan QR Code using any UPI App</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">BHIM, GPay, PhonePe, Paytm, Any Banking App</p>
+                      </div>
+
+                      <div className="relative flex py-1 items-center">
+                        <div className="flex-grow border-t border-slate-200"></div>
+                        <span className="flex-shrink mx-4 text-xs uppercase text-slate-400 font-semibold">Or Enter UPI ID</span>
+                        <div className="flex-grow border-t border-slate-200"></div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Virtual Payment Address (VPA) / UPI ID
+                        </label>
+                        <input
+                          type="text"
+                          value={upiId}
+                          onChange={(e) => setUpiId(e.target.value)}
+                          placeholder="username@bank"
+                          required
+                          className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                        />
+                        <span className="text-[11px] text-slate-500 mt-1 block">
+                          Example: citizen@okhdfcbank, 9876543210@paytm
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {(paymentMethod === "DEBIT_CARD" || paymentMethod === "CREDIT_CARD") && (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Cardholder Name (as printed on card)
+                        </label>
+                        <input
+                          type="text"
+                          value={cardName}
+                          onChange={(e) => setCardName(e.target.value)}
+                          placeholder="CARDHOLDER NAME"
+                          required
+                          className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm uppercase focus:outline-none focus:ring-2 focus:ring-blue-900"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Card Number (16 Digits)
+                        </label>
+                        <input
+                          type="text"
+                          value={cardNumber}
+                          onChange={(e) => setCardNumber(e.target.value)}
+                          placeholder="4532 •••• •••• 8910"
+                          required
+                          className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-900"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            Expiry (MM/YY)
+                          </label>
+                          <input
+                            type="text"
+                            value={cardExpiry}
+                            onChange={(e) => setCardExpiry(e.target.value)}
+                            placeholder="MM/YY"
+                            maxLength={5}
+                            required
+                            className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm font-mono text-center focus:outline-none focus:ring-2 focus:ring-blue-900"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-700 mb-1">
+                            CVV / CVC
+                          </label>
+                          <input
+                            type="password"
+                            value={cardCvv}
+                            onChange={(e) => setCardCvv(e.target.value)}
+                            placeholder="•••"
+                            maxLength={4}
+                            required
+                            className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm font-mono text-center focus:outline-none focus:ring-2 focus:ring-blue-900"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentMethod === "NET_BANKING" && (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-2">
+                          Select Banking Institution
+                        </label>
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                          {[
+                            "State Bank of India",
+                            "HDFC Bank",
+                            "ICICI Bank",
+                            "Punjab National Bank",
+                            "Axis Bank",
+                            "Bank of Baroda",
+                          ].map((bank) => (
+                            <button
+                              key={bank}
+                              type="button"
+                              onClick={() => setSelectedBank(bank)}
+                              className={`p-2.5 rounded border text-left text-xs font-medium transition ${
+                                selectedBank === bank
+                                  ? "border-blue-900 bg-blue-50 text-blue-950 font-bold"
+                                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                              }`}
+                            >
+                              {bank}
+                            </button>
+                          ))}
+                        </div>
+
+                        <select
+                          value={selectedBank}
+                          onChange={(e) => setSelectedBank(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
+                        >
+                          <option value="State Bank of India">State Bank of India (SBI)</option>
+                          <option value="HDFC Bank">HDFC Bank</option>
+                          <option value="ICICI Bank">ICICI Bank</option>
+                          <option value="Punjab National Bank">Punjab National Bank (PNB)</option>
+                          <option value="Axis Bank">Axis Bank</option>
+                          <option value="Bank of Baroda">Bank of Baroda</option>
+                          <option value="Canara Bank">Canara Bank</option>
+                          <option value="Union Bank of India">Union Bank of India</option>
+                          <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Submit / Authorise Button */}
+                  <div className="pt-4 border-t border-slate-100">
+                    <button
+                      type="submit"
+                      disabled={paying}
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-950 text-white font-semibold text-sm rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-md"
+                    >
+                      {paying ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Processing Payment with Gateway...
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4" />
+                          Pay ₹{breakdown?.totalAmount || 1500}.00 & Confirm Application
+                        </>
+                      )}
+                    </button>
+                    <p className="text-[11px] text-center text-slate-400 mt-2">
+                      Academic simulation environment. No real funds will be deducted.
+                    </p>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         )}
       </div>

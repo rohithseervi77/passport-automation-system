@@ -28,38 +28,49 @@ export type AggregateAppointment = {
 
 export type AppointmentAvgAggregateOutputType = {
   id: number | null
+  rescheduleCount: number | null
   applicationId: number | null
 }
 
 export type AppointmentSumAggregateOutputType = {
   id: number | null
+  rescheduleCount: number | null
   applicationId: number | null
 }
 
 export type AppointmentMinAggregateOutputType = {
   id: number | null
   appointmentId: string | null
+  quota: string | null
+  location: string | null
   date: Date | null
   timeSlot: string | null
   status: string | null
+  rescheduleCount: number | null
   applicationId: number | null
 }
 
 export type AppointmentMaxAggregateOutputType = {
   id: number | null
   appointmentId: string | null
+  quota: string | null
+  location: string | null
   date: Date | null
   timeSlot: string | null
   status: string | null
+  rescheduleCount: number | null
   applicationId: number | null
 }
 
 export type AppointmentCountAggregateOutputType = {
   id: number
   appointmentId: number
+  quota: number
+  location: number
   date: number
   timeSlot: number
   status: number
+  rescheduleCount: number
   applicationId: number
   _all: number
 }
@@ -67,38 +78,49 @@ export type AppointmentCountAggregateOutputType = {
 
 export type AppointmentAvgAggregateInputType = {
   id?: true
+  rescheduleCount?: true
   applicationId?: true
 }
 
 export type AppointmentSumAggregateInputType = {
   id?: true
+  rescheduleCount?: true
   applicationId?: true
 }
 
 export type AppointmentMinAggregateInputType = {
   id?: true
   appointmentId?: true
+  quota?: true
+  location?: true
   date?: true
   timeSlot?: true
   status?: true
+  rescheduleCount?: true
   applicationId?: true
 }
 
 export type AppointmentMaxAggregateInputType = {
   id?: true
   appointmentId?: true
+  quota?: true
+  location?: true
   date?: true
   timeSlot?: true
   status?: true
+  rescheduleCount?: true
   applicationId?: true
 }
 
 export type AppointmentCountAggregateInputType = {
   id?: true
   appointmentId?: true
+  quota?: true
+  location?: true
   date?: true
   timeSlot?: true
   status?: true
+  rescheduleCount?: true
   applicationId?: true
   _all?: true
 }
@@ -192,9 +214,12 @@ export type AppointmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type AppointmentGroupByOutputType = {
   id: number
   appointmentId: string
+  quota: string
+  location: string
   date: Date
   timeSlot: string
   status: string
+  rescheduleCount: number
   applicationId: number
   _count: AppointmentCountAggregateOutputType | null
   _avg: AppointmentAvgAggregateOutputType | null
@@ -224,9 +249,12 @@ export type AppointmentWhereInput = {
   NOT?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   id?: Prisma.IntFilter<"Appointment"> | number
   appointmentId?: Prisma.StringFilter<"Appointment"> | string
+  quota?: Prisma.StringFilter<"Appointment"> | string
+  location?: Prisma.StringFilter<"Appointment"> | string
   date?: Prisma.DateTimeFilter<"Appointment"> | Date | string
   timeSlot?: Prisma.StringFilter<"Appointment"> | string
   status?: Prisma.StringFilter<"Appointment"> | string
+  rescheduleCount?: Prisma.IntFilter<"Appointment"> | number
   applicationId?: Prisma.IntFilter<"Appointment"> | number
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
 }
@@ -234,9 +262,12 @@ export type AppointmentWhereInput = {
 export type AppointmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   appointmentId?: Prisma.SortOrder
+  quota?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
 }
@@ -245,22 +276,27 @@ export type AppointmentWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   appointmentId?: string
   applicationId?: number
-  date_timeSlot?: Prisma.AppointmentDateTimeSlotCompoundUniqueInput
   AND?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
   OR?: Prisma.AppointmentWhereInput[]
   NOT?: Prisma.AppointmentWhereInput | Prisma.AppointmentWhereInput[]
+  quota?: Prisma.StringFilter<"Appointment"> | string
+  location?: Prisma.StringFilter<"Appointment"> | string
   date?: Prisma.DateTimeFilter<"Appointment"> | Date | string
   timeSlot?: Prisma.StringFilter<"Appointment"> | string
   status?: Prisma.StringFilter<"Appointment"> | string
+  rescheduleCount?: Prisma.IntFilter<"Appointment"> | number
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
-}, "id" | "appointmentId" | "applicationId" | "date_timeSlot">
+}, "id" | "appointmentId" | "applicationId">
 
 export type AppointmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   appointmentId?: Prisma.SortOrder
+  quota?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   _count?: Prisma.AppointmentCountOrderByAggregateInput
   _avg?: Prisma.AppointmentAvgOrderByAggregateInput
@@ -275,68 +311,92 @@ export type AppointmentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AppointmentScalarWhereWithAggregatesInput | Prisma.AppointmentScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
   appointmentId?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
+  quota?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
+  location?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
   date?: Prisma.DateTimeWithAggregatesFilter<"Appointment"> | Date | string
   timeSlot?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
   status?: Prisma.StringWithAggregatesFilter<"Appointment"> | string
+  rescheduleCount?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
   applicationId?: Prisma.IntWithAggregatesFilter<"Appointment"> | number
 }
 
 export type AppointmentCreateInput = {
   appointmentId: string
+  quota?: string
+  location?: string
   date: Date | string
   timeSlot: string
   status?: string
+  rescheduleCount?: number
   application: Prisma.ApplicationCreateNestedOneWithoutAppointmentInput
 }
 
 export type AppointmentUncheckedCreateInput = {
   id?: number
   appointmentId: string
+  quota?: string
+  location?: string
   date: Date | string
   timeSlot: string
   status?: string
+  rescheduleCount?: number
   applicationId: number
 }
 
 export type AppointmentUpdateInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  quota?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  rescheduleCount?: Prisma.IntFieldUpdateOperationsInput | number
   application?: Prisma.ApplicationUpdateOneRequiredWithoutAppointmentNestedInput
 }
 
 export type AppointmentUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  quota?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  rescheduleCount?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AppointmentCreateManyInput = {
   id?: number
   appointmentId: string
+  quota?: string
+  location?: string
   date: Date | string
   timeSlot: string
   status?: string
+  rescheduleCount?: number
   applicationId: number
 }
 
 export type AppointmentUpdateManyMutationInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  quota?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  rescheduleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AppointmentUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  quota?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  rescheduleCount?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -345,45 +405,51 @@ export type AppointmentNullableScalarRelationFilter = {
   isNot?: Prisma.AppointmentWhereInput | null
 }
 
-export type AppointmentDateTimeSlotCompoundUniqueInput = {
-  date: Date | string
-  timeSlot: string
-}
-
 export type AppointmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   appointmentId?: Prisma.SortOrder
+  quota?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
 export type AppointmentAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
 export type AppointmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   appointmentId?: Prisma.SortOrder
+  quota?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
 export type AppointmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   appointmentId?: Prisma.SortOrder
+  quota?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   date?: Prisma.SortOrder
   timeSlot?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
 export type AppointmentSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  rescheduleCount?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
 }
 
@@ -421,17 +487,23 @@ export type AppointmentUncheckedUpdateOneWithoutApplicationNestedInput = {
 
 export type AppointmentCreateWithoutApplicationInput = {
   appointmentId: string
+  quota?: string
+  location?: string
   date: Date | string
   timeSlot: string
   status?: string
+  rescheduleCount?: number
 }
 
 export type AppointmentUncheckedCreateWithoutApplicationInput = {
   id?: number
   appointmentId: string
+  quota?: string
+  location?: string
   date: Date | string
   timeSlot: string
   status?: string
+  rescheduleCount?: number
 }
 
 export type AppointmentCreateOrConnectWithoutApplicationInput = {
@@ -452,17 +524,23 @@ export type AppointmentUpdateToOneWithWhereWithoutApplicationInput = {
 
 export type AppointmentUpdateWithoutApplicationInput = {
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  quota?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  rescheduleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AppointmentUncheckedUpdateWithoutApplicationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   appointmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  quota?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   timeSlot?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  rescheduleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -470,9 +548,12 @@ export type AppointmentUncheckedUpdateWithoutApplicationInput = {
 export type AppointmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   appointmentId?: boolean
+  quota?: boolean
+  location?: boolean
   date?: boolean
   timeSlot?: boolean
   status?: boolean
+  rescheduleCount?: boolean
   applicationId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
@@ -480,9 +561,12 @@ export type AppointmentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 export type AppointmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   appointmentId?: boolean
+  quota?: boolean
+  location?: boolean
   date?: boolean
   timeSlot?: boolean
   status?: boolean
+  rescheduleCount?: boolean
   applicationId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
@@ -490,9 +574,12 @@ export type AppointmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   appointmentId?: boolean
+  quota?: boolean
+  location?: boolean
   date?: boolean
   timeSlot?: boolean
   status?: boolean
+  rescheduleCount?: boolean
   applicationId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["appointment"]>
@@ -500,13 +587,16 @@ export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type AppointmentSelectScalar = {
   id?: boolean
   appointmentId?: boolean
+  quota?: boolean
+  location?: boolean
   date?: boolean
   timeSlot?: boolean
   status?: boolean
+  rescheduleCount?: boolean
   applicationId?: boolean
 }
 
-export type AppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "appointmentId" | "date" | "timeSlot" | "status" | "applicationId", ExtArgs["result"]["appointment"]>
+export type AppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "appointmentId" | "quota" | "location" | "date" | "timeSlot" | "status" | "rescheduleCount" | "applicationId", ExtArgs["result"]["appointment"]>
 export type AppointmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }
@@ -525,9 +615,12 @@ export type $AppointmentPayload<ExtArgs extends runtime.Types.Extensions.Interna
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     appointmentId: string
+    quota: string
+    location: string
     date: Date
     timeSlot: string
     status: string
+    rescheduleCount: number
     applicationId: number
   }, ExtArgs["result"]["appointment"]>
   composites: {}
@@ -955,9 +1048,12 @@ export interface Prisma__AppointmentClient<T, Null = never, ExtArgs extends runt
 export interface AppointmentFieldRefs {
   readonly id: Prisma.FieldRef<"Appointment", 'Int'>
   readonly appointmentId: Prisma.FieldRef<"Appointment", 'String'>
+  readonly quota: Prisma.FieldRef<"Appointment", 'String'>
+  readonly location: Prisma.FieldRef<"Appointment", 'String'>
   readonly date: Prisma.FieldRef<"Appointment", 'DateTime'>
   readonly timeSlot: Prisma.FieldRef<"Appointment", 'String'>
   readonly status: Prisma.FieldRef<"Appointment", 'String'>
+  readonly rescheduleCount: Prisma.FieldRef<"Appointment", 'Int'>
   readonly applicationId: Prisma.FieldRef<"Appointment", 'Int'>
 }
     
@@ -1193,7 +1289,6 @@ export type AppointmentCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many Appointments.
    */
   data: Prisma.AppointmentCreateManyInput | Prisma.AppointmentCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1212,7 +1307,6 @@ export type AppointmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many Appointments.
    */
   data: Prisma.AppointmentCreateManyInput | Prisma.AppointmentCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

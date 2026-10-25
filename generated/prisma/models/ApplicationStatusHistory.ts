@@ -44,6 +44,8 @@ export type ApplicationStatusHistoryMinAggregateOutputType = {
   fromStatus: string | null
   toStatus: string | null
   remarks: string | null
+  performedBy: string | null
+  role: string | null
   changedById: number | null
   changedAt: Date | null
 }
@@ -54,6 +56,8 @@ export type ApplicationStatusHistoryMaxAggregateOutputType = {
   fromStatus: string | null
   toStatus: string | null
   remarks: string | null
+  performedBy: string | null
+  role: string | null
   changedById: number | null
   changedAt: Date | null
 }
@@ -64,6 +68,8 @@ export type ApplicationStatusHistoryCountAggregateOutputType = {
   fromStatus: number
   toStatus: number
   remarks: number
+  performedBy: number
+  role: number
   changedById: number
   changedAt: number
   _all: number
@@ -88,6 +94,8 @@ export type ApplicationStatusHistoryMinAggregateInputType = {
   fromStatus?: true
   toStatus?: true
   remarks?: true
+  performedBy?: true
+  role?: true
   changedById?: true
   changedAt?: true
 }
@@ -98,6 +106,8 @@ export type ApplicationStatusHistoryMaxAggregateInputType = {
   fromStatus?: true
   toStatus?: true
   remarks?: true
+  performedBy?: true
+  role?: true
   changedById?: true
   changedAt?: true
 }
@@ -108,6 +118,8 @@ export type ApplicationStatusHistoryCountAggregateInputType = {
   fromStatus?: true
   toStatus?: true
   remarks?: true
+  performedBy?: true
+  role?: true
   changedById?: true
   changedAt?: true
   _all?: true
@@ -205,6 +217,8 @@ export type ApplicationStatusHistoryGroupByOutputType = {
   fromStatus: string
   toStatus: string
   remarks: string | null
+  performedBy: string | null
+  role: string | null
   changedById: number | null
   changedAt: Date
   _count: ApplicationStatusHistoryCountAggregateOutputType | null
@@ -238,6 +252,8 @@ export type ApplicationStatusHistoryWhereInput = {
   fromStatus?: Prisma.StringFilter<"ApplicationStatusHistory"> | string
   toStatus?: Prisma.StringFilter<"ApplicationStatusHistory"> | string
   remarks?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
+  performedBy?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
+  role?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
   changedById?: Prisma.IntNullableFilter<"ApplicationStatusHistory"> | number | null
   changedAt?: Prisma.DateTimeFilter<"ApplicationStatusHistory"> | Date | string
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
@@ -249,6 +265,8 @@ export type ApplicationStatusHistoryOrderByWithRelationInput = {
   fromStatus?: Prisma.SortOrder
   toStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  performedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
   changedById?: Prisma.SortOrderInput | Prisma.SortOrder
   changedAt?: Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
@@ -263,6 +281,8 @@ export type ApplicationStatusHistoryWhereUniqueInput = Prisma.AtLeast<{
   fromStatus?: Prisma.StringFilter<"ApplicationStatusHistory"> | string
   toStatus?: Prisma.StringFilter<"ApplicationStatusHistory"> | string
   remarks?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
+  performedBy?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
+  role?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
   changedById?: Prisma.IntNullableFilter<"ApplicationStatusHistory"> | number | null
   changedAt?: Prisma.DateTimeFilter<"ApplicationStatusHistory"> | Date | string
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
@@ -274,6 +294,8 @@ export type ApplicationStatusHistoryOrderByWithAggregationInput = {
   fromStatus?: Prisma.SortOrder
   toStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
+  performedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
   changedById?: Prisma.SortOrderInput | Prisma.SortOrder
   changedAt?: Prisma.SortOrder
   _count?: Prisma.ApplicationStatusHistoryCountOrderByAggregateInput
@@ -292,6 +314,8 @@ export type ApplicationStatusHistoryScalarWhereWithAggregatesInput = {
   fromStatus?: Prisma.StringWithAggregatesFilter<"ApplicationStatusHistory"> | string
   toStatus?: Prisma.StringWithAggregatesFilter<"ApplicationStatusHistory"> | string
   remarks?: Prisma.StringNullableWithAggregatesFilter<"ApplicationStatusHistory"> | string | null
+  performedBy?: Prisma.StringNullableWithAggregatesFilter<"ApplicationStatusHistory"> | string | null
+  role?: Prisma.StringNullableWithAggregatesFilter<"ApplicationStatusHistory"> | string | null
   changedById?: Prisma.IntNullableWithAggregatesFilter<"ApplicationStatusHistory"> | number | null
   changedAt?: Prisma.DateTimeWithAggregatesFilter<"ApplicationStatusHistory"> | Date | string
 }
@@ -300,6 +324,8 @@ export type ApplicationStatusHistoryCreateInput = {
   fromStatus: string
   toStatus: string
   remarks?: string | null
+  performedBy?: string | null
+  role?: string | null
   changedById?: number | null
   changedAt?: Date | string
   application: Prisma.ApplicationCreateNestedOneWithoutStatusHistoryInput
@@ -311,6 +337,8 @@ export type ApplicationStatusHistoryUncheckedCreateInput = {
   fromStatus: string
   toStatus: string
   remarks?: string | null
+  performedBy?: string | null
+  role?: string | null
   changedById?: number | null
   changedAt?: Date | string
 }
@@ -319,6 +347,8 @@ export type ApplicationStatusHistoryUpdateInput = {
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   application?: Prisma.ApplicationUpdateOneRequiredWithoutStatusHistoryNestedInput
@@ -330,6 +360,8 @@ export type ApplicationStatusHistoryUncheckedUpdateInput = {
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -340,6 +372,8 @@ export type ApplicationStatusHistoryCreateManyInput = {
   fromStatus: string
   toStatus: string
   remarks?: string | null
+  performedBy?: string | null
+  role?: string | null
   changedById?: number | null
   changedAt?: Date | string
 }
@@ -348,6 +382,8 @@ export type ApplicationStatusHistoryUpdateManyMutationInput = {
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -358,6 +394,8 @@ export type ApplicationStatusHistoryUncheckedUpdateManyInput = {
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -378,6 +416,8 @@ export type ApplicationStatusHistoryCountOrderByAggregateInput = {
   fromStatus?: Prisma.SortOrder
   toStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  performedBy?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   changedById?: Prisma.SortOrder
   changedAt?: Prisma.SortOrder
 }
@@ -394,6 +434,8 @@ export type ApplicationStatusHistoryMaxOrderByAggregateInput = {
   fromStatus?: Prisma.SortOrder
   toStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  performedBy?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   changedById?: Prisma.SortOrder
   changedAt?: Prisma.SortOrder
 }
@@ -404,6 +446,8 @@ export type ApplicationStatusHistoryMinOrderByAggregateInput = {
   fromStatus?: Prisma.SortOrder
   toStatus?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
+  performedBy?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   changedById?: Prisma.SortOrder
   changedAt?: Prisma.SortOrder
 }
@@ -456,14 +500,12 @@ export type ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationNestedI
   deleteMany?: Prisma.ApplicationStatusHistoryScalarWhereInput | Prisma.ApplicationStatusHistoryScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ApplicationStatusHistoryCreateWithoutApplicationInput = {
   fromStatus: string
   toStatus: string
   remarks?: string | null
+  performedBy?: string | null
+  role?: string | null
   changedById?: number | null
   changedAt?: Date | string
 }
@@ -473,6 +515,8 @@ export type ApplicationStatusHistoryUncheckedCreateWithoutApplicationInput = {
   fromStatus: string
   toStatus: string
   remarks?: string | null
+  performedBy?: string | null
+  role?: string | null
   changedById?: number | null
   changedAt?: Date | string
 }
@@ -484,7 +528,6 @@ export type ApplicationStatusHistoryCreateOrConnectWithoutApplicationInput = {
 
 export type ApplicationStatusHistoryCreateManyApplicationInputEnvelope = {
   data: Prisma.ApplicationStatusHistoryCreateManyApplicationInput | Prisma.ApplicationStatusHistoryCreateManyApplicationInput[]
-  skipDuplicates?: boolean
 }
 
 export type ApplicationStatusHistoryUpsertWithWhereUniqueWithoutApplicationInput = {
@@ -512,6 +555,8 @@ export type ApplicationStatusHistoryScalarWhereInput = {
   fromStatus?: Prisma.StringFilter<"ApplicationStatusHistory"> | string
   toStatus?: Prisma.StringFilter<"ApplicationStatusHistory"> | string
   remarks?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
+  performedBy?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
+  role?: Prisma.StringNullableFilter<"ApplicationStatusHistory"> | string | null
   changedById?: Prisma.IntNullableFilter<"ApplicationStatusHistory"> | number | null
   changedAt?: Prisma.DateTimeFilter<"ApplicationStatusHistory"> | Date | string
 }
@@ -521,6 +566,8 @@ export type ApplicationStatusHistoryCreateManyApplicationInput = {
   fromStatus: string
   toStatus: string
   remarks?: string | null
+  performedBy?: string | null
+  role?: string | null
   changedById?: number | null
   changedAt?: Date | string
 }
@@ -529,6 +576,8 @@ export type ApplicationStatusHistoryUpdateWithoutApplicationInput = {
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -538,6 +587,8 @@ export type ApplicationStatusHistoryUncheckedUpdateWithoutApplicationInput = {
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -547,6 +598,8 @@ export type ApplicationStatusHistoryUncheckedUpdateManyWithoutApplicationInput =
   fromStatus?: Prisma.StringFieldUpdateOperationsInput | string
   toStatus?: Prisma.StringFieldUpdateOperationsInput | string
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -559,6 +612,8 @@ export type ApplicationStatusHistorySelect<ExtArgs extends runtime.Types.Extensi
   fromStatus?: boolean
   toStatus?: boolean
   remarks?: boolean
+  performedBy?: boolean
+  role?: boolean
   changedById?: boolean
   changedAt?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -570,6 +625,8 @@ export type ApplicationStatusHistorySelectCreateManyAndReturn<ExtArgs extends ru
   fromStatus?: boolean
   toStatus?: boolean
   remarks?: boolean
+  performedBy?: boolean
+  role?: boolean
   changedById?: boolean
   changedAt?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -581,6 +638,8 @@ export type ApplicationStatusHistorySelectUpdateManyAndReturn<ExtArgs extends ru
   fromStatus?: boolean
   toStatus?: boolean
   remarks?: boolean
+  performedBy?: boolean
+  role?: boolean
   changedById?: boolean
   changedAt?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -592,11 +651,13 @@ export type ApplicationStatusHistorySelectScalar = {
   fromStatus?: boolean
   toStatus?: boolean
   remarks?: boolean
+  performedBy?: boolean
+  role?: boolean
   changedById?: boolean
   changedAt?: boolean
 }
 
-export type ApplicationStatusHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "fromStatus" | "toStatus" | "remarks" | "changedById" | "changedAt", ExtArgs["result"]["applicationStatusHistory"]>
+export type ApplicationStatusHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "fromStatus" | "toStatus" | "remarks" | "performedBy" | "role" | "changedById" | "changedAt", ExtArgs["result"]["applicationStatusHistory"]>
 export type ApplicationStatusHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
 }
@@ -618,6 +679,8 @@ export type $ApplicationStatusHistoryPayload<ExtArgs extends runtime.Types.Exten
     fromStatus: string
     toStatus: string
     remarks: string | null
+    performedBy: string | null
+    role: string | null
     changedById: number | null
     changedAt: Date
   }, ExtArgs["result"]["applicationStatusHistory"]>
@@ -1049,6 +1112,8 @@ export interface ApplicationStatusHistoryFieldRefs {
   readonly fromStatus: Prisma.FieldRef<"ApplicationStatusHistory", 'String'>
   readonly toStatus: Prisma.FieldRef<"ApplicationStatusHistory", 'String'>
   readonly remarks: Prisma.FieldRef<"ApplicationStatusHistory", 'String'>
+  readonly performedBy: Prisma.FieldRef<"ApplicationStatusHistory", 'String'>
+  readonly role: Prisma.FieldRef<"ApplicationStatusHistory", 'String'>
   readonly changedById: Prisma.FieldRef<"ApplicationStatusHistory", 'Int'>
   readonly changedAt: Prisma.FieldRef<"ApplicationStatusHistory", 'DateTime'>
 }
@@ -1285,7 +1350,6 @@ export type ApplicationStatusHistoryCreateManyArgs<ExtArgs extends runtime.Types
    * The data used to create many ApplicationStatusHistories.
    */
   data: Prisma.ApplicationStatusHistoryCreateManyInput | Prisma.ApplicationStatusHistoryCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1304,7 +1368,6 @@ export type ApplicationStatusHistoryCreateManyAndReturnArgs<ExtArgs extends runt
    * The data used to create many ApplicationStatusHistories.
    */
   data: Prisma.ApplicationStatusHistoryCreateManyInput | Prisma.ApplicationStatusHistoryCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

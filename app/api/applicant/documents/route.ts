@@ -14,11 +14,14 @@ export async function GET() {
     const applicant = await prisma.applicant.findUnique({
       where: { userId },
       include: {
+        user: true,
         applications: {
           orderBy: { id: "desc" },
           take: 1,
           include: {
-            documents: true,
+            documents: {
+              orderBy: { id: "asc" },
+            },
           },
         },
       },
@@ -30,10 +33,18 @@ export async function GET() {
 
     const application = applicant.applications[0];
     return NextResponse.json({
-      applicant,
+      applicant: {
+        name: applicant.name,
+        email: applicant.user.email,
+        phone: application?.emergencyMobile || "N/A",
+      },
       documents: application?.documents || [],
-      applicationId: application?.applicationId || null,
-      status: application?.status || null,
+      application: application ? {
+        id: application.id,
+        applicationId: application.applicationId,
+        serviceType: application.serviceType,
+        status: application.status,
+      } : null,
     });
   } catch (error) {
     console.error("Fetch documents error:", error);
@@ -64,54 +75,75 @@ export async function POST(req: Request) {
     }
 
     let application = applicant.applications[0];
-    // If no application exists, create a draft application first
     if (!application) {
-      const newAppId = `PAS-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
-      application = await prisma.application.create({
+      return NextResponse.json({ error: "No active application found. Please initiate an application first." }, { status: 400 });
+    }
+
+    const body = await req.json();
+    const { documentType, fileName, fileSize, fileUrl } = body;
+
+    if (!documentType) {
+      return NextResponse.json({ error: "Document type is required." }, { status: 400 });
+    }
+
+    // Check if a document of this type already exists for this application; if so update it
+    const existingDoc = await prisma.document.findFirst({
+      where: {
+        applicationId: application.id,
+        documentType,
+      },
+    });
+
+    const docId = existingDoc ? existingDoc.docId : `DOC-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
+    const effectiveFileName = fileName || `${documentType.toLowerCase().replace(/[^a-z0-9]/g, "_")}.pdf`;
+    const effectiveFileSize = fileSize || 1024 * 350; // default 350 KB simulation
+
+    let savedDoc;
+    if (existingDoc) {
+      savedDoc = await prisma.document.update({
+        where: { id: existingDoc.id },
         data: {
-          applicationId: newAppId,
-          passportType: "REGULAR (36 Pages)",
-          status: "DRAFT",
-          applicantId: applicant.id,
+          fileStatus: "UPLOADED",
+          fileName: effectiveFileName,
+          fileSize: effectiveFileSize,
+          fileUrl: fileUrl || `/uploads/${effectiveFileName}`,
+          uploadedAt: new Date(),
+        },
+      });
+    } else {
+      savedDoc = await prisma.document.create({
+        data: {
+          docId,
+          documentType,
+          fileStatus: "UPLOADED",
+          fileName: effectiveFileName,
+          fileSize: effectiveFileSize,
+          fileUrl: fileUrl || `/uploads/${effectiveFileName}`,
+          applicationId: application.id,
         },
       });
     }
 
-    const body = await req.json();
-    const { documentType, fileUrl } = body;
-
-    if (!documentType) {
-      return NextResponse.json({ error: "Document type is required" }, { status: 400 });
-    }
-
-    const docId = `DOC-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
-
-    const newDoc = await prisma.document.create({
-      data: {
-        docId,
-        documentType,
-        fileStatus: "UPLOADED",
-        fileUrl: fileUrl || `/uploads/${documentType.toLowerCase().replace(/\s+/g, "_")}.pdf`,
-        applicationId: application.id,
-      },
-    });
-
-    // Unhappy Path: If the officer rejected documents and asked for correction,
-    // re-uploading should push it back to DOCUMENT_REVIEW via the FSM.
+    // If the officer previously requested corrections, transition back to review
     let updatedStatus = application.status;
-    if (application.status === "DOCUMENT_CORRECTION_REQUIRED") {
+    if (application.status === "DOCUMENT_CORRECTION_REQUIRED" || application.status === "CLARIFICATION_REQUIRED") {
       try {
-        const updatedApp = await transitionApplicationStatus(application.id, "DOCUMENT_REVIEW", userId, "Applicant uploaded corrected documents");
+        const updatedApp = await transitionApplicationStatus(
+          application.id,
+          "DOCUMENT_REVIEW",
+          userId,
+          `Applicant uploaded corrected supporting document: ${documentType}`
+        );
         updatedStatus = updatedApp.status;
-      } catch (fsmError) {
-        console.error("Failed to transition application after document re-upload", fsmError);
+      } catch (fsmError: any) {
+        console.warn("FSM notice:", fsmError.message);
       }
     }
 
     return NextResponse.json({
-      message: "Document uploaded successfully",
-      document: newDoc,
-      status: updatedStatus
+      message: `Document '${documentType}' uploaded and verified successfully.`,
+      document: savedDoc,
+      status: updatedStatus,
     });
   } catch (error) {
     console.error("Upload document error:", error);

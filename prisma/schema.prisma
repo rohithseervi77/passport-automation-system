@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 // =====================================================
@@ -21,11 +21,11 @@ model User {
   role      String   @default("APPLICANT")
   
   // Security & State
-  isActive          Boolean  @default(true)
-  failedLoginAttempts Int      @default(0)
-  lockedUntil       DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  isActive            Boolean   @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now()) @updatedAt
 
   applicant         Applicant?
   passportOfficer   PassportOfficer?
@@ -49,14 +49,14 @@ model Admin {
 // =====================================================
 
 model Applicant {
-  id          Int    @id @default(autoincrement())
-  applicantId String @unique
+  id          Int      @id @default(autoincrement())
+  applicantId String   @unique
   name        String
   dob         DateTime
   address     String
 
-  userId      Int  @unique
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   applications Application[]
 }
@@ -66,12 +66,12 @@ model Applicant {
 // =====================================================
 
 model PassportOfficer {
-  id             Int    @id @default(autoincrement())
-  officerId      String @unique
+  id             Int      @id @default(autoincrement())
+  officerId      String   @unique
   branchLocation String
 
-  userId         Int  @unique
-  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int      @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   assignedApplications Application[]
   passports           Passport[]
@@ -82,12 +82,12 @@ model PassportOfficer {
 // =====================================================
 
 model Police {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   stationCode String
-  badgeNumber String @unique
+  badgeNumber String   @unique
 
-  userId      Int  @unique
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   reports     PoliceReport[]
 }
@@ -98,12 +98,79 @@ model Police {
 
 model Application {
   id             Int      @id @default(autoincrement())
-  applicationId  String   @unique
-  passportType   String
+  applicationId  String   @unique // Application Reference Number (ARN)
+  passportType   String   @default("REGULAR (36 Pages)")
+  serviceType    String   @default("FRESH") // FRESH, REISSUE
+  applicationCategory String @default("NORMAL") // NORMAL, TATKAAL
+  bookletType    String   @default("36_PAGES") // 36_PAGES, 60_PAGES
+  rpoLocation    String?  @default("RPO Chennai")
   status         String   @default("DRAFT")
   submissionDate DateTime?
   createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  updatedAt      DateTime @default(now()) @updatedAt
+
+  // Step 2: Applicant Personal Details
+  givenName                  String?
+  surname                    String?
+  gender                     String?
+  dob                        DateTime?
+  placeOfBirth               String?
+  maritalStatus              String?
+  citizenship                String?   @default("By Birth")
+  pan                        String?
+  voterId                    String?
+  employmentType             String?
+  educationalQualification   String?
+  visibleIdentificationMark  String?
+  aadhaarNumber              String?
+
+  // Step 3: Family Details
+  fatherName                 String?
+  motherName                 String?
+  spouseName                 String?
+  legalGuardianName          String?
+
+  // Step 4: Address Details
+  presentAddressLine1        String?
+  presentAddressLine2        String?
+  presentCity                String?
+  presentDistrict            String?
+  presentState               String?
+  presentPinCode             String?
+  policeStation              String?
+  isPermanentSame            Boolean   @default(true)
+  permanentAddress           String?
+
+  // Step 5: Emergency Contact
+  emergencyName              String?
+  emergencyRelationship      String?
+  emergencyMobile            String?
+  emergencyEmail             String?
+  emergencyAddress           String?
+
+  // Step 6: Previous Passport
+  hasPreviousPassport        Boolean   @default(false)
+  prevPassportNumber         String?
+  prevIssueDate              DateTime?
+  prevExpiryDate             DateTime?
+  prevPlaceOfIssue           String?
+
+  // Step 7: Other Details & Declarations
+  hasCriminalRecord          Boolean   @default(false)
+  criminalRecordDetails      String?
+  hasPendingProceedings      Boolean   @default(false)
+  pendingProceedingsDetails  String?
+  hasLostPassport            Boolean   @default(false)
+  lostPassportDetails        String?
+  confirmedDeclaration       Boolean   @default(false)
+
+  // Review & Clarification workflow
+  clarificationReason        String?
+  clarificationRequestedAt   DateTime?
+  clarificationResponse      String?
+  clarificationRespondedAt   DateTime?
+  officerChecklist           String?   // JSON checklist of verified points
+  rejectionReason            String?
 
   applicantId    Int
   applicant      Applicant @relation(fields: [applicantId], references: [id])
@@ -128,6 +195,8 @@ model ApplicationStatusHistory {
   fromStatus    String
   toStatus      String
   remarks       String?
+  performedBy   String?
+  role          String?  @default("SYSTEM")
   changedById   Int?
   changedAt     DateTime @default(now())
 }
@@ -137,11 +206,13 @@ model ApplicationStatusHistory {
 // =====================================================
 
 model Document {
-  id           Int    @id @default(autoincrement())
-  docId        String @unique
+  id           Int      @id @default(autoincrement())
+  docId        String   @unique
   documentType String
   fileStatus   String
   fileUrl      String?
+  fileName     String?
+  fileSize     Int?
   uploadedAt   DateTime @default(now())
 
   applicationId Int
@@ -155,14 +226,15 @@ model Document {
 model Appointment {
   id            Int      @id @default(autoincrement())
   appointmentId String   @unique
+  quota         String   @default("NORMAL") // NORMAL, TATKAAL
+  location      String   @default("Chennai PSK")
   date          DateTime
   timeSlot      String
-  status        String   @default("AVAILABLE") // BOOKED, COMPLETED, CANCELLED, MISSED
+  status        String   @default("BOOKED") // BOOKED, COMPLETED, CANCELLED, RESCHEDULED
+  rescheduleCount Int    @default(0)
 
   applicationId Int      @unique
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-
-  @@unique([date, timeSlot])
 }
 
 // =====================================================
@@ -173,10 +245,13 @@ model Payment {
   id            Int      @id @default(autoincrement())
   transactionId String   @unique
   amount        Float
-  status        String   @default("PENDING") // PROCESSING, SUCCESS, FAILED, REFUNDED
-  paymentMethod String?
+  baseFee       Float    @default(1500)
+  additionalFee Float    @default(0)
+  status        String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  paymentMethod String?  // UPI, DEBIT_CARD, CREDIT_CARD, NET_BANKING
+  paymentReference String?
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime @default(now()) @updatedAt
 
   applicationId Int
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
@@ -187,17 +262,20 @@ model Payment {
 // =====================================================
 
 model PoliceReport {
-  id              Int    @id @default(autoincrement())
-  reportId        String @unique
-  clearanceStatus String // PENDING, APPROVED, REJECTED, CLARIFICATION_REQUIRED
+  id              Int      @id @default(autoincrement())
+  reportId        String   @unique
+  clearanceStatus String   // PENDING, IN_PROGRESS, CLEARED, ADVERSE, CLARIFICATION_REQUIRED
   remarks         String?
+  adverseReason   String?
+  stationCode     String?
+  verifiedAt      DateTime?
   createdAt       DateTime @default(now())
 
   applicationId   Int
   application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
-  policeId        Int
-  police          Police @relation(fields: [policeId], references: [id])
+  policeId        Int?
+  police          Police?  @relation(fields: [policeId], references: [id])
 }
 
 // =====================================================
@@ -209,7 +287,8 @@ model Passport {
   passportNumber String   @unique
   issueDate      DateTime
   expiryDate     DateTime
-  dispatchStatus String   @default("PRINTING") // READY, DISPATCHED, DELIVERED
+  dispatchStatus String   @default("PRINTING") // PRINTING, READY, DISPATCHED, DELIVERED
+  trackingNumber String?
 
   applicationId  Int      @unique
   application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
@@ -229,7 +308,7 @@ model Notification {
   title       String
   message     String
   isRead      Boolean  @default(false)
-  type        String   @default("INFO")
+  type        String   @default("INFO") // INFO, SUCCESS, WARNING, ALERT
   createdAt   DateTime @default(now())
 }
 

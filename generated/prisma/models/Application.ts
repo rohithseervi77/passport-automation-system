@@ -42,10 +42,63 @@ export type ApplicationMinAggregateOutputType = {
   id: number | null
   applicationId: string | null
   passportType: string | null
+  serviceType: string | null
+  applicationCategory: string | null
+  bookletType: string | null
+  rpoLocation: string | null
   status: string | null
   submissionDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  givenName: string | null
+  surname: string | null
+  gender: string | null
+  dob: Date | null
+  placeOfBirth: string | null
+  maritalStatus: string | null
+  citizenship: string | null
+  pan: string | null
+  voterId: string | null
+  employmentType: string | null
+  educationalQualification: string | null
+  visibleIdentificationMark: string | null
+  aadhaarNumber: string | null
+  fatherName: string | null
+  motherName: string | null
+  spouseName: string | null
+  legalGuardianName: string | null
+  presentAddressLine1: string | null
+  presentAddressLine2: string | null
+  presentCity: string | null
+  presentDistrict: string | null
+  presentState: string | null
+  presentPinCode: string | null
+  policeStation: string | null
+  isPermanentSame: boolean | null
+  permanentAddress: string | null
+  emergencyName: string | null
+  emergencyRelationship: string | null
+  emergencyMobile: string | null
+  emergencyEmail: string | null
+  emergencyAddress: string | null
+  hasPreviousPassport: boolean | null
+  prevPassportNumber: string | null
+  prevIssueDate: Date | null
+  prevExpiryDate: Date | null
+  prevPlaceOfIssue: string | null
+  hasCriminalRecord: boolean | null
+  criminalRecordDetails: string | null
+  hasPendingProceedings: boolean | null
+  pendingProceedingsDetails: string | null
+  hasLostPassport: boolean | null
+  lostPassportDetails: string | null
+  confirmedDeclaration: boolean | null
+  clarificationReason: string | null
+  clarificationRequestedAt: Date | null
+  clarificationResponse: string | null
+  clarificationRespondedAt: Date | null
+  officerChecklist: string | null
+  rejectionReason: string | null
   applicantId: number | null
   officerId: number | null
 }
@@ -54,10 +107,63 @@ export type ApplicationMaxAggregateOutputType = {
   id: number | null
   applicationId: string | null
   passportType: string | null
+  serviceType: string | null
+  applicationCategory: string | null
+  bookletType: string | null
+  rpoLocation: string | null
   status: string | null
   submissionDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  givenName: string | null
+  surname: string | null
+  gender: string | null
+  dob: Date | null
+  placeOfBirth: string | null
+  maritalStatus: string | null
+  citizenship: string | null
+  pan: string | null
+  voterId: string | null
+  employmentType: string | null
+  educationalQualification: string | null
+  visibleIdentificationMark: string | null
+  aadhaarNumber: string | null
+  fatherName: string | null
+  motherName: string | null
+  spouseName: string | null
+  legalGuardianName: string | null
+  presentAddressLine1: string | null
+  presentAddressLine2: string | null
+  presentCity: string | null
+  presentDistrict: string | null
+  presentState: string | null
+  presentPinCode: string | null
+  policeStation: string | null
+  isPermanentSame: boolean | null
+  permanentAddress: string | null
+  emergencyName: string | null
+  emergencyRelationship: string | null
+  emergencyMobile: string | null
+  emergencyEmail: string | null
+  emergencyAddress: string | null
+  hasPreviousPassport: boolean | null
+  prevPassportNumber: string | null
+  prevIssueDate: Date | null
+  prevExpiryDate: Date | null
+  prevPlaceOfIssue: string | null
+  hasCriminalRecord: boolean | null
+  criminalRecordDetails: string | null
+  hasPendingProceedings: boolean | null
+  pendingProceedingsDetails: string | null
+  hasLostPassport: boolean | null
+  lostPassportDetails: string | null
+  confirmedDeclaration: boolean | null
+  clarificationReason: string | null
+  clarificationRequestedAt: Date | null
+  clarificationResponse: string | null
+  clarificationRespondedAt: Date | null
+  officerChecklist: string | null
+  rejectionReason: string | null
   applicantId: number | null
   officerId: number | null
 }
@@ -66,10 +172,63 @@ export type ApplicationCountAggregateOutputType = {
   id: number
   applicationId: number
   passportType: number
+  serviceType: number
+  applicationCategory: number
+  bookletType: number
+  rpoLocation: number
   status: number
   submissionDate: number
   createdAt: number
   updatedAt: number
+  givenName: number
+  surname: number
+  gender: number
+  dob: number
+  placeOfBirth: number
+  maritalStatus: number
+  citizenship: number
+  pan: number
+  voterId: number
+  employmentType: number
+  educationalQualification: number
+  visibleIdentificationMark: number
+  aadhaarNumber: number
+  fatherName: number
+  motherName: number
+  spouseName: number
+  legalGuardianName: number
+  presentAddressLine1: number
+  presentAddressLine2: number
+  presentCity: number
+  presentDistrict: number
+  presentState: number
+  presentPinCode: number
+  policeStation: number
+  isPermanentSame: number
+  permanentAddress: number
+  emergencyName: number
+  emergencyRelationship: number
+  emergencyMobile: number
+  emergencyEmail: number
+  emergencyAddress: number
+  hasPreviousPassport: number
+  prevPassportNumber: number
+  prevIssueDate: number
+  prevExpiryDate: number
+  prevPlaceOfIssue: number
+  hasCriminalRecord: number
+  criminalRecordDetails: number
+  hasPendingProceedings: number
+  pendingProceedingsDetails: number
+  hasLostPassport: number
+  lostPassportDetails: number
+  confirmedDeclaration: number
+  clarificationReason: number
+  clarificationRequestedAt: number
+  clarificationResponse: number
+  clarificationRespondedAt: number
+  officerChecklist: number
+  rejectionReason: number
   applicantId: number
   officerId: number
   _all: number
@@ -92,10 +251,63 @@ export type ApplicationMinAggregateInputType = {
   id?: true
   applicationId?: true
   passportType?: true
+  serviceType?: true
+  applicationCategory?: true
+  bookletType?: true
+  rpoLocation?: true
   status?: true
   submissionDate?: true
   createdAt?: true
   updatedAt?: true
+  givenName?: true
+  surname?: true
+  gender?: true
+  dob?: true
+  placeOfBirth?: true
+  maritalStatus?: true
+  citizenship?: true
+  pan?: true
+  voterId?: true
+  employmentType?: true
+  educationalQualification?: true
+  visibleIdentificationMark?: true
+  aadhaarNumber?: true
+  fatherName?: true
+  motherName?: true
+  spouseName?: true
+  legalGuardianName?: true
+  presentAddressLine1?: true
+  presentAddressLine2?: true
+  presentCity?: true
+  presentDistrict?: true
+  presentState?: true
+  presentPinCode?: true
+  policeStation?: true
+  isPermanentSame?: true
+  permanentAddress?: true
+  emergencyName?: true
+  emergencyRelationship?: true
+  emergencyMobile?: true
+  emergencyEmail?: true
+  emergencyAddress?: true
+  hasPreviousPassport?: true
+  prevPassportNumber?: true
+  prevIssueDate?: true
+  prevExpiryDate?: true
+  prevPlaceOfIssue?: true
+  hasCriminalRecord?: true
+  criminalRecordDetails?: true
+  hasPendingProceedings?: true
+  pendingProceedingsDetails?: true
+  hasLostPassport?: true
+  lostPassportDetails?: true
+  confirmedDeclaration?: true
+  clarificationReason?: true
+  clarificationRequestedAt?: true
+  clarificationResponse?: true
+  clarificationRespondedAt?: true
+  officerChecklist?: true
+  rejectionReason?: true
   applicantId?: true
   officerId?: true
 }
@@ -104,10 +316,63 @@ export type ApplicationMaxAggregateInputType = {
   id?: true
   applicationId?: true
   passportType?: true
+  serviceType?: true
+  applicationCategory?: true
+  bookletType?: true
+  rpoLocation?: true
   status?: true
   submissionDate?: true
   createdAt?: true
   updatedAt?: true
+  givenName?: true
+  surname?: true
+  gender?: true
+  dob?: true
+  placeOfBirth?: true
+  maritalStatus?: true
+  citizenship?: true
+  pan?: true
+  voterId?: true
+  employmentType?: true
+  educationalQualification?: true
+  visibleIdentificationMark?: true
+  aadhaarNumber?: true
+  fatherName?: true
+  motherName?: true
+  spouseName?: true
+  legalGuardianName?: true
+  presentAddressLine1?: true
+  presentAddressLine2?: true
+  presentCity?: true
+  presentDistrict?: true
+  presentState?: true
+  presentPinCode?: true
+  policeStation?: true
+  isPermanentSame?: true
+  permanentAddress?: true
+  emergencyName?: true
+  emergencyRelationship?: true
+  emergencyMobile?: true
+  emergencyEmail?: true
+  emergencyAddress?: true
+  hasPreviousPassport?: true
+  prevPassportNumber?: true
+  prevIssueDate?: true
+  prevExpiryDate?: true
+  prevPlaceOfIssue?: true
+  hasCriminalRecord?: true
+  criminalRecordDetails?: true
+  hasPendingProceedings?: true
+  pendingProceedingsDetails?: true
+  hasLostPassport?: true
+  lostPassportDetails?: true
+  confirmedDeclaration?: true
+  clarificationReason?: true
+  clarificationRequestedAt?: true
+  clarificationResponse?: true
+  clarificationRespondedAt?: true
+  officerChecklist?: true
+  rejectionReason?: true
   applicantId?: true
   officerId?: true
 }
@@ -116,10 +381,63 @@ export type ApplicationCountAggregateInputType = {
   id?: true
   applicationId?: true
   passportType?: true
+  serviceType?: true
+  applicationCategory?: true
+  bookletType?: true
+  rpoLocation?: true
   status?: true
   submissionDate?: true
   createdAt?: true
   updatedAt?: true
+  givenName?: true
+  surname?: true
+  gender?: true
+  dob?: true
+  placeOfBirth?: true
+  maritalStatus?: true
+  citizenship?: true
+  pan?: true
+  voterId?: true
+  employmentType?: true
+  educationalQualification?: true
+  visibleIdentificationMark?: true
+  aadhaarNumber?: true
+  fatherName?: true
+  motherName?: true
+  spouseName?: true
+  legalGuardianName?: true
+  presentAddressLine1?: true
+  presentAddressLine2?: true
+  presentCity?: true
+  presentDistrict?: true
+  presentState?: true
+  presentPinCode?: true
+  policeStation?: true
+  isPermanentSame?: true
+  permanentAddress?: true
+  emergencyName?: true
+  emergencyRelationship?: true
+  emergencyMobile?: true
+  emergencyEmail?: true
+  emergencyAddress?: true
+  hasPreviousPassport?: true
+  prevPassportNumber?: true
+  prevIssueDate?: true
+  prevExpiryDate?: true
+  prevPlaceOfIssue?: true
+  hasCriminalRecord?: true
+  criminalRecordDetails?: true
+  hasPendingProceedings?: true
+  pendingProceedingsDetails?: true
+  hasLostPassport?: true
+  lostPassportDetails?: true
+  confirmedDeclaration?: true
+  clarificationReason?: true
+  clarificationRequestedAt?: true
+  clarificationResponse?: true
+  clarificationRespondedAt?: true
+  officerChecklist?: true
+  rejectionReason?: true
   applicantId?: true
   officerId?: true
   _all?: true
@@ -215,10 +533,63 @@ export type ApplicationGroupByOutputType = {
   id: number
   applicationId: string
   passportType: string
+  serviceType: string
+  applicationCategory: string
+  bookletType: string
+  rpoLocation: string | null
   status: string
   submissionDate: Date | null
   createdAt: Date
   updatedAt: Date
+  givenName: string | null
+  surname: string | null
+  gender: string | null
+  dob: Date | null
+  placeOfBirth: string | null
+  maritalStatus: string | null
+  citizenship: string | null
+  pan: string | null
+  voterId: string | null
+  employmentType: string | null
+  educationalQualification: string | null
+  visibleIdentificationMark: string | null
+  aadhaarNumber: string | null
+  fatherName: string | null
+  motherName: string | null
+  spouseName: string | null
+  legalGuardianName: string | null
+  presentAddressLine1: string | null
+  presentAddressLine2: string | null
+  presentCity: string | null
+  presentDistrict: string | null
+  presentState: string | null
+  presentPinCode: string | null
+  policeStation: string | null
+  isPermanentSame: boolean
+  permanentAddress: string | null
+  emergencyName: string | null
+  emergencyRelationship: string | null
+  emergencyMobile: string | null
+  emergencyEmail: string | null
+  emergencyAddress: string | null
+  hasPreviousPassport: boolean
+  prevPassportNumber: string | null
+  prevIssueDate: Date | null
+  prevExpiryDate: Date | null
+  prevPlaceOfIssue: string | null
+  hasCriminalRecord: boolean
+  criminalRecordDetails: string | null
+  hasPendingProceedings: boolean
+  pendingProceedingsDetails: string | null
+  hasLostPassport: boolean
+  lostPassportDetails: string | null
+  confirmedDeclaration: boolean
+  clarificationReason: string | null
+  clarificationRequestedAt: Date | null
+  clarificationResponse: string | null
+  clarificationRespondedAt: Date | null
+  officerChecklist: string | null
+  rejectionReason: string | null
   applicantId: number
   officerId: number | null
   _count: ApplicationCountAggregateOutputType | null
@@ -250,10 +621,63 @@ export type ApplicationWhereInput = {
   id?: Prisma.IntFilter<"Application"> | number
   applicationId?: Prisma.StringFilter<"Application"> | string
   passportType?: Prisma.StringFilter<"Application"> | string
+  serviceType?: Prisma.StringFilter<"Application"> | string
+  applicationCategory?: Prisma.StringFilter<"Application"> | string
+  bookletType?: Prisma.StringFilter<"Application"> | string
+  rpoLocation?: Prisma.StringNullableFilter<"Application"> | string | null
   status?: Prisma.StringFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Application"> | Date | string
+  givenName?: Prisma.StringNullableFilter<"Application"> | string | null
+  surname?: Prisma.StringNullableFilter<"Application"> | string | null
+  gender?: Prisma.StringNullableFilter<"Application"> | string | null
+  dob?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  placeOfBirth?: Prisma.StringNullableFilter<"Application"> | string | null
+  maritalStatus?: Prisma.StringNullableFilter<"Application"> | string | null
+  citizenship?: Prisma.StringNullableFilter<"Application"> | string | null
+  pan?: Prisma.StringNullableFilter<"Application"> | string | null
+  voterId?: Prisma.StringNullableFilter<"Application"> | string | null
+  employmentType?: Prisma.StringNullableFilter<"Application"> | string | null
+  educationalQualification?: Prisma.StringNullableFilter<"Application"> | string | null
+  visibleIdentificationMark?: Prisma.StringNullableFilter<"Application"> | string | null
+  aadhaarNumber?: Prisma.StringNullableFilter<"Application"> | string | null
+  fatherName?: Prisma.StringNullableFilter<"Application"> | string | null
+  motherName?: Prisma.StringNullableFilter<"Application"> | string | null
+  spouseName?: Prisma.StringNullableFilter<"Application"> | string | null
+  legalGuardianName?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentAddressLine1?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentAddressLine2?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentCity?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentDistrict?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentState?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentPinCode?: Prisma.StringNullableFilter<"Application"> | string | null
+  policeStation?: Prisma.StringNullableFilter<"Application"> | string | null
+  isPermanentSame?: Prisma.BoolFilter<"Application"> | boolean
+  permanentAddress?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyName?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyMobile?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyEmail?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyAddress?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasPreviousPassport?: Prisma.BoolFilter<"Application"> | boolean
+  prevPassportNumber?: Prisma.StringNullableFilter<"Application"> | string | null
+  prevIssueDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  prevExpiryDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  prevPlaceOfIssue?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasCriminalRecord?: Prisma.BoolFilter<"Application"> | boolean
+  criminalRecordDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasPendingProceedings?: Prisma.BoolFilter<"Application"> | boolean
+  pendingProceedingsDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasLostPassport?: Prisma.BoolFilter<"Application"> | boolean
+  lostPassportDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  confirmedDeclaration?: Prisma.BoolFilter<"Application"> | boolean
+  clarificationReason?: Prisma.StringNullableFilter<"Application"> | string | null
+  clarificationRequestedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  clarificationResponse?: Prisma.StringNullableFilter<"Application"> | string | null
+  clarificationRespondedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  officerChecklist?: Prisma.StringNullableFilter<"Application"> | string | null
+  rejectionReason?: Prisma.StringNullableFilter<"Application"> | string | null
   applicantId?: Prisma.IntFilter<"Application"> | number
   officerId?: Prisma.IntNullableFilter<"Application"> | number | null
   applicant?: Prisma.XOR<Prisma.ApplicantScalarRelationFilter, Prisma.ApplicantWhereInput>
@@ -270,10 +694,63 @@ export type ApplicationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   passportType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
+  applicationCategory?: Prisma.SortOrder
+  bookletType?: Prisma.SortOrder
+  rpoLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  givenName?: Prisma.SortOrderInput | Prisma.SortOrder
+  surname?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
+  dob?: Prisma.SortOrderInput | Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  maritalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  citizenship?: Prisma.SortOrderInput | Prisma.SortOrder
+  pan?: Prisma.SortOrderInput | Prisma.SortOrder
+  voterId?: Prisma.SortOrderInput | Prisma.SortOrder
+  employmentType?: Prisma.SortOrderInput | Prisma.SortOrder
+  educationalQualification?: Prisma.SortOrderInput | Prisma.SortOrder
+  visibleIdentificationMark?: Prisma.SortOrderInput | Prisma.SortOrder
+  aadhaarNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  motherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  spouseName?: Prisma.SortOrderInput | Prisma.SortOrder
+  legalGuardianName?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentAddressLine1?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentAddressLine2?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentDistrict?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentState?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentPinCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  policeStation?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPermanentSame?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyName?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyMobile?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasPreviousPassport?: Prisma.SortOrder
+  prevPassportNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  prevIssueDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  prevExpiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  prevPlaceOfIssue?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasCriminalRecord?: Prisma.SortOrder
+  criminalRecordDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasPendingProceedings?: Prisma.SortOrder
+  pendingProceedingsDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasLostPassport?: Prisma.SortOrder
+  lostPassportDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  confirmedDeclaration?: Prisma.SortOrder
+  clarificationReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  clarificationRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  clarificationResponse?: Prisma.SortOrderInput | Prisma.SortOrder
+  clarificationRespondedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  officerChecklist?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrderInput | Prisma.SortOrder
   applicant?: Prisma.ApplicantOrderByWithRelationInput
@@ -293,10 +770,63 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ApplicationWhereInput[]
   NOT?: Prisma.ApplicationWhereInput | Prisma.ApplicationWhereInput[]
   passportType?: Prisma.StringFilter<"Application"> | string
+  serviceType?: Prisma.StringFilter<"Application"> | string
+  applicationCategory?: Prisma.StringFilter<"Application"> | string
+  bookletType?: Prisma.StringFilter<"Application"> | string
+  rpoLocation?: Prisma.StringNullableFilter<"Application"> | string | null
   status?: Prisma.StringFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Application"> | Date | string
+  givenName?: Prisma.StringNullableFilter<"Application"> | string | null
+  surname?: Prisma.StringNullableFilter<"Application"> | string | null
+  gender?: Prisma.StringNullableFilter<"Application"> | string | null
+  dob?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  placeOfBirth?: Prisma.StringNullableFilter<"Application"> | string | null
+  maritalStatus?: Prisma.StringNullableFilter<"Application"> | string | null
+  citizenship?: Prisma.StringNullableFilter<"Application"> | string | null
+  pan?: Prisma.StringNullableFilter<"Application"> | string | null
+  voterId?: Prisma.StringNullableFilter<"Application"> | string | null
+  employmentType?: Prisma.StringNullableFilter<"Application"> | string | null
+  educationalQualification?: Prisma.StringNullableFilter<"Application"> | string | null
+  visibleIdentificationMark?: Prisma.StringNullableFilter<"Application"> | string | null
+  aadhaarNumber?: Prisma.StringNullableFilter<"Application"> | string | null
+  fatherName?: Prisma.StringNullableFilter<"Application"> | string | null
+  motherName?: Prisma.StringNullableFilter<"Application"> | string | null
+  spouseName?: Prisma.StringNullableFilter<"Application"> | string | null
+  legalGuardianName?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentAddressLine1?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentAddressLine2?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentCity?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentDistrict?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentState?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentPinCode?: Prisma.StringNullableFilter<"Application"> | string | null
+  policeStation?: Prisma.StringNullableFilter<"Application"> | string | null
+  isPermanentSame?: Prisma.BoolFilter<"Application"> | boolean
+  permanentAddress?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyName?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyMobile?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyEmail?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyAddress?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasPreviousPassport?: Prisma.BoolFilter<"Application"> | boolean
+  prevPassportNumber?: Prisma.StringNullableFilter<"Application"> | string | null
+  prevIssueDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  prevExpiryDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  prevPlaceOfIssue?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasCriminalRecord?: Prisma.BoolFilter<"Application"> | boolean
+  criminalRecordDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasPendingProceedings?: Prisma.BoolFilter<"Application"> | boolean
+  pendingProceedingsDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasLostPassport?: Prisma.BoolFilter<"Application"> | boolean
+  lostPassportDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  confirmedDeclaration?: Prisma.BoolFilter<"Application"> | boolean
+  clarificationReason?: Prisma.StringNullableFilter<"Application"> | string | null
+  clarificationRequestedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  clarificationResponse?: Prisma.StringNullableFilter<"Application"> | string | null
+  clarificationRespondedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  officerChecklist?: Prisma.StringNullableFilter<"Application"> | string | null
+  rejectionReason?: Prisma.StringNullableFilter<"Application"> | string | null
   applicantId?: Prisma.IntFilter<"Application"> | number
   officerId?: Prisma.IntNullableFilter<"Application"> | number | null
   applicant?: Prisma.XOR<Prisma.ApplicantScalarRelationFilter, Prisma.ApplicantWhereInput>
@@ -313,10 +843,63 @@ export type ApplicationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   passportType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
+  applicationCategory?: Prisma.SortOrder
+  bookletType?: Prisma.SortOrder
+  rpoLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  givenName?: Prisma.SortOrderInput | Prisma.SortOrder
+  surname?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
+  dob?: Prisma.SortOrderInput | Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  maritalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  citizenship?: Prisma.SortOrderInput | Prisma.SortOrder
+  pan?: Prisma.SortOrderInput | Prisma.SortOrder
+  voterId?: Prisma.SortOrderInput | Prisma.SortOrder
+  employmentType?: Prisma.SortOrderInput | Prisma.SortOrder
+  educationalQualification?: Prisma.SortOrderInput | Prisma.SortOrder
+  visibleIdentificationMark?: Prisma.SortOrderInput | Prisma.SortOrder
+  aadhaarNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  fatherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  motherName?: Prisma.SortOrderInput | Prisma.SortOrder
+  spouseName?: Prisma.SortOrderInput | Prisma.SortOrder
+  legalGuardianName?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentAddressLine1?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentAddressLine2?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentCity?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentDistrict?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentState?: Prisma.SortOrderInput | Prisma.SortOrder
+  presentPinCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  policeStation?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPermanentSame?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyName?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyMobile?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  emergencyAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasPreviousPassport?: Prisma.SortOrder
+  prevPassportNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  prevIssueDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  prevExpiryDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  prevPlaceOfIssue?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasCriminalRecord?: Prisma.SortOrder
+  criminalRecordDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasPendingProceedings?: Prisma.SortOrder
+  pendingProceedingsDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasLostPassport?: Prisma.SortOrder
+  lostPassportDetails?: Prisma.SortOrderInput | Prisma.SortOrder
+  confirmedDeclaration?: Prisma.SortOrder
+  clarificationReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  clarificationRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  clarificationResponse?: Prisma.SortOrderInput | Prisma.SortOrder
+  clarificationRespondedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  officerChecklist?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ApplicationCountOrderByAggregateInput
@@ -333,21 +916,127 @@ export type ApplicationScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Application"> | number
   applicationId?: Prisma.StringWithAggregatesFilter<"Application"> | string
   passportType?: Prisma.StringWithAggregatesFilter<"Application"> | string
+  serviceType?: Prisma.StringWithAggregatesFilter<"Application"> | string
+  applicationCategory?: Prisma.StringWithAggregatesFilter<"Application"> | string
+  bookletType?: Prisma.StringWithAggregatesFilter<"Application"> | string
+  rpoLocation?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Application"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Application"> | Date | string
+  givenName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  surname?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  gender?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  dob?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
+  placeOfBirth?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  maritalStatus?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  citizenship?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  pan?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  voterId?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  employmentType?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  educationalQualification?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  visibleIdentificationMark?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  aadhaarNumber?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  fatherName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  motherName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  spouseName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  legalGuardianName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  presentAddressLine1?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  presentAddressLine2?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  presentCity?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  presentDistrict?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  presentState?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  presentPinCode?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  policeStation?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  isPermanentSame?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  permanentAddress?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  emergencyName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  emergencyRelationship?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  emergencyMobile?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  emergencyEmail?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  emergencyAddress?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  hasPreviousPassport?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  prevPassportNumber?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  prevIssueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
+  prevExpiryDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
+  prevPlaceOfIssue?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  hasCriminalRecord?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  criminalRecordDetails?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  hasPendingProceedings?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  pendingProceedingsDetails?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  hasLostPassport?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  lostPassportDetails?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  confirmedDeclaration?: Prisma.BoolWithAggregatesFilter<"Application"> | boolean
+  clarificationReason?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  clarificationRequestedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
+  clarificationResponse?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  clarificationRespondedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
+  officerChecklist?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   applicantId?: Prisma.IntWithAggregatesFilter<"Application"> | number
   officerId?: Prisma.IntNullableWithAggregatesFilter<"Application"> | number | null
 }
 
 export type ApplicationCreateInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
@@ -361,11 +1050,64 @@ export type ApplicationCreateInput = {
 export type ApplicationUncheckedCreateInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
@@ -379,10 +1121,63 @@ export type ApplicationUncheckedCreateInput = {
 export type ApplicationUpdateInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
@@ -397,10 +1192,63 @@ export type ApplicationUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
@@ -414,11 +1262,64 @@ export type ApplicationUncheckedUpdateInput = {
 export type ApplicationCreateManyInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
 }
@@ -426,20 +1327,126 @@ export type ApplicationCreateManyInput = {
 export type ApplicationUpdateManyMutationInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ApplicationUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -458,10 +1465,63 @@ export type ApplicationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   passportType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
+  applicationCategory?: Prisma.SortOrder
+  bookletType?: Prisma.SortOrder
+  rpoLocation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  givenName?: Prisma.SortOrder
+  surname?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dob?: Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrder
+  maritalStatus?: Prisma.SortOrder
+  citizenship?: Prisma.SortOrder
+  pan?: Prisma.SortOrder
+  voterId?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  educationalQualification?: Prisma.SortOrder
+  visibleIdentificationMark?: Prisma.SortOrder
+  aadhaarNumber?: Prisma.SortOrder
+  fatherName?: Prisma.SortOrder
+  motherName?: Prisma.SortOrder
+  spouseName?: Prisma.SortOrder
+  legalGuardianName?: Prisma.SortOrder
+  presentAddressLine1?: Prisma.SortOrder
+  presentAddressLine2?: Prisma.SortOrder
+  presentCity?: Prisma.SortOrder
+  presentDistrict?: Prisma.SortOrder
+  presentState?: Prisma.SortOrder
+  presentPinCode?: Prisma.SortOrder
+  policeStation?: Prisma.SortOrder
+  isPermanentSame?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrder
+  emergencyName?: Prisma.SortOrder
+  emergencyRelationship?: Prisma.SortOrder
+  emergencyMobile?: Prisma.SortOrder
+  emergencyEmail?: Prisma.SortOrder
+  emergencyAddress?: Prisma.SortOrder
+  hasPreviousPassport?: Prisma.SortOrder
+  prevPassportNumber?: Prisma.SortOrder
+  prevIssueDate?: Prisma.SortOrder
+  prevExpiryDate?: Prisma.SortOrder
+  prevPlaceOfIssue?: Prisma.SortOrder
+  hasCriminalRecord?: Prisma.SortOrder
+  criminalRecordDetails?: Prisma.SortOrder
+  hasPendingProceedings?: Prisma.SortOrder
+  pendingProceedingsDetails?: Prisma.SortOrder
+  hasLostPassport?: Prisma.SortOrder
+  lostPassportDetails?: Prisma.SortOrder
+  confirmedDeclaration?: Prisma.SortOrder
+  clarificationReason?: Prisma.SortOrder
+  clarificationRequestedAt?: Prisma.SortOrder
+  clarificationResponse?: Prisma.SortOrder
+  clarificationRespondedAt?: Prisma.SortOrder
+  officerChecklist?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -476,10 +1536,63 @@ export type ApplicationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   passportType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
+  applicationCategory?: Prisma.SortOrder
+  bookletType?: Prisma.SortOrder
+  rpoLocation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  givenName?: Prisma.SortOrder
+  surname?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dob?: Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrder
+  maritalStatus?: Prisma.SortOrder
+  citizenship?: Prisma.SortOrder
+  pan?: Prisma.SortOrder
+  voterId?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  educationalQualification?: Prisma.SortOrder
+  visibleIdentificationMark?: Prisma.SortOrder
+  aadhaarNumber?: Prisma.SortOrder
+  fatherName?: Prisma.SortOrder
+  motherName?: Prisma.SortOrder
+  spouseName?: Prisma.SortOrder
+  legalGuardianName?: Prisma.SortOrder
+  presentAddressLine1?: Prisma.SortOrder
+  presentAddressLine2?: Prisma.SortOrder
+  presentCity?: Prisma.SortOrder
+  presentDistrict?: Prisma.SortOrder
+  presentState?: Prisma.SortOrder
+  presentPinCode?: Prisma.SortOrder
+  policeStation?: Prisma.SortOrder
+  isPermanentSame?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrder
+  emergencyName?: Prisma.SortOrder
+  emergencyRelationship?: Prisma.SortOrder
+  emergencyMobile?: Prisma.SortOrder
+  emergencyEmail?: Prisma.SortOrder
+  emergencyAddress?: Prisma.SortOrder
+  hasPreviousPassport?: Prisma.SortOrder
+  prevPassportNumber?: Prisma.SortOrder
+  prevIssueDate?: Prisma.SortOrder
+  prevExpiryDate?: Prisma.SortOrder
+  prevPlaceOfIssue?: Prisma.SortOrder
+  hasCriminalRecord?: Prisma.SortOrder
+  criminalRecordDetails?: Prisma.SortOrder
+  hasPendingProceedings?: Prisma.SortOrder
+  pendingProceedingsDetails?: Prisma.SortOrder
+  hasLostPassport?: Prisma.SortOrder
+  lostPassportDetails?: Prisma.SortOrder
+  confirmedDeclaration?: Prisma.SortOrder
+  clarificationReason?: Prisma.SortOrder
+  clarificationRequestedAt?: Prisma.SortOrder
+  clarificationResponse?: Prisma.SortOrder
+  clarificationRespondedAt?: Prisma.SortOrder
+  officerChecklist?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -488,10 +1601,63 @@ export type ApplicationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   passportType?: Prisma.SortOrder
+  serviceType?: Prisma.SortOrder
+  applicationCategory?: Prisma.SortOrder
+  bookletType?: Prisma.SortOrder
+  rpoLocation?: Prisma.SortOrder
   status?: Prisma.SortOrder
   submissionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  givenName?: Prisma.SortOrder
+  surname?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dob?: Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrder
+  maritalStatus?: Prisma.SortOrder
+  citizenship?: Prisma.SortOrder
+  pan?: Prisma.SortOrder
+  voterId?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  educationalQualification?: Prisma.SortOrder
+  visibleIdentificationMark?: Prisma.SortOrder
+  aadhaarNumber?: Prisma.SortOrder
+  fatherName?: Prisma.SortOrder
+  motherName?: Prisma.SortOrder
+  spouseName?: Prisma.SortOrder
+  legalGuardianName?: Prisma.SortOrder
+  presentAddressLine1?: Prisma.SortOrder
+  presentAddressLine2?: Prisma.SortOrder
+  presentCity?: Prisma.SortOrder
+  presentDistrict?: Prisma.SortOrder
+  presentState?: Prisma.SortOrder
+  presentPinCode?: Prisma.SortOrder
+  policeStation?: Prisma.SortOrder
+  isPermanentSame?: Prisma.SortOrder
+  permanentAddress?: Prisma.SortOrder
+  emergencyName?: Prisma.SortOrder
+  emergencyRelationship?: Prisma.SortOrder
+  emergencyMobile?: Prisma.SortOrder
+  emergencyEmail?: Prisma.SortOrder
+  emergencyAddress?: Prisma.SortOrder
+  hasPreviousPassport?: Prisma.SortOrder
+  prevPassportNumber?: Prisma.SortOrder
+  prevIssueDate?: Prisma.SortOrder
+  prevExpiryDate?: Prisma.SortOrder
+  prevPlaceOfIssue?: Prisma.SortOrder
+  hasCriminalRecord?: Prisma.SortOrder
+  criminalRecordDetails?: Prisma.SortOrder
+  hasPendingProceedings?: Prisma.SortOrder
+  pendingProceedingsDetails?: Prisma.SortOrder
+  hasLostPassport?: Prisma.SortOrder
+  lostPassportDetails?: Prisma.SortOrder
+  confirmedDeclaration?: Prisma.SortOrder
+  clarificationReason?: Prisma.SortOrder
+  clarificationRequestedAt?: Prisma.SortOrder
+  clarificationResponse?: Prisma.SortOrder
+  clarificationRespondedAt?: Prisma.SortOrder
+  officerChecklist?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
   applicantId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -591,6 +1757,10 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerNestedInput = {
   deleteMany?: Prisma.ApplicationScalarWhereInput | Prisma.ApplicationScalarWhereInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -685,11 +1855,64 @@ export type ApplicationUpdateOneRequiredWithoutPassportNestedInput = {
 
 export type ApplicationCreateWithoutApplicantInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
@@ -702,11 +1925,64 @@ export type ApplicationCreateWithoutApplicantInput = {
 export type ApplicationUncheckedCreateWithoutApplicantInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
@@ -723,7 +1999,6 @@ export type ApplicationCreateOrConnectWithoutApplicantInput = {
 
 export type ApplicationCreateManyApplicantInputEnvelope = {
   data: Prisma.ApplicationCreateManyApplicantInput | Prisma.ApplicationCreateManyApplicantInput[]
-  skipDuplicates?: boolean
 }
 
 export type ApplicationUpsertWithWhereUniqueWithoutApplicantInput = {
@@ -749,21 +2024,127 @@ export type ApplicationScalarWhereInput = {
   id?: Prisma.IntFilter<"Application"> | number
   applicationId?: Prisma.StringFilter<"Application"> | string
   passportType?: Prisma.StringFilter<"Application"> | string
+  serviceType?: Prisma.StringFilter<"Application"> | string
+  applicationCategory?: Prisma.StringFilter<"Application"> | string
+  bookletType?: Prisma.StringFilter<"Application"> | string
+  rpoLocation?: Prisma.StringNullableFilter<"Application"> | string | null
   status?: Prisma.StringFilter<"Application"> | string
   submissionDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Application"> | Date | string
+  givenName?: Prisma.StringNullableFilter<"Application"> | string | null
+  surname?: Prisma.StringNullableFilter<"Application"> | string | null
+  gender?: Prisma.StringNullableFilter<"Application"> | string | null
+  dob?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  placeOfBirth?: Prisma.StringNullableFilter<"Application"> | string | null
+  maritalStatus?: Prisma.StringNullableFilter<"Application"> | string | null
+  citizenship?: Prisma.StringNullableFilter<"Application"> | string | null
+  pan?: Prisma.StringNullableFilter<"Application"> | string | null
+  voterId?: Prisma.StringNullableFilter<"Application"> | string | null
+  employmentType?: Prisma.StringNullableFilter<"Application"> | string | null
+  educationalQualification?: Prisma.StringNullableFilter<"Application"> | string | null
+  visibleIdentificationMark?: Prisma.StringNullableFilter<"Application"> | string | null
+  aadhaarNumber?: Prisma.StringNullableFilter<"Application"> | string | null
+  fatherName?: Prisma.StringNullableFilter<"Application"> | string | null
+  motherName?: Prisma.StringNullableFilter<"Application"> | string | null
+  spouseName?: Prisma.StringNullableFilter<"Application"> | string | null
+  legalGuardianName?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentAddressLine1?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentAddressLine2?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentCity?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentDistrict?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentState?: Prisma.StringNullableFilter<"Application"> | string | null
+  presentPinCode?: Prisma.StringNullableFilter<"Application"> | string | null
+  policeStation?: Prisma.StringNullableFilter<"Application"> | string | null
+  isPermanentSame?: Prisma.BoolFilter<"Application"> | boolean
+  permanentAddress?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyName?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyMobile?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyEmail?: Prisma.StringNullableFilter<"Application"> | string | null
+  emergencyAddress?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasPreviousPassport?: Prisma.BoolFilter<"Application"> | boolean
+  prevPassportNumber?: Prisma.StringNullableFilter<"Application"> | string | null
+  prevIssueDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  prevExpiryDate?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  prevPlaceOfIssue?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasCriminalRecord?: Prisma.BoolFilter<"Application"> | boolean
+  criminalRecordDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasPendingProceedings?: Prisma.BoolFilter<"Application"> | boolean
+  pendingProceedingsDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  hasLostPassport?: Prisma.BoolFilter<"Application"> | boolean
+  lostPassportDetails?: Prisma.StringNullableFilter<"Application"> | string | null
+  confirmedDeclaration?: Prisma.BoolFilter<"Application"> | boolean
+  clarificationReason?: Prisma.StringNullableFilter<"Application"> | string | null
+  clarificationRequestedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  clarificationResponse?: Prisma.StringNullableFilter<"Application"> | string | null
+  clarificationRespondedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
+  officerChecklist?: Prisma.StringNullableFilter<"Application"> | string | null
+  rejectionReason?: Prisma.StringNullableFilter<"Application"> | string | null
   applicantId?: Prisma.IntFilter<"Application"> | number
   officerId?: Prisma.IntNullableFilter<"Application"> | number | null
 }
 
 export type ApplicationCreateWithoutOfficerInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
@@ -776,11 +2157,64 @@ export type ApplicationCreateWithoutOfficerInput = {
 export type ApplicationUncheckedCreateWithoutOfficerInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
@@ -797,7 +2231,6 @@ export type ApplicationCreateOrConnectWithoutOfficerInput = {
 
 export type ApplicationCreateManyOfficerInputEnvelope = {
   data: Prisma.ApplicationCreateManyOfficerInput | Prisma.ApplicationCreateManyOfficerInput[]
-  skipDuplicates?: boolean
 }
 
 export type ApplicationUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -818,11 +2251,64 @@ export type ApplicationUpdateManyWithWhereWithoutOfficerInput = {
 
 export type ApplicationCreateWithoutStatusHistoryInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
@@ -835,11 +2321,64 @@ export type ApplicationCreateWithoutStatusHistoryInput = {
 export type ApplicationUncheckedCreateWithoutStatusHistoryInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
@@ -868,10 +2407,63 @@ export type ApplicationUpdateToOneWithWhereWithoutStatusHistoryInput = {
 export type ApplicationUpdateWithoutStatusHistoryInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
@@ -885,10 +2477,63 @@ export type ApplicationUncheckedUpdateWithoutStatusHistoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
@@ -900,11 +2545,64 @@ export type ApplicationUncheckedUpdateWithoutStatusHistoryInput = {
 
 export type ApplicationCreateWithoutDocumentsInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   appointment?: Prisma.AppointmentCreateNestedOneWithoutApplicationInput
@@ -917,11 +2615,64 @@ export type ApplicationCreateWithoutDocumentsInput = {
 export type ApplicationUncheckedCreateWithoutDocumentsInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   appointment?: Prisma.AppointmentUncheckedCreateNestedOneWithoutApplicationInput
@@ -950,10 +2701,63 @@ export type ApplicationUpdateToOneWithWhereWithoutDocumentsInput = {
 export type ApplicationUpdateWithoutDocumentsInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
@@ -967,10 +2771,63 @@ export type ApplicationUncheckedUpdateWithoutDocumentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
@@ -982,11 +2839,64 @@ export type ApplicationUncheckedUpdateWithoutDocumentsInput = {
 
 export type ApplicationCreateWithoutAppointmentInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
@@ -999,11 +2909,64 @@ export type ApplicationCreateWithoutAppointmentInput = {
 export type ApplicationUncheckedCreateWithoutAppointmentInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
@@ -1032,10 +2995,63 @@ export type ApplicationUpdateToOneWithWhereWithoutAppointmentInput = {
 export type ApplicationUpdateWithoutAppointmentInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
@@ -1049,10 +3065,63 @@ export type ApplicationUncheckedUpdateWithoutAppointmentInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
@@ -1064,11 +3133,64 @@ export type ApplicationUncheckedUpdateWithoutAppointmentInput = {
 
 export type ApplicationCreateWithoutPaymentsInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
@@ -1081,11 +3203,64 @@ export type ApplicationCreateWithoutPaymentsInput = {
 export type ApplicationUncheckedCreateWithoutPaymentsInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
@@ -1114,10 +3289,63 @@ export type ApplicationUpdateToOneWithWhereWithoutPaymentsInput = {
 export type ApplicationUpdateWithoutPaymentsInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
@@ -1131,10 +3359,63 @@ export type ApplicationUncheckedUpdateWithoutPaymentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
@@ -1146,11 +3427,64 @@ export type ApplicationUncheckedUpdateWithoutPaymentsInput = {
 
 export type ApplicationCreateWithoutPoliceReportsInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
@@ -1163,11 +3497,64 @@ export type ApplicationCreateWithoutPoliceReportsInput = {
 export type ApplicationUncheckedCreateWithoutPoliceReportsInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
@@ -1196,10 +3583,63 @@ export type ApplicationUpdateToOneWithWhereWithoutPoliceReportsInput = {
 export type ApplicationUpdateWithoutPoliceReportsInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
@@ -1213,10 +3653,63 @@ export type ApplicationUncheckedUpdateWithoutPoliceReportsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
@@ -1228,11 +3721,64 @@ export type ApplicationUncheckedUpdateWithoutPoliceReportsInput = {
 
 export type ApplicationCreateWithoutPassportInput = {
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicant: Prisma.ApplicantCreateNestedOneWithoutApplicationsInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutAssignedApplicationsInput
   documents?: Prisma.DocumentCreateNestedManyWithoutApplicationInput
@@ -1245,11 +3791,64 @@ export type ApplicationCreateWithoutPassportInput = {
 export type ApplicationUncheckedCreateWithoutPassportInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
   officerId?: number | null
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutApplicationInput
@@ -1278,10 +3877,63 @@ export type ApplicationUpdateToOneWithWhereWithoutPassportInput = {
 export type ApplicationUpdateWithoutPassportInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
@@ -1295,10 +3947,63 @@ export type ApplicationUncheckedUpdateWithoutPassportInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
@@ -1311,21 +4016,127 @@ export type ApplicationUncheckedUpdateWithoutPassportInput = {
 export type ApplicationCreateManyApplicantInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   officerId?: number | null
 }
 
 export type ApplicationUpdateWithoutApplicantInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   officer?: Prisma.PassportOfficerUpdateOneWithoutAssignedApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
@@ -1339,10 +4150,63 @@ export type ApplicationUncheckedUpdateWithoutApplicantInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
@@ -1356,31 +4220,190 @@ export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type ApplicationCreateManyOfficerInput = {
   id?: number
   applicationId: string
-  passportType: string
+  passportType?: string
+  serviceType?: string
+  applicationCategory?: string
+  bookletType?: string
+  rpoLocation?: string | null
   status?: string
   submissionDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  givenName?: string | null
+  surname?: string | null
+  gender?: string | null
+  dob?: Date | string | null
+  placeOfBirth?: string | null
+  maritalStatus?: string | null
+  citizenship?: string | null
+  pan?: string | null
+  voterId?: string | null
+  employmentType?: string | null
+  educationalQualification?: string | null
+  visibleIdentificationMark?: string | null
+  aadhaarNumber?: string | null
+  fatherName?: string | null
+  motherName?: string | null
+  spouseName?: string | null
+  legalGuardianName?: string | null
+  presentAddressLine1?: string | null
+  presentAddressLine2?: string | null
+  presentCity?: string | null
+  presentDistrict?: string | null
+  presentState?: string | null
+  presentPinCode?: string | null
+  policeStation?: string | null
+  isPermanentSame?: boolean
+  permanentAddress?: string | null
+  emergencyName?: string | null
+  emergencyRelationship?: string | null
+  emergencyMobile?: string | null
+  emergencyEmail?: string | null
+  emergencyAddress?: string | null
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: string | null
+  prevIssueDate?: Date | string | null
+  prevExpiryDate?: Date | string | null
+  prevPlaceOfIssue?: string | null
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: string | null
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: string | null
+  hasLostPassport?: boolean
+  lostPassportDetails?: string | null
+  confirmedDeclaration?: boolean
+  clarificationReason?: string | null
+  clarificationRequestedAt?: Date | string | null
+  clarificationResponse?: string | null
+  clarificationRespondedAt?: Date | string | null
+  officerChecklist?: string | null
+  rejectionReason?: string | null
   applicantId: number
 }
 
 export type ApplicationUpdateWithoutOfficerInput = {
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicant?: Prisma.ApplicantUpdateOneRequiredWithoutApplicationsNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUpdateOneWithoutApplicationNestedInput
@@ -1394,10 +4417,63 @@ export type ApplicationUncheckedUpdateWithoutOfficerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutApplicationNestedInput
   appointment?: Prisma.AppointmentUncheckedUpdateOneWithoutApplicationNestedInput
@@ -1411,10 +4487,63 @@ export type ApplicationUncheckedUpdateManyWithoutOfficerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   passportType?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  bookletType?: Prisma.StringFieldUpdateOperationsInput | string
+  rpoLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   submissionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  givenName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  surname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dob?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  citizenship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  employmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  educationalQualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibleIdentificationMark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aadhaarNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fatherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  motherName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spouseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  legalGuardianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine1?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentAddressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentCity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentDistrict?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentState?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  presentPinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  policeStation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPermanentSame?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  permanentAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyMobile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emergencyAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPreviousPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  prevPassportNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prevIssueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevExpiryDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  prevPlaceOfIssue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasCriminalRecord?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  criminalRecordDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasPendingProceedings?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingProceedingsDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasLostPassport?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lostPassportDetails?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedDeclaration?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  clarificationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clarificationResponse?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clarificationRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  officerChecklist?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicantId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -1480,10 +4609,63 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   applicationId?: boolean
   passportType?: boolean
+  serviceType?: boolean
+  applicationCategory?: boolean
+  bookletType?: boolean
+  rpoLocation?: boolean
   status?: boolean
   submissionDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  givenName?: boolean
+  surname?: boolean
+  gender?: boolean
+  dob?: boolean
+  placeOfBirth?: boolean
+  maritalStatus?: boolean
+  citizenship?: boolean
+  pan?: boolean
+  voterId?: boolean
+  employmentType?: boolean
+  educationalQualification?: boolean
+  visibleIdentificationMark?: boolean
+  aadhaarNumber?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  spouseName?: boolean
+  legalGuardianName?: boolean
+  presentAddressLine1?: boolean
+  presentAddressLine2?: boolean
+  presentCity?: boolean
+  presentDistrict?: boolean
+  presentState?: boolean
+  presentPinCode?: boolean
+  policeStation?: boolean
+  isPermanentSame?: boolean
+  permanentAddress?: boolean
+  emergencyName?: boolean
+  emergencyRelationship?: boolean
+  emergencyMobile?: boolean
+  emergencyEmail?: boolean
+  emergencyAddress?: boolean
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: boolean
+  prevIssueDate?: boolean
+  prevExpiryDate?: boolean
+  prevPlaceOfIssue?: boolean
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: boolean
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: boolean
+  hasLostPassport?: boolean
+  lostPassportDetails?: boolean
+  confirmedDeclaration?: boolean
+  clarificationReason?: boolean
+  clarificationRequestedAt?: boolean
+  clarificationResponse?: boolean
+  clarificationRespondedAt?: boolean
+  officerChecklist?: boolean
+  rejectionReason?: boolean
   applicantId?: boolean
   officerId?: boolean
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
@@ -1501,10 +4683,63 @@ export type ApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   applicationId?: boolean
   passportType?: boolean
+  serviceType?: boolean
+  applicationCategory?: boolean
+  bookletType?: boolean
+  rpoLocation?: boolean
   status?: boolean
   submissionDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  givenName?: boolean
+  surname?: boolean
+  gender?: boolean
+  dob?: boolean
+  placeOfBirth?: boolean
+  maritalStatus?: boolean
+  citizenship?: boolean
+  pan?: boolean
+  voterId?: boolean
+  employmentType?: boolean
+  educationalQualification?: boolean
+  visibleIdentificationMark?: boolean
+  aadhaarNumber?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  spouseName?: boolean
+  legalGuardianName?: boolean
+  presentAddressLine1?: boolean
+  presentAddressLine2?: boolean
+  presentCity?: boolean
+  presentDistrict?: boolean
+  presentState?: boolean
+  presentPinCode?: boolean
+  policeStation?: boolean
+  isPermanentSame?: boolean
+  permanentAddress?: boolean
+  emergencyName?: boolean
+  emergencyRelationship?: boolean
+  emergencyMobile?: boolean
+  emergencyEmail?: boolean
+  emergencyAddress?: boolean
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: boolean
+  prevIssueDate?: boolean
+  prevExpiryDate?: boolean
+  prevPlaceOfIssue?: boolean
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: boolean
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: boolean
+  hasLostPassport?: boolean
+  lostPassportDetails?: boolean
+  confirmedDeclaration?: boolean
+  clarificationReason?: boolean
+  clarificationRequestedAt?: boolean
+  clarificationResponse?: boolean
+  clarificationRespondedAt?: boolean
+  officerChecklist?: boolean
+  rejectionReason?: boolean
   applicantId?: boolean
   officerId?: boolean
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
@@ -1515,10 +4750,63 @@ export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   applicationId?: boolean
   passportType?: boolean
+  serviceType?: boolean
+  applicationCategory?: boolean
+  bookletType?: boolean
+  rpoLocation?: boolean
   status?: boolean
   submissionDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  givenName?: boolean
+  surname?: boolean
+  gender?: boolean
+  dob?: boolean
+  placeOfBirth?: boolean
+  maritalStatus?: boolean
+  citizenship?: boolean
+  pan?: boolean
+  voterId?: boolean
+  employmentType?: boolean
+  educationalQualification?: boolean
+  visibleIdentificationMark?: boolean
+  aadhaarNumber?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  spouseName?: boolean
+  legalGuardianName?: boolean
+  presentAddressLine1?: boolean
+  presentAddressLine2?: boolean
+  presentCity?: boolean
+  presentDistrict?: boolean
+  presentState?: boolean
+  presentPinCode?: boolean
+  policeStation?: boolean
+  isPermanentSame?: boolean
+  permanentAddress?: boolean
+  emergencyName?: boolean
+  emergencyRelationship?: boolean
+  emergencyMobile?: boolean
+  emergencyEmail?: boolean
+  emergencyAddress?: boolean
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: boolean
+  prevIssueDate?: boolean
+  prevExpiryDate?: boolean
+  prevPlaceOfIssue?: boolean
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: boolean
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: boolean
+  hasLostPassport?: boolean
+  lostPassportDetails?: boolean
+  confirmedDeclaration?: boolean
+  clarificationReason?: boolean
+  clarificationRequestedAt?: boolean
+  clarificationResponse?: boolean
+  clarificationRespondedAt?: boolean
+  officerChecklist?: boolean
+  rejectionReason?: boolean
   applicantId?: boolean
   officerId?: boolean
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
@@ -1529,15 +4817,68 @@ export type ApplicationSelectScalar = {
   id?: boolean
   applicationId?: boolean
   passportType?: boolean
+  serviceType?: boolean
+  applicationCategory?: boolean
+  bookletType?: boolean
+  rpoLocation?: boolean
   status?: boolean
   submissionDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  givenName?: boolean
+  surname?: boolean
+  gender?: boolean
+  dob?: boolean
+  placeOfBirth?: boolean
+  maritalStatus?: boolean
+  citizenship?: boolean
+  pan?: boolean
+  voterId?: boolean
+  employmentType?: boolean
+  educationalQualification?: boolean
+  visibleIdentificationMark?: boolean
+  aadhaarNumber?: boolean
+  fatherName?: boolean
+  motherName?: boolean
+  spouseName?: boolean
+  legalGuardianName?: boolean
+  presentAddressLine1?: boolean
+  presentAddressLine2?: boolean
+  presentCity?: boolean
+  presentDistrict?: boolean
+  presentState?: boolean
+  presentPinCode?: boolean
+  policeStation?: boolean
+  isPermanentSame?: boolean
+  permanentAddress?: boolean
+  emergencyName?: boolean
+  emergencyRelationship?: boolean
+  emergencyMobile?: boolean
+  emergencyEmail?: boolean
+  emergencyAddress?: boolean
+  hasPreviousPassport?: boolean
+  prevPassportNumber?: boolean
+  prevIssueDate?: boolean
+  prevExpiryDate?: boolean
+  prevPlaceOfIssue?: boolean
+  hasCriminalRecord?: boolean
+  criminalRecordDetails?: boolean
+  hasPendingProceedings?: boolean
+  pendingProceedingsDetails?: boolean
+  hasLostPassport?: boolean
+  lostPassportDetails?: boolean
+  confirmedDeclaration?: boolean
+  clarificationReason?: boolean
+  clarificationRequestedAt?: boolean
+  clarificationResponse?: boolean
+  clarificationRespondedAt?: boolean
+  officerChecklist?: boolean
+  rejectionReason?: boolean
   applicantId?: boolean
   officerId?: boolean
 }
 
-export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "passportType" | "status" | "submissionDate" | "createdAt" | "updatedAt" | "applicantId" | "officerId", ExtArgs["result"]["application"]>
+export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "passportType" | "serviceType" | "applicationCategory" | "bookletType" | "rpoLocation" | "status" | "submissionDate" | "createdAt" | "updatedAt" | "givenName" | "surname" | "gender" | "dob" | "placeOfBirth" | "maritalStatus" | "citizenship" | "pan" | "voterId" | "employmentType" | "educationalQualification" | "visibleIdentificationMark" | "aadhaarNumber" | "fatherName" | "motherName" | "spouseName" | "legalGuardianName" | "presentAddressLine1" | "presentAddressLine2" | "presentCity" | "presentDistrict" | "presentState" | "presentPinCode" | "policeStation" | "isPermanentSame" | "permanentAddress" | "emergencyName" | "emergencyRelationship" | "emergencyMobile" | "emergencyEmail" | "emergencyAddress" | "hasPreviousPassport" | "prevPassportNumber" | "prevIssueDate" | "prevExpiryDate" | "prevPlaceOfIssue" | "hasCriminalRecord" | "criminalRecordDetails" | "hasPendingProceedings" | "pendingProceedingsDetails" | "hasLostPassport" | "lostPassportDetails" | "confirmedDeclaration" | "clarificationReason" | "clarificationRequestedAt" | "clarificationResponse" | "clarificationRespondedAt" | "officerChecklist" | "rejectionReason" | "applicantId" | "officerId", ExtArgs["result"]["application"]>
 export type ApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   applicant?: boolean | Prisma.ApplicantDefaultArgs<ExtArgs>
   officer?: boolean | Prisma.Application$officerArgs<ExtArgs>
@@ -1574,10 +4915,63 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: number
     applicationId: string
     passportType: string
+    serviceType: string
+    applicationCategory: string
+    bookletType: string
+    rpoLocation: string | null
     status: string
     submissionDate: Date | null
     createdAt: Date
     updatedAt: Date
+    givenName: string | null
+    surname: string | null
+    gender: string | null
+    dob: Date | null
+    placeOfBirth: string | null
+    maritalStatus: string | null
+    citizenship: string | null
+    pan: string | null
+    voterId: string | null
+    employmentType: string | null
+    educationalQualification: string | null
+    visibleIdentificationMark: string | null
+    aadhaarNumber: string | null
+    fatherName: string | null
+    motherName: string | null
+    spouseName: string | null
+    legalGuardianName: string | null
+    presentAddressLine1: string | null
+    presentAddressLine2: string | null
+    presentCity: string | null
+    presentDistrict: string | null
+    presentState: string | null
+    presentPinCode: string | null
+    policeStation: string | null
+    isPermanentSame: boolean
+    permanentAddress: string | null
+    emergencyName: string | null
+    emergencyRelationship: string | null
+    emergencyMobile: string | null
+    emergencyEmail: string | null
+    emergencyAddress: string | null
+    hasPreviousPassport: boolean
+    prevPassportNumber: string | null
+    prevIssueDate: Date | null
+    prevExpiryDate: Date | null
+    prevPlaceOfIssue: string | null
+    hasCriminalRecord: boolean
+    criminalRecordDetails: string | null
+    hasPendingProceedings: boolean
+    pendingProceedingsDetails: string | null
+    hasLostPassport: boolean
+    lostPassportDetails: string | null
+    confirmedDeclaration: boolean
+    clarificationReason: string | null
+    clarificationRequestedAt: Date | null
+    clarificationResponse: string | null
+    clarificationRespondedAt: Date | null
+    officerChecklist: string | null
+    rejectionReason: string | null
     applicantId: number
     officerId: number | null
   }, ExtArgs["result"]["application"]>
@@ -2014,10 +5408,63 @@ export interface ApplicationFieldRefs {
   readonly id: Prisma.FieldRef<"Application", 'Int'>
   readonly applicationId: Prisma.FieldRef<"Application", 'String'>
   readonly passportType: Prisma.FieldRef<"Application", 'String'>
+  readonly serviceType: Prisma.FieldRef<"Application", 'String'>
+  readonly applicationCategory: Prisma.FieldRef<"Application", 'String'>
+  readonly bookletType: Prisma.FieldRef<"Application", 'String'>
+  readonly rpoLocation: Prisma.FieldRef<"Application", 'String'>
   readonly status: Prisma.FieldRef<"Application", 'String'>
   readonly submissionDate: Prisma.FieldRef<"Application", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Application", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly givenName: Prisma.FieldRef<"Application", 'String'>
+  readonly surname: Prisma.FieldRef<"Application", 'String'>
+  readonly gender: Prisma.FieldRef<"Application", 'String'>
+  readonly dob: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly placeOfBirth: Prisma.FieldRef<"Application", 'String'>
+  readonly maritalStatus: Prisma.FieldRef<"Application", 'String'>
+  readonly citizenship: Prisma.FieldRef<"Application", 'String'>
+  readonly pan: Prisma.FieldRef<"Application", 'String'>
+  readonly voterId: Prisma.FieldRef<"Application", 'String'>
+  readonly employmentType: Prisma.FieldRef<"Application", 'String'>
+  readonly educationalQualification: Prisma.FieldRef<"Application", 'String'>
+  readonly visibleIdentificationMark: Prisma.FieldRef<"Application", 'String'>
+  readonly aadhaarNumber: Prisma.FieldRef<"Application", 'String'>
+  readonly fatherName: Prisma.FieldRef<"Application", 'String'>
+  readonly motherName: Prisma.FieldRef<"Application", 'String'>
+  readonly spouseName: Prisma.FieldRef<"Application", 'String'>
+  readonly legalGuardianName: Prisma.FieldRef<"Application", 'String'>
+  readonly presentAddressLine1: Prisma.FieldRef<"Application", 'String'>
+  readonly presentAddressLine2: Prisma.FieldRef<"Application", 'String'>
+  readonly presentCity: Prisma.FieldRef<"Application", 'String'>
+  readonly presentDistrict: Prisma.FieldRef<"Application", 'String'>
+  readonly presentState: Prisma.FieldRef<"Application", 'String'>
+  readonly presentPinCode: Prisma.FieldRef<"Application", 'String'>
+  readonly policeStation: Prisma.FieldRef<"Application", 'String'>
+  readonly isPermanentSame: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly permanentAddress: Prisma.FieldRef<"Application", 'String'>
+  readonly emergencyName: Prisma.FieldRef<"Application", 'String'>
+  readonly emergencyRelationship: Prisma.FieldRef<"Application", 'String'>
+  readonly emergencyMobile: Prisma.FieldRef<"Application", 'String'>
+  readonly emergencyEmail: Prisma.FieldRef<"Application", 'String'>
+  readonly emergencyAddress: Prisma.FieldRef<"Application", 'String'>
+  readonly hasPreviousPassport: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly prevPassportNumber: Prisma.FieldRef<"Application", 'String'>
+  readonly prevIssueDate: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly prevExpiryDate: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly prevPlaceOfIssue: Prisma.FieldRef<"Application", 'String'>
+  readonly hasCriminalRecord: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly criminalRecordDetails: Prisma.FieldRef<"Application", 'String'>
+  readonly hasPendingProceedings: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly pendingProceedingsDetails: Prisma.FieldRef<"Application", 'String'>
+  readonly hasLostPassport: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly lostPassportDetails: Prisma.FieldRef<"Application", 'String'>
+  readonly confirmedDeclaration: Prisma.FieldRef<"Application", 'Boolean'>
+  readonly clarificationReason: Prisma.FieldRef<"Application", 'String'>
+  readonly clarificationRequestedAt: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly clarificationResponse: Prisma.FieldRef<"Application", 'String'>
+  readonly clarificationRespondedAt: Prisma.FieldRef<"Application", 'DateTime'>
+  readonly officerChecklist: Prisma.FieldRef<"Application", 'String'>
+  readonly rejectionReason: Prisma.FieldRef<"Application", 'String'>
   readonly applicantId: Prisma.FieldRef<"Application", 'Int'>
   readonly officerId: Prisma.FieldRef<"Application", 'Int'>
 }
@@ -2254,7 +5701,6 @@ export type ApplicationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many Applications.
    */
   data: Prisma.ApplicationCreateManyInput | Prisma.ApplicationCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -2273,7 +5719,6 @@ export type ApplicationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many Applications.
    */
   data: Prisma.ApplicationCreateManyInput | Prisma.ApplicationCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

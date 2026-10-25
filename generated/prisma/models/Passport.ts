@@ -44,6 +44,7 @@ export type PassportMinAggregateOutputType = {
   issueDate: Date | null
   expiryDate: Date | null
   dispatchStatus: string | null
+  trackingNumber: string | null
   applicationId: number | null
   officerId: number | null
 }
@@ -54,6 +55,7 @@ export type PassportMaxAggregateOutputType = {
   issueDate: Date | null
   expiryDate: Date | null
   dispatchStatus: string | null
+  trackingNumber: string | null
   applicationId: number | null
   officerId: number | null
 }
@@ -64,6 +66,7 @@ export type PassportCountAggregateOutputType = {
   issueDate: number
   expiryDate: number
   dispatchStatus: number
+  trackingNumber: number
   applicationId: number
   officerId: number
   _all: number
@@ -88,6 +91,7 @@ export type PassportMinAggregateInputType = {
   issueDate?: true
   expiryDate?: true
   dispatchStatus?: true
+  trackingNumber?: true
   applicationId?: true
   officerId?: true
 }
@@ -98,6 +102,7 @@ export type PassportMaxAggregateInputType = {
   issueDate?: true
   expiryDate?: true
   dispatchStatus?: true
+  trackingNumber?: true
   applicationId?: true
   officerId?: true
 }
@@ -108,6 +113,7 @@ export type PassportCountAggregateInputType = {
   issueDate?: true
   expiryDate?: true
   dispatchStatus?: true
+  trackingNumber?: true
   applicationId?: true
   officerId?: true
   _all?: true
@@ -205,6 +211,7 @@ export type PassportGroupByOutputType = {
   issueDate: Date
   expiryDate: Date
   dispatchStatus: string
+  trackingNumber: string | null
   applicationId: number
   officerId: number | null
   _count: PassportCountAggregateOutputType | null
@@ -238,6 +245,7 @@ export type PassportWhereInput = {
   issueDate?: Prisma.DateTimeFilter<"Passport"> | Date | string
   expiryDate?: Prisma.DateTimeFilter<"Passport"> | Date | string
   dispatchStatus?: Prisma.StringFilter<"Passport"> | string
+  trackingNumber?: Prisma.StringNullableFilter<"Passport"> | string | null
   applicationId?: Prisma.IntFilter<"Passport"> | number
   officerId?: Prisma.IntNullableFilter<"Passport"> | number | null
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
@@ -250,6 +258,7 @@ export type PassportOrderByWithRelationInput = {
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
   dispatchStatus?: Prisma.SortOrder
+  trackingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   officerId?: Prisma.SortOrderInput | Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
@@ -266,6 +275,7 @@ export type PassportWhereUniqueInput = Prisma.AtLeast<{
   issueDate?: Prisma.DateTimeFilter<"Passport"> | Date | string
   expiryDate?: Prisma.DateTimeFilter<"Passport"> | Date | string
   dispatchStatus?: Prisma.StringFilter<"Passport"> | string
+  trackingNumber?: Prisma.StringNullableFilter<"Passport"> | string | null
   officerId?: Prisma.IntNullableFilter<"Passport"> | number | null
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
   officer?: Prisma.XOR<Prisma.PassportOfficerNullableScalarRelationFilter, Prisma.PassportOfficerWhereInput> | null
@@ -277,6 +287,7 @@ export type PassportOrderByWithAggregationInput = {
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
   dispatchStatus?: Prisma.SortOrder
+  trackingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   officerId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PassportCountOrderByAggregateInput
@@ -295,6 +306,7 @@ export type PassportScalarWhereWithAggregatesInput = {
   issueDate?: Prisma.DateTimeWithAggregatesFilter<"Passport"> | Date | string
   expiryDate?: Prisma.DateTimeWithAggregatesFilter<"Passport"> | Date | string
   dispatchStatus?: Prisma.StringWithAggregatesFilter<"Passport"> | string
+  trackingNumber?: Prisma.StringNullableWithAggregatesFilter<"Passport"> | string | null
   applicationId?: Prisma.IntWithAggregatesFilter<"Passport"> | number
   officerId?: Prisma.IntNullableWithAggregatesFilter<"Passport"> | number | null
 }
@@ -304,6 +316,7 @@ export type PassportCreateInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   application: Prisma.ApplicationCreateNestedOneWithoutPassportInput
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutPassportsInput
 }
@@ -314,6 +327,7 @@ export type PassportUncheckedCreateInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   applicationId: number
   officerId?: number | null
 }
@@ -323,6 +337,7 @@ export type PassportUpdateInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   application?: Prisma.ApplicationUpdateOneRequiredWithoutPassportNestedInput
   officer?: Prisma.PassportOfficerUpdateOneWithoutPassportsNestedInput
 }
@@ -333,6 +348,7 @@ export type PassportUncheckedUpdateInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -343,6 +359,7 @@ export type PassportCreateManyInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   applicationId: number
   officerId?: number | null
 }
@@ -352,6 +369,7 @@ export type PassportUpdateManyMutationInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PassportUncheckedUpdateManyInput = {
@@ -360,6 +378,7 @@ export type PassportUncheckedUpdateManyInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
@@ -385,6 +404,7 @@ export type PassportCountOrderByAggregateInput = {
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
   dispatchStatus?: Prisma.SortOrder
+  trackingNumber?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -401,6 +421,7 @@ export type PassportMaxOrderByAggregateInput = {
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
   dispatchStatus?: Prisma.SortOrder
+  trackingNumber?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -411,6 +432,7 @@ export type PassportMinOrderByAggregateInput = {
   issueDate?: Prisma.SortOrder
   expiryDate?: Prisma.SortOrder
   dispatchStatus?: Prisma.SortOrder
+  trackingNumber?: Prisma.SortOrder
   applicationId?: Prisma.SortOrder
   officerId?: Prisma.SortOrder
 }
@@ -500,6 +522,7 @@ export type PassportCreateWithoutOfficerInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   application: Prisma.ApplicationCreateNestedOneWithoutPassportInput
 }
 
@@ -509,6 +532,7 @@ export type PassportUncheckedCreateWithoutOfficerInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   applicationId: number
 }
 
@@ -519,7 +543,6 @@ export type PassportCreateOrConnectWithoutOfficerInput = {
 
 export type PassportCreateManyOfficerInputEnvelope = {
   data: Prisma.PassportCreateManyOfficerInput | Prisma.PassportCreateManyOfficerInput[]
-  skipDuplicates?: boolean
 }
 
 export type PassportUpsertWithWhereUniqueWithoutOfficerInput = {
@@ -547,6 +570,7 @@ export type PassportScalarWhereInput = {
   issueDate?: Prisma.DateTimeFilter<"Passport"> | Date | string
   expiryDate?: Prisma.DateTimeFilter<"Passport"> | Date | string
   dispatchStatus?: Prisma.StringFilter<"Passport"> | string
+  trackingNumber?: Prisma.StringNullableFilter<"Passport"> | string | null
   applicationId?: Prisma.IntFilter<"Passport"> | number
   officerId?: Prisma.IntNullableFilter<"Passport"> | number | null
 }
@@ -556,6 +580,7 @@ export type PassportCreateWithoutApplicationInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   officer?: Prisma.PassportOfficerCreateNestedOneWithoutPassportsInput
 }
 
@@ -565,6 +590,7 @@ export type PassportUncheckedCreateWithoutApplicationInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   officerId?: number | null
 }
 
@@ -589,6 +615,7 @@ export type PassportUpdateWithoutApplicationInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   officer?: Prisma.PassportOfficerUpdateOneWithoutPassportsNestedInput
 }
 
@@ -598,6 +625,7 @@ export type PassportUncheckedUpdateWithoutApplicationInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   officerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
@@ -607,6 +635,7 @@ export type PassportCreateManyOfficerInput = {
   issueDate: Date | string
   expiryDate: Date | string
   dispatchStatus?: string
+  trackingNumber?: string | null
   applicationId: number
 }
 
@@ -615,6 +644,7 @@ export type PassportUpdateWithoutOfficerInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   application?: Prisma.ApplicationUpdateOneRequiredWithoutPassportNestedInput
 }
 
@@ -624,6 +654,7 @@ export type PassportUncheckedUpdateWithoutOfficerInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -633,6 +664,7 @@ export type PassportUncheckedUpdateManyWithoutOfficerInput = {
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dispatchStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  trackingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   applicationId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -644,6 +676,7 @@ export type PassportSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   issueDate?: boolean
   expiryDate?: boolean
   dispatchStatus?: boolean
+  trackingNumber?: boolean
   applicationId?: boolean
   officerId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -656,6 +689,7 @@ export type PassportSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   issueDate?: boolean
   expiryDate?: boolean
   dispatchStatus?: boolean
+  trackingNumber?: boolean
   applicationId?: boolean
   officerId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -668,6 +702,7 @@ export type PassportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   issueDate?: boolean
   expiryDate?: boolean
   dispatchStatus?: boolean
+  trackingNumber?: boolean
   applicationId?: boolean
   officerId?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -680,11 +715,12 @@ export type PassportSelectScalar = {
   issueDate?: boolean
   expiryDate?: boolean
   dispatchStatus?: boolean
+  trackingNumber?: boolean
   applicationId?: boolean
   officerId?: boolean
 }
 
-export type PassportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "passportNumber" | "issueDate" | "expiryDate" | "dispatchStatus" | "applicationId" | "officerId", ExtArgs["result"]["passport"]>
+export type PassportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "passportNumber" | "issueDate" | "expiryDate" | "dispatchStatus" | "trackingNumber" | "applicationId" | "officerId", ExtArgs["result"]["passport"]>
 export type PassportInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
   officer?: boolean | Prisma.Passport$officerArgs<ExtArgs>
@@ -710,6 +746,7 @@ export type $PassportPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     issueDate: Date
     expiryDate: Date
     dispatchStatus: string
+    trackingNumber: string | null
     applicationId: number
     officerId: number | null
   }, ExtArgs["result"]["passport"]>
@@ -1142,6 +1179,7 @@ export interface PassportFieldRefs {
   readonly issueDate: Prisma.FieldRef<"Passport", 'DateTime'>
   readonly expiryDate: Prisma.FieldRef<"Passport", 'DateTime'>
   readonly dispatchStatus: Prisma.FieldRef<"Passport", 'String'>
+  readonly trackingNumber: Prisma.FieldRef<"Passport", 'String'>
   readonly applicationId: Prisma.FieldRef<"Passport", 'Int'>
   readonly officerId: Prisma.FieldRef<"Passport", 'Int'>
 }
@@ -1378,7 +1416,6 @@ export type PassportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many Passports.
    */
   data: Prisma.PassportCreateManyInput | Prisma.PassportCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1397,7 +1434,6 @@ export type PassportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many Passports.
    */
   data: Prisma.PassportCreateManyInput | Prisma.PassportCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Lock, User, CheckCircle2, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,12 +40,12 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Login failed.");
+        setError(data.error || "Login credentials could not be authenticated.");
         setLoading(false);
         return;
       }
 
-      // Redirect based on the user's role
+      // Redirect according to role
       if (data.user.role === "APPLICANT") {
         router.push("/applicant/dashboard");
       } else if (data.user.role === "OFFICER") {
@@ -52,181 +53,182 @@ export default function LoginPage() {
       } else if (data.user.role === "POLICE") {
         router.push("/police/dashboard");
       } else if (data.user.role === "ADMIN") {
-        router.push("/admin/dashboard");
+        router.push("/officer/dashboard");
       } else {
-        setError("Unknown user role.");
+        setError("Unknown role assigned to user account.");
         setLoading(false);
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("Unable to connect to the server.");
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Unable to connect to authentication server. Please check your network.");
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col justify-between">
+      {/* Tricolor Ribbon */}
+      <div className="h-1.5 w-full flex">
+        <div className="flex-1 bg-[#FF9933]"></div>
+        <div className="flex-1 bg-white"></div>
+        <div className="flex-1 bg-[#138808]"></div>
+      </div>
+
       {/* Header */}
-      <header className="border-b border-slate-800">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <header className="bg-white border-b border-slate-200">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 py-3.5">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 font-bold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-950 text-white font-bold text-sm shadow-xs">
               PAS
             </div>
-
             <div>
-              <h1 className="font-bold">Passport Automation System</h1>
-
-              <p className="text-xs text-slate-400">
-                Secure • Simple • Transparent
-              </p>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-base text-slate-900 tracking-tight">Passport Automation System</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold uppercase">Academic</span>
+              </div>
+              <p className="text-xs text-slate-500">Government Service Workflow Simulation</p>
             </div>
           </Link>
 
           <Link
             href="/register"
-            className="text-sm text-blue-400 hover:text-blue-300"
+            className="text-xs font-semibold text-blue-950 hover:underline"
           >
-            Create an account
+            New Citizen Registration →
           </Link>
         </div>
       </header>
 
-      {/* Login Section */}
-      <section className="flex min-h-[calc(100vh-81px)] items-center justify-center px-6 py-12">
+      {/* Main Login Form Section */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12">
         <div className="w-full max-w-md">
+          {/* Header */}
           <div className="mb-6 text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-blue-400">
-              Secure Portal Login
-            </p>
-
-            <h2 className="mt-2 text-3xl font-bold">Welcome back</h2>
-
-            <p className="mt-2 text-sm text-slate-400">
-              Sign in to access your role dashboard.
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-blue-100 text-blue-900 text-xs font-semibold mb-2">
+              <Lock className="w-3.5 h-3.5" />
+              Role-Based Authentication
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900">Sign in to Passport Portal</h1>
+            <p className="text-xs text-slate-500 mt-1">
+              Access your Citizen Application, RPO Officer Terminal, or Police Enquiry Roster.
             </p>
           </div>
 
-          {/* Quick Demo Login Preset Buttons */}
-          <div className="mb-6 rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-              ⚡ Quick Fill Demo Accounts
+          {/* Quick Demo Fill Buttons */}
+          <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50/70 p-4 shadow-xs">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-blue-950 mb-2 flex items-center gap-1">
+              <span>⚡ One-Click Demo Credentials:</span>
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => fillCredentials("applicant_demo", "Applicant@123")}
-                className="rounded-lg border border-blue-500/30 bg-blue-500/10 px-2 py-2 text-xs font-medium text-blue-300 hover:bg-blue-500/20 transition text-center"
+                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs"
               >
                 👤 Applicant
               </button>
               <button
                 type="button"
                 onClick={() => fillCredentials("officer_demo", "Officer@123")}
-                className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-2 py-2 text-xs font-medium text-amber-300 hover:bg-amber-500/20 transition text-center"
+                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs"
               >
                 🧑‍💼 Officer
               </button>
               <button
                 type="button"
                 onClick={() => fillCredentials("police_demo", "Police@123")}
-                className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-2 text-xs font-medium text-emerald-300 hover:bg-emerald-500/20 transition text-center"
+                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs"
               >
                 👮 Police
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials("admin_demo", "Admin@123")}
-                className="rounded-lg border border-purple-500/30 bg-purple-500/10 px-2 py-2 text-xs font-medium text-purple-300 hover:bg-purple-500/20 transition text-center"
-              >
-                🛡️ Admin
               </button>
             </div>
           </div>
 
-          <form
-            onSubmit={handleLogin}
-            className="space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-xl"
-          >
-            {/* Username */}
-            <div>
-              <label
-                htmlFor="username"
-                className="mb-2 block text-sm font-medium"
-              >
-                Username
-              </label>
+          {/* Error Notice */}
+          {error && (
+            <div className="mb-6 p-3 rounded-lg bg-rose-50 border border-rose-300 text-rose-800 text-xs font-semibold flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
 
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                placeholder="Enter your username"
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500"
-                required
-              />
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Username / Login ID
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter username"
+                  required
+                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-900"
+                />
+                <User className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              </div>
             </div>
 
-            {/* Password */}
             <div>
-              <div className="mb-2 flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium"
-                >
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
                   Password
                 </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-xs font-medium text-blue-400 hover:text-blue-300"
-                >
+                <Link href="/forgot-password" className="text-[11px] text-blue-900 hover:underline">
                   Forgot password?
                 </Link>
               </div>
-
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="Enter your password"
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500"
-                required
-              />
+              <div className="relative">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                  required
+                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-900"
+                />
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              </div>
             </div>
 
-            {/* Error message */}
-            {error && (
-              <div className="rounded-lg border border-red-800 bg-red-950/50 px-4 py-3 text-sm text-red-300">
-                {error}
-              </div>
-            )}
-
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Signing in..." : "Login"}
-            </button>
-
-            {/* Register Link */}
-            <p className="text-center text-sm text-slate-400">
-              Don't have an account?{" "}
-              <Link
-                href="/register"
-                className="font-medium text-blue-400 hover:text-blue-300"
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 px-4 bg-blue-950 text-white font-semibold text-sm rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-xs flex items-center justify-center gap-2"
               >
-                Register as Applicant
-              </Link>
-            </p>
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Authenticating Credentials...
+                  </>
+                ) : (
+                  <>
+                    Sign In to Portal
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="text-center pt-2 border-t border-slate-100">
+              <p className="text-xs text-slate-500">
+                Don't have an account yet?{" "}
+                <Link href="/register" className="font-semibold text-blue-950 hover:underline">
+                  Register as a Citizen
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
-      </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        <p>Passport Automation System (PAS) • Academic Software Engineering Project</p>
+      </footer>
     </main>
   );
 }

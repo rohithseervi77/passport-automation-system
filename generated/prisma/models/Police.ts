@@ -344,11 +344,6 @@ export type PoliceSumOrderByAggregateInput = {
   userId?: Prisma.SortOrder
 }
 
-export type PoliceScalarRelationFilter = {
-  is?: Prisma.PoliceWhereInput
-  isNot?: Prisma.PoliceWhereInput
-}
-
 export type PoliceCreateNestedOneWithoutUserInput = {
   create?: Prisma.XOR<Prisma.PoliceCreateWithoutUserInput, Prisma.PoliceUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.PoliceCreateOrConnectWithoutUserInput
@@ -387,10 +382,12 @@ export type PoliceCreateNestedOneWithoutReportsInput = {
   connect?: Prisma.PoliceWhereUniqueInput
 }
 
-export type PoliceUpdateOneRequiredWithoutReportsNestedInput = {
+export type PoliceUpdateOneWithoutReportsNestedInput = {
   create?: Prisma.XOR<Prisma.PoliceCreateWithoutReportsInput, Prisma.PoliceUncheckedCreateWithoutReportsInput>
   connectOrCreate?: Prisma.PoliceCreateOrConnectWithoutReportsInput
   upsert?: Prisma.PoliceUpsertWithoutReportsInput
+  disconnect?: Prisma.PoliceWhereInput | boolean
+  delete?: Prisma.PoliceWhereInput | boolean
   connect?: Prisma.PoliceWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.PoliceUpdateToOneWithWhereWithoutReportsInput, Prisma.PoliceUpdateWithoutReportsInput>, Prisma.PoliceUncheckedUpdateWithoutReportsInput>
 }
@@ -1230,7 +1227,6 @@ export type PoliceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Police.
    */
   data: Prisma.PoliceCreateManyInput | Prisma.PoliceCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1249,7 +1245,6 @@ export type PoliceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Police.
    */
   data: Prisma.PoliceCreateManyInput | Prisma.PoliceCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

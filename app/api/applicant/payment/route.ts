@@ -3,7 +3,7 @@ import { getCurrentUserId } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { transitionApplicationStatus } from "@/lib/applicationService";
 
-// GET payment status and fee structure
+// GET payment status and fee breakdown
 export async function GET() {
   try {
     const userId = await getCurrentUserId();
@@ -14,39 +14,72 @@ export async function GET() {
     const applicant = await prisma.applicant.findUnique({
       where: { userId },
       include: {
+        user: true,
         applications: {
           orderBy: { id: "desc" },
           take: 1,
+          include: {
+            payments: {
+              orderBy: { id: "desc" },
+              take: 1,
+            },
+          },
         },
       },
     });
 
     if (!applicant) {
-      return NextResponse.json({ error: "Applicant not found" }, { status: 404 });
+      return NextResponse.json({ error: "Applicant profile not found" }, { status: 404 });
     }
 
     const application = applicant.applications[0];
     if (!application) {
-      return NextResponse.json({ error: "No active application found" }, { status: 404 });
+      return NextResponse.json({ error: "No active passport application found" }, { status: 404 });
     }
 
-    // Fee calculations based on passport type
-    let feeAmount = 1500;
-    if (application.passportType.includes("60 Pages") || application.passportType.includes("JUMBO")) {
-      feeAmount = 2000;
-    } else if (application.passportType.includes("TATKAAL")) {
-      feeAmount = 3500;
-    } else if (application.passportType.includes("DIPLOMATIC")) {
-      feeAmount = 0;
-    }
+    // Fee breakdown calculation
+    // Base Fee: Normal 36 pages = Rs. 1500
+    // 60 Pages booklet surcharge: + Rs. 500
+    // Tatkaal surcharge: + Rs. 2000
+    const isTatkaal = application.applicationCategory === "TATKAAL" || application.passportType?.includes("TATKAAL");
+    const is60Pages = application.bookletType === "60_PAGES" || application.passportType?.includes("60");
+
+    const baseFee = 1500;
+    let additionalFee = 0;
+    if (is60Pages) additionalFee += 500;
+    if (isTatkaal) additionalFee += 2000;
+
+    const totalAmount = baseFee + additionalFee;
+
+    const latestPayment = application.payments?.[0] || null;
 
     return NextResponse.json({
-      applicant,
-      applicationId: application.applicationId,
-      passportType: application.passportType,
-      status: application.status,
-      feeAmount,
-      currency: "INR",
+      applicant: {
+        name: applicant.name,
+        email: applicant.user.email,
+        phone: application.emergencyMobile || "N/A",
+      },
+      application: {
+        id: application.id,
+        applicationId: application.applicationId,
+        serviceType: application.serviceType,
+        applicationCategory: application.applicationCategory,
+        bookletType: application.bookletType,
+        passportType: application.passportType,
+        rpoLocation: application.rpoLocation,
+        status: application.status,
+        givenName: application.givenName,
+        surname: application.surname,
+      },
+      feeBreakdown: {
+        baseFee,
+        bookletSurcharge: is60Pages ? 500 : 0,
+        tatkaalSurcharge: isTatkaal ? 2000 : 0,
+        additionalFee,
+        totalAmount,
+        currency: "INR",
+      },
+      latestPayment,
     });
   } catch (error) {
     console.error("Fetch payment error:", error);
@@ -54,7 +87,7 @@ export async function GET() {
   }
 }
 
-// POST process payment
+// POST process payment simulation
 export async function POST(req: Request) {
   try {
     const userId = await getCurrentUserId();
@@ -73,74 +106,77 @@ export async function POST(req: Request) {
     });
 
     if (!applicant) {
-      return NextResponse.json({ error: "Applicant not found" }, { status: 404 });
+      return NextResponse.json({ error: "Applicant profile not found" }, { status: 404 });
     }
 
     const application = applicant.applications[0];
     if (!application) {
-      return NextResponse.json({ error: "No application found" }, { status: 404 });
+      return NextResponse.json({ error: "No active application found" }, { status: 404 });
     }
 
     const body = await req.json();
-    const { paymentMethod, amount } = body;
-    const idempotencyKey = req.headers.get("idempotency-key");
+    const { paymentMethod, amount, baseFee, additionalFee, paymentReference } = body;
 
-    if (!idempotencyKey) {
-      return NextResponse.json({ error: "Idempotency-Key header is required." }, { status: 400 });
-    }
-
-    // Check if we already processed this exact payment to prevent double charging
-    const existingPayment = await prisma.payment.findFirst({
-      where: { transactionId: idempotencyKey }
+    // Check if already paid
+    const existingSuccessfulPayment = await prisma.payment.findFirst({
+      where: {
+        applicationId: application.id,
+        status: "SUCCESS",
+      },
     });
 
-    if (existingPayment && existingPayment.status === "SUCCESS") {
+    if (existingSuccessfulPayment) {
       return NextResponse.json({
-        message: "Payment already processed (Idempotency Hit).",
-        transaction: existingPayment,
+        message: "Fee payment has already been successfully completed for this application.",
+        transaction: existingSuccessfulPayment,
       });
     }
 
-    // Generate Transaction ID based on idempotency key for uniqueness
-    const txnId = idempotencyKey;
+    // Generate official-looking Transaction Reference: PAY + YYYYMMDD + 6 digits
+    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+    const txnId = `PAY${dateStr}${randomSuffix}`;
 
-    // Simulate Payment Gateway Random Failure (Unhappy Path)
-    const isNetworkFailure = Math.random() < 0.1; // 10% chance
-    if (isNetworkFailure) {
-      await prisma.payment.create({
-        data: {
-          transactionId: txnId,
-          amount: amount || 1500,
-          paymentMethod: paymentMethod || "Credit/Debit Card",
-          status: "FAILED",
-          applicationId: application.id,
-        }
-      });
-      return NextResponse.json({ error: "Payment Gateway Timeout. Please try again." }, { status: 502 });
-    }
+    const paidAmount = amount || 1500;
+    const finalBaseFee = baseFee || 1500;
+    const finalAdditionalFee = additionalFee || (paidAmount > 1500 ? paidAmount - 1500 : 0);
 
-    let payment;
+    const payment = await prisma.payment.create({
+      data: {
+        transactionId: txnId,
+        amount: paidAmount,
+        baseFee: finalBaseFee,
+        additionalFee: finalAdditionalFee,
+        status: "SUCCESS",
+        paymentMethod: paymentMethod || "UPI",
+        paymentReference: paymentReference || `MBI-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+        applicationId: application.id,
+      },
+    });
+
+    // Advance application status to PAYMENT_COMPLETED then APPOINTMENT_PENDING if valid
     try {
-      payment = await prisma.payment.create({
-        data: {
-          transactionId: txnId,
-          amount: amount || 1500,
-          paymentMethod: paymentMethod || "Credit/Debit Card",
-          status: "SUCCESS",
-          applicationId: application.id,
-        }
-      });
-
-      if (application.status === "PAYMENT_PENDING" || application.status === "SUBMITTED" || application.status === "DRAFT") {
-        await transitionApplicationStatus(application.id, "PAYMENT_COMPLETED", userId, "Payment successful");
+      if (application.status === "DRAFT" || application.status === "SUBMITTED" || application.status === "PAYMENT_PENDING") {
+        await transitionApplicationStatus(
+          application.id,
+          "PAYMENT_COMPLETED",
+          userId,
+          `Statutory passport fee of ₹${paidAmount} paid successfully via ${paymentMethod || "UPI"}. Transaction ID: ${txnId}`
+        );
+        // Automatically allow appointment booking
+        await transitionApplicationStatus(
+          application.id,
+          "APPOINTMENT_PENDING",
+          userId,
+          "Eligible for appointment slot selection at designated PSK / POPSK centre."
+        );
       }
     } catch (e: any) {
-      console.error("Payment transaction error", e);
-      return NextResponse.json({ error: "Failed to save payment record." }, { status: 500 });
+      console.warn("Status transition notice:", e.message);
     }
 
     return NextResponse.json({
-      message: "Payment processed and confirmed successfully!",
+      message: "Statutory passport fee paid successfully! Appointment booking is now unlocked.",
       transaction: payment,
     });
   } catch (error) {

@@ -1571,9 +1571,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -1641,10 +1638,63 @@ export const ApplicationScalarFieldEnum = {
   id: 'id',
   applicationId: 'applicationId',
   passportType: 'passportType',
+  serviceType: 'serviceType',
+  applicationCategory: 'applicationCategory',
+  bookletType: 'bookletType',
+  rpoLocation: 'rpoLocation',
   status: 'status',
   submissionDate: 'submissionDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  givenName: 'givenName',
+  surname: 'surname',
+  gender: 'gender',
+  dob: 'dob',
+  placeOfBirth: 'placeOfBirth',
+  maritalStatus: 'maritalStatus',
+  citizenship: 'citizenship',
+  pan: 'pan',
+  voterId: 'voterId',
+  employmentType: 'employmentType',
+  educationalQualification: 'educationalQualification',
+  visibleIdentificationMark: 'visibleIdentificationMark',
+  aadhaarNumber: 'aadhaarNumber',
+  fatherName: 'fatherName',
+  motherName: 'motherName',
+  spouseName: 'spouseName',
+  legalGuardianName: 'legalGuardianName',
+  presentAddressLine1: 'presentAddressLine1',
+  presentAddressLine2: 'presentAddressLine2',
+  presentCity: 'presentCity',
+  presentDistrict: 'presentDistrict',
+  presentState: 'presentState',
+  presentPinCode: 'presentPinCode',
+  policeStation: 'policeStation',
+  isPermanentSame: 'isPermanentSame',
+  permanentAddress: 'permanentAddress',
+  emergencyName: 'emergencyName',
+  emergencyRelationship: 'emergencyRelationship',
+  emergencyMobile: 'emergencyMobile',
+  emergencyEmail: 'emergencyEmail',
+  emergencyAddress: 'emergencyAddress',
+  hasPreviousPassport: 'hasPreviousPassport',
+  prevPassportNumber: 'prevPassportNumber',
+  prevIssueDate: 'prevIssueDate',
+  prevExpiryDate: 'prevExpiryDate',
+  prevPlaceOfIssue: 'prevPlaceOfIssue',
+  hasCriminalRecord: 'hasCriminalRecord',
+  criminalRecordDetails: 'criminalRecordDetails',
+  hasPendingProceedings: 'hasPendingProceedings',
+  pendingProceedingsDetails: 'pendingProceedingsDetails',
+  hasLostPassport: 'hasLostPassport',
+  lostPassportDetails: 'lostPassportDetails',
+  confirmedDeclaration: 'confirmedDeclaration',
+  clarificationReason: 'clarificationReason',
+  clarificationRequestedAt: 'clarificationRequestedAt',
+  clarificationResponse: 'clarificationResponse',
+  clarificationRespondedAt: 'clarificationRespondedAt',
+  officerChecklist: 'officerChecklist',
+  rejectionReason: 'rejectionReason',
   applicantId: 'applicantId',
   officerId: 'officerId'
 } as const
@@ -1658,6 +1708,8 @@ export const ApplicationStatusHistoryScalarFieldEnum = {
   fromStatus: 'fromStatus',
   toStatus: 'toStatus',
   remarks: 'remarks',
+  performedBy: 'performedBy',
+  role: 'role',
   changedById: 'changedById',
   changedAt: 'changedAt'
 } as const
@@ -1671,6 +1723,8 @@ export const DocumentScalarFieldEnum = {
   documentType: 'documentType',
   fileStatus: 'fileStatus',
   fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
   uploadedAt: 'uploadedAt',
   applicationId: 'applicationId'
 } as const
@@ -1681,9 +1735,12 @@ export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typ
 export const AppointmentScalarFieldEnum = {
   id: 'id',
   appointmentId: 'appointmentId',
+  quota: 'quota',
+  location: 'location',
   date: 'date',
   timeSlot: 'timeSlot',
   status: 'status',
+  rescheduleCount: 'rescheduleCount',
   applicationId: 'applicationId'
 } as const
 
@@ -1694,8 +1751,11 @@ export const PaymentScalarFieldEnum = {
   id: 'id',
   transactionId: 'transactionId',
   amount: 'amount',
+  baseFee: 'baseFee',
+  additionalFee: 'additionalFee',
   status: 'status',
   paymentMethod: 'paymentMethod',
+  paymentReference: 'paymentReference',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   applicationId: 'applicationId'
@@ -1709,6 +1769,9 @@ export const PoliceReportScalarFieldEnum = {
   reportId: 'reportId',
   clearanceStatus: 'clearanceStatus',
   remarks: 'remarks',
+  adverseReason: 'adverseReason',
+  stationCode: 'stationCode',
+  verifiedAt: 'verifiedAt',
   createdAt: 'createdAt',
   applicationId: 'applicationId',
   policeId: 'policeId'
@@ -1723,6 +1786,7 @@ export const PassportScalarFieldEnum = {
   issueDate: 'issueDate',
   expiryDate: 'expiryDate',
   dispatchStatus: 'dispatchStatus',
+  trackingNumber: 'trackingNumber',
   applicationId: 'applicationId',
   officerId: 'officerId'
 } as const
@@ -1777,14 +1841,6 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -1807,23 +1863,9 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'String'
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
-
-
-/**
- * Reference to a field of type 'String[]'
- */
-export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
     
 
 
@@ -1842,23 +1884,9 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
 
 
 /**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
