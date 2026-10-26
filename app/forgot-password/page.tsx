@@ -9,7 +9,10 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  
+  const [rateLimited, setRateLimited] = useState(false);
+  const [resetUrl, setResetUrl] = useState("");
+  const [actionLink, setActionLink] = useState("");
+
   // For development debugging only
   const [debugToken, setDebugToken] = useState("");
   const router = useRouter();
@@ -20,6 +23,9 @@ export default function ForgotPasswordPage() {
     setError("");
     setMessage("");
     setDebugToken("");
+    setResetUrl("");
+    setActionLink("");
+    setRateLimited(false);
     setLoading(true);
 
     try {
@@ -39,7 +45,16 @@ export default function ForgotPasswordPage() {
         return;
       }
 
-      setMessage(data.message || "A reset link has been sent if the email exists.");
+      setMessage(data.message || "A reset link has been dispatched.");
+      if (data.rateLimited) {
+        setRateLimited(true);
+      }
+      if (data.resetUrl) {
+        setResetUrl(data.resetUrl);
+      }
+      if (data.actionLink) {
+        setActionLink(data.actionLink);
+      }
       if (data.simulatedToken) {
         setDebugToken(data.simulatedToken);
       }
@@ -107,12 +122,44 @@ export default function ForgotPasswordPage() {
             )}
 
             {message && (
-              <div className="rounded-lg border border-emerald-800 bg-emerald-950/50 px-4 py-3 text-sm text-emerald-300">
-                {message}
+              <div
+                className={`rounded-lg border px-4 py-3 text-xs leading-relaxed ${
+                  rateLimited
+                    ? "border-amber-500/50 bg-amber-950/40 text-amber-200"
+                    : "border-emerald-800 bg-emerald-950/50 text-emerald-300"
+                }`}
+              >
+                <div className="font-semibold mb-1 flex items-center gap-1.5">
+                  {rateLimited ? "⚠️ Hourly Mail Quota Reached (Free Tier)" : "✉️ Reset Link Dispatched"}
+                </div>
+                <p>{message}</p>
+                {!rateLimited && (
+                  <p className="mt-2 text-[11px] text-emerald-400/80">
+                    * If you do not see the email in your inbox within 1–2 minutes, please inspect your{" "}
+                    <strong>Spam / Junk</strong> folder.
+                  </p>
+                )}
               </div>
             )}
 
-            {debugToken && (
+            {resetUrl && (
+              <div className="rounded-xl border border-blue-500/40 bg-blue-950/30 p-4 text-xs text-blue-200">
+                <div className="font-semibold text-white flex items-center gap-2 mb-1.5">
+                  <span>⚡ Instant Password Reset</span>
+                </div>
+                <p className="text-[11px] text-blue-300 mb-3">
+                  You can immediately update your password now without waiting for email delivery.
+                </p>
+                <a
+                  href={resetUrl}
+                  className="block w-full text-center rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-blue-500 shadow-md"
+                >
+                  Open Password Reset Form →
+                </a>
+              </div>
+            )}
+
+            {debugToken && !resetUrl && (
               <div className="mt-4 p-4 rounded-xl border border-amber-500/30 bg-amber-950/20 text-xs text-amber-200 break-words">
                 <p className="font-bold uppercase tracking-wider mb-2">Simulated Email (Dev Only)</p>
                 <p>A reset link was generated.</p>

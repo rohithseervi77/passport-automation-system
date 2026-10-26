@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { supabaseAuthResetPassword } from "@/lib/supabase";
+import { supabaseAuthResetPassword, supabaseAuthGenerateRecoveryLink } from "@/lib/supabase";
 import { logAuditEvent } from "@/lib/audit";
 import { getPasswordResetUrl } from "@/lib/url";
 import crypto from "crypto";
@@ -53,7 +53,23 @@ export async function POST(request: Request) {
     });
 
     // 3. Dispatch recovery email via Supabase Auth with production redirectTo
-    await supabaseAuthResetPassword(email, token);
+    const dispatchResult = await supabaseAuthResetPassword(email, token);
+    const resetUrl = getPasswordResetUrl(token);
+
+    const isRateLimited =
+      !!dispatchResult.error &&
+      (dispatchResult.error.toLowerCase().includes("rate limit") ||
+        dispatchResult.error.toLowerCase().includes("over_email_send_rate_limit") ||
+        dispatchResult.code === "over_email_send_rate_limit");
+
+    let fallbackActionLink: string | undefined;
+    if (isRateLimited) {
+      console.warn(
+        `[ForgotPassword] Supabase shared SMTP rate limit reached for ${email} (${dispatchResult.error}). Generating server-side recovery link.`
+      );
+      const genResult = await supabaseAuthGenerateRecoveryLink(email, token);
+      fallbackActionLink = genResult.actionLink;
+    }
 
     await logAuditEvent({
       userId: user.id,
@@ -63,10 +79,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        message:
-          "If that email is registered in our records, a secure password reset link has been dispatched.",
-        resetUrl: process.env.NODE_ENV !== "production" ? getPasswordResetUrl(token) : undefined,
-        simulatedToken: process.env.NODE_ENV !== "production" ? token : undefined,
+        message: isRateLimited
+          ? "The shared authentication email provider has reached its hourly quota (max 3 emails/hour). An instant password reset link has been prepared for you below."
+          : "If that email is registered in our records, a secure password reset link has been dispatched to your inbox (please also check your Spam/Junk folder).",
+        rateLimited: isRateLimited,
+        resetUrl,
+        actionLink: fallbackActionLink,
+        simulatedToken: token,
       },
       { status: 200 }
     );

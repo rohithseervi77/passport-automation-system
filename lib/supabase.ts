@@ -234,7 +234,7 @@ export async function supabaseAuthSignIn(params: {
 export async function supabaseAuthResetPassword(
   email: string,
   token?: string
-): Promise<{ error?: string }> {
+): Promise<{ success?: boolean; error?: string; code?: string }> {
   const client = getSupabaseClient() || getSupabaseAdmin();
   if (client) {
     try {
@@ -242,12 +242,47 @@ export async function supabaseAuthResetPassword(
       const { error } = await client.auth.resetPasswordForEmail(email, {
         redirectTo,
       });
-      if (error) return { error: error.message };
+      if (error) {
+        return {
+          error: error.message,
+          code: (error as any).code || ((error as any).status === 429 ? "over_email_send_rate_limit" : undefined),
+        };
+      }
+      return { success: true };
     } catch (err: any) {
-      return { error: err.message };
+      return {
+        error: err.message,
+        code: err.code || (err.status === 429 ? "over_email_send_rate_limit" : undefined),
+      };
     }
   }
-  return {};
+  return { error: "Supabase client not initialized." };
+}
+
+/**
+ * Generates an out-of-band recovery action link using Supabase Admin API.
+ * Bypasses the 3-email/hour shared SMTP rate limit.
+ */
+export async function supabaseAuthGenerateRecoveryLink(
+  email: string,
+  token?: string
+): Promise<{ actionLink?: string; error?: string }> {
+  const adminClient = getSupabaseAdmin();
+  if (!adminClient) return { error: "Supabase admin client not initialized." };
+  try {
+    const redirectTo = token ? getPasswordResetUrl(token) : `${getAppUrl()}/reset-password`;
+    const { data, error } = await adminClient.auth.admin.generateLink({
+      type: "recovery",
+      email,
+      options: {
+        redirectTo,
+      },
+    });
+    if (error) return { error: error.message };
+    return { actionLink: data?.properties?.action_link };
+  } catch (err: any) {
+    return { error: err.message };
+  }
 }
 
 /**
