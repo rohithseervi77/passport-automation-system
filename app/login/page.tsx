@@ -116,36 +116,44 @@ export default function LoginPage() {
 
           {/* Quick Demo Fill Buttons */}
           <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50/70 p-4 shadow-xs">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-blue-950 mb-2 flex items-center gap-1">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-blue-950 mb-2 flex items-center justify-between">
               <span>⚡ One-Click Demo Credentials:</span>
+              <span className="text-[10px] text-slate-500 font-normal">Click any role to autofill</span>
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => fillCredentials("applicant_demo", "Applicant@123")}
-                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs"
+                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs text-center"
               >
                 👤 Applicant
               </button>
               <button
                 type="button"
                 onClick={() => fillCredentials("officer_demo", "Officer@123")}
-                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs"
+                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs text-center"
               >
                 🧑‍💼 Officer
               </button>
               <button
                 type="button"
                 onClick={() => fillCredentials("police_demo", "Police@123")}
-                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs"
+                className="py-1.5 px-2 rounded-md bg-white border border-blue-200 text-[11px] font-semibold text-blue-950 hover:bg-blue-100 transition shadow-2xs text-center"
               >
                 👮 Police
               </button>
-              <Link
-                href="/admin/login"
-                className="py-1.5 px-2 rounded-md bg-purple-50 border border-purple-300 text-[11px] font-semibold text-purple-950 hover:bg-purple-100 transition shadow-2xs text-center flex items-center justify-center gap-1"
+              <button
+                type="button"
+                onClick={() => fillCredentials("admin_demo", "Admin@123")}
+                className="py-1.5 px-2 rounded-md bg-purple-100 border border-purple-300 text-[11px] font-bold text-purple-950 hover:bg-purple-200 transition shadow-2xs text-center"
               >
-                🛡️ Admin →
+                🛡️ Admin
+              </button>
+            </div>
+            <div className="mt-2.5 pt-2 border-t border-blue-200/60 flex items-center justify-between text-[11px]">
+              <span className="text-slate-600">Need dedicated admin gateway?</span>
+              <Link href="/admin/login" className="font-bold text-purple-900 hover:text-purple-700 underline flex items-center gap-1">
+                Go to Dedicated Admin Portal →
               </Link>
             </div>
           </div>

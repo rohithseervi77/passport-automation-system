@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         applicant: true,
         passportOfficer: true,
         police: true,
+        admin: true,
       },
     });
 
@@ -185,6 +186,7 @@ export async function POST(request: Request) {
           applicantId: user.applicant?.applicantId ?? null,
           officerId: user.passportOfficer?.officerId ?? null,
           stationCode: user.police?.stationCode ?? null,
+          adminCode: user.admin?.adminCode ?? null,
         },
       },
       { status: 200 }
