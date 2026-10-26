@@ -212,7 +212,7 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold transition ${
+                  className={`flex items-center gap-1.5 px-2.5 xl:px-3 py-2 rounded-md text-xs font-semibold whitespace-nowrap shrink-0 transition ${
                     isActive
                       ? "bg-blue-50 text-blue-900 border border-blue-200"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"

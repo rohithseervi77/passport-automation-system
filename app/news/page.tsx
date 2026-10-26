@@ -147,25 +147,25 @@ export default function NewsPage() {
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-5 text-xs font-semibold text-slate-700">
-              <Link href="/" className="hover:text-blue-900 transition">Home</Link>
-              <Link href="/news" className="text-blue-900 font-bold">News & Notices</Link>
-              <Link href="/services" className="hover:text-blue-900 transition">Services</Link>
-              <Link href="/fee-calculator" className="hover:text-blue-900 transition">Fee Schedule</Link>
-              <Link href="/locate-centre" className="hover:text-blue-900 transition">Locate Centre</Link>
-              <Link href="/track" className="hover:text-blue-900 transition text-amber-700">Track ARN</Link>
+            <nav className="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-semibold text-slate-700">
+              <Link href="/" className="whitespace-nowrap shrink-0 px-2 py-1.5 rounded hover:text-blue-900 hover:bg-slate-100 transition">Home</Link>
+              <Link href="/news" className="whitespace-nowrap shrink-0 px-2 py-1.5 rounded text-blue-900 bg-blue-50 font-bold">News & Notices</Link>
+              <Link href="/services" className="whitespace-nowrap shrink-0 px-2 py-1.5 rounded hover:text-blue-900 hover:bg-slate-100 transition">Services</Link>
+              <Link href="/fee-calculator" className="whitespace-nowrap shrink-0 px-2 py-1.5 rounded hover:text-blue-900 hover:bg-slate-100 transition">Fee Schedule</Link>
+              <Link href="/locate-centre" className="whitespace-nowrap shrink-0 px-2 py-1.5 rounded hover:text-blue-900 hover:bg-slate-100 transition">Locate Centre</Link>
+              <Link href="/track" className="whitespace-nowrap shrink-0 px-2 py-1.5 rounded hover:text-blue-900 hover:bg-slate-100 transition text-amber-700">Track ARN</Link>
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <Link
                 href="/login"
-                className="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-2xs"
+                className="whitespace-nowrap shrink-0 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-2xs"
               >
                 Sign In
               </Link>
               <Link
                 href="/register"
-                className="px-3.5 py-1.5 rounded-lg bg-blue-950 text-white text-xs font-semibold hover:bg-blue-900 transition shadow-2xs"
+                className="whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-lg bg-blue-950 text-white text-xs font-semibold hover:bg-blue-900 transition shadow-2xs"
               >
                 Register
               </Link>
