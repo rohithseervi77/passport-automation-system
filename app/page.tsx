@@ -136,10 +136,6 @@ export default function Home() {
             <Link href="/locate-centre" className="hover:text-blue-900 transition">Locate Centre</Link>
             <Link href="/track" className="hover:text-blue-900 transition font-medium text-amber-700">Track Application</Link>
             <Link href="/grievance" className="hover:text-blue-900 transition">Grievance</Link>
-            <Link href="/admin/login" className="hover:text-purple-700 transition font-bold text-purple-900 flex items-center gap-1 bg-purple-50 px-2 py-1 rounded border border-purple-200">
-              <Shield className="w-3.5 h-3.5 text-purple-700" />
-              Admin
-            </Link>
           </nav>
 
           {/* Auth Action Buttons */}
