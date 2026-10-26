@@ -8,24 +8,26 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient(): PrismaClient {
+  // Always prioritize the pooled connection string (PgBouncer port 6543) in serverless production
   const connectionString =
-    process.env.DIRECT_URL &&
-    (process.env.DIRECT_URL.startsWith("postgres://") ||
-      process.env.DIRECT_URL.startsWith("postgresql://"))
-      ? process.env.DIRECT_URL
-      : process.env.DATABASE_URL &&
-        (process.env.DATABASE_URL.startsWith("postgres://") ||
-          process.env.DATABASE_URL.startsWith("postgresql://"))
+    process.env.DATABASE_URL &&
+    (process.env.DATABASE_URL.startsWith("postgres://") ||
+      process.env.DATABASE_URL.startsWith("postgresql://"))
       ? process.env.DATABASE_URL
+      : process.env.DIRECT_URL &&
+        (process.env.DIRECT_URL.startsWith("postgres://") ||
+          process.env.DIRECT_URL.startsWith("postgresql://"))
+      ? process.env.DIRECT_URL
       : "postgresql://postgres:postgres@127.0.0.1:5432/passport_db";
 
   const pool =
     globalForPrisma.pgPool ||
     new Pool({
       connectionString,
-      max: 10,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 5000,
+      // In serverless production, keep pool small (1-2 per lambda) to prevent max client exhaustion
+      max: process.env.NODE_ENV === "production" ? 1 : 5,
+      idleTimeoutMillis: 15000,
+      connectionTimeoutMillis: 10000,
       ssl:
         connectionString.includes("supabase.co") ||
         connectionString.includes("supabase.com")
@@ -33,16 +35,19 @@ function createPrismaClient(): PrismaClient {
           : undefined,
     });
 
-  if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.pgPool = pool;
-  }
+  // Prevent idle connection error crashes
+  pool.on("error", (err) => {
+    console.error("PostgreSQL Pool unexpected client error:", err);
+  });
+
+  // Cache pool on globalThis across all environments to reuse across warm lambdas
+  globalForPrisma.pgPool = pool;
 
   const adapter = new PrismaPg(pool);
-  return new PrismaClient({ adapter });
+  const client = new PrismaClient({ adapter });
+
+  globalForPrisma.prisma = client;
+  return client;
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
