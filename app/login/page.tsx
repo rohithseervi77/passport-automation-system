@@ -1,15 +1,20 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Lock, User, CheckCircle2, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
+import { Captcha, CaptchaRef } from "@/components/Captcha";
+import { AttentionNotice } from "@/components/AttentionNotice";
 
 export default function LoginPage() {
   const router = useRouter();
+  const captchaRef = useRef<CaptchaRef | null>(null);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,12 +22,37 @@ export default function LoginPage() {
     setUsername(user);
     setPassword(pass);
     setError("");
+    setCaptchaError("");
+    // Automatically synchronize captcha for seamless one-click demo testing
+    const currentCode = captchaRef.current?.getCode();
+    if (currentCode) {
+      setCaptchaInput(currentCode);
+    }
+  }
+
+  function handleClear() {
+    setUsername("");
+    setPassword("");
+    setCaptchaInput("");
+    setCaptchaError("");
+    setError("");
+    captchaRef.current?.refresh();
   }
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
+    setCaptchaError("");
+
+    // 1. Verify CAPTCHA challenge
+    if (!captchaRef.current?.isValid()) {
+      setCaptchaError("Enter the characters shown in the image correctly.");
+      captchaRef.current?.refresh();
+      setCaptchaInput("");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -41,6 +71,8 @@ export default function LoginPage() {
 
       if (!response.ok) {
         setError(data.error || "Login credentials could not be authenticated.");
+        captchaRef.current?.refresh();
+        setCaptchaInput("");
         setLoading(false);
         return;
       }
@@ -61,6 +93,8 @@ export default function LoginPage() {
     } catch (err) {
       console.error("Login error:", err);
       setError("Unable to connect to authentication server. Please check your network.");
+      captchaRef.current?.refresh();
+      setCaptchaInput("");
       setLoading(false);
     }
   }
@@ -207,16 +241,37 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="pt-2">
+            {/* CAPTCHA Challenge */}
+            <div className="pt-2 border-t border-slate-100">
+              <Captcha
+                ref={captchaRef}
+                value={captchaInput}
+                onChange={(val) => {
+                  setCaptchaInput(val);
+                  setCaptchaError("");
+                }}
+                error={captchaError}
+              />
+            </div>
+
+            {/* Action Buttons: Clear & Sign In */}
+            <div className="pt-2 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleClear}
+                className="w-1/3 py-2.5 px-4 bg-white border-2 border-blue-950 text-blue-950 font-bold text-xs rounded-lg hover:bg-slate-100 transition shadow-2xs"
+              >
+                Clear
+              </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 bg-blue-950 text-white font-semibold text-sm rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-xs flex items-center justify-center gap-2"
+                className="flex-1 py-2.5 px-4 bg-blue-950 text-white font-bold text-xs rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-2xs flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Authenticating Credentials...
+                    Authenticating...
                   </>
                 ) : (
                   <>
@@ -236,6 +291,9 @@ export default function LoginPage() {
               </p>
             </div>
           </form>
+
+          {/* Attention & Alert Notice */}
+          <AttentionNotice className="mt-6" />
         </div>
       </div>
 

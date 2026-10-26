@@ -1,12 +1,16 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Lock, Mail, Building, ShieldCheck, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";
+import { Captcha, CaptchaRef } from "@/components/Captcha";
+import { AttentionNotice } from "@/components/AttentionNotice";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const captchaRef = useRef<CaptchaRef | null>(null);
 
   const [role, setRole] = useState<"APPLICANT" | "OFFICER" | "POLICE">("APPLICANT");
   const [loading, setLoading] = useState(false);
@@ -26,12 +30,42 @@ export default function RegisterPage() {
   const [stationCode, setStationCode] = useState("PS-CENTRAL");
   const [badgeNumber, setBadgeNumber] = useState("");
 
+  // Captcha fields
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+
+  function handleClear() {
+    formRef.current?.reset();
+    setName("");
+    setDob("");
+    setAddress("");
+    setOfficerId("");
+    setBranchLocation("RPO Central Processing Center - Chennai");
+    setStationCode("PS-CENTRAL");
+    setBadgeNumber("");
+    setCaptchaInput("");
+    setCaptchaError("");
+    setError("");
+    setSuccess("");
+    captchaRef.current?.refresh();
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setLoading(true);
     setError("");
     setSuccess("");
+    setCaptchaError("");
+
+    // 1. Verify CAPTCHA challenge
+    if (!captchaRef.current?.isValid()) {
+      setCaptchaError("Enter the characters shown in the image correctly.");
+      captchaRef.current?.refresh();
+      setCaptchaInput("");
+      return;
+    }
+
+    setLoading(true);
 
     const formData = new FormData(event.currentTarget);
 
@@ -69,6 +103,8 @@ export default function RegisterPage() {
 
       if (!response.ok) {
         setError(data.error || "Account registration failed.");
+        captchaRef.current?.refresh();
+        setCaptchaInput("");
         setLoading(false);
         return;
       }
@@ -80,6 +116,8 @@ export default function RegisterPage() {
     } catch (err) {
       console.error("Registration error:", err);
       setError("Unable to connect to registration server.");
+      captchaRef.current?.refresh();
+      setCaptchaInput("");
       setLoading(false);
     }
   }
@@ -181,7 +219,11 @@ export default function RegisterPage() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-4"
+          >
             {/* Account Credentials */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -218,9 +260,9 @@ export default function RegisterPage() {
               <input
                 name="password"
                 type="password"
-                placeholder="At least 6 characters"
+                placeholder="At least 8 characters"
                 required
-                minLength={6}
+                minLength={8}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-900"
               />
             </div>
@@ -339,35 +381,59 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <div className="pt-2">
+            {/* CAPTCHA Challenge (Modeled on official Passport Seva portal) */}
+            <div className="pt-3 border-t border-slate-100">
+              <Captcha
+                ref={captchaRef}
+                value={captchaInput}
+                onChange={(val) => {
+                  setCaptchaInput(val);
+                  setCaptchaError("");
+                }}
+                error={captchaError}
+              />
+            </div>
+
+            {/* Action Buttons: Clear & Sign Up (Side-by-side as in official portal) */}
+            <div className="pt-2 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleClear}
+                className="w-1/2 py-2.5 px-4 bg-white border-2 border-blue-950 text-blue-950 font-bold text-xs rounded-lg hover:bg-slate-100 transition shadow-2xs flex items-center justify-center gap-1.5"
+              >
+                Clear
+              </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 bg-blue-950 text-white font-semibold text-sm rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-xs flex items-center justify-center gap-2"
+                className="w-1/2 py-2.5 px-4 bg-blue-950 text-white font-bold text-xs rounded-lg hover:bg-blue-900 disabled:opacity-50 transition shadow-2xs flex items-center justify-center gap-1.5"
               >
                 {loading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Registering Account...
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Registering...
                   </>
                 ) : (
                   <>
-                    Complete Registration
-                    <ArrowRight className="w-4 h-4" />
+                    Sign Up
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
               </button>
             </div>
 
             <div className="text-center pt-2 border-t border-slate-100">
-              <p className="text-xs text-slate-500">
-                Already registered?{" "}
-                <Link href="/login" className="font-semibold text-blue-950 hover:underline">
-                  Sign In to Portal
+              <p className="text-xs text-slate-600">
+                Already have an Account?{" "}
+                <Link href="/login" className="font-bold text-blue-950 hover:underline">
+                  Sign In
                 </Link>
               </p>
             </div>
           </form>
+
+          {/* Attention & Alert Notice (Modeled directly after official Passport Seva portal) */}
+          <AttentionNotice className="mt-6" />
         </div>
       </div>
 
