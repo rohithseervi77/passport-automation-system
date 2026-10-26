@@ -59,8 +59,11 @@ The diagrams in this repository are **not generic templates**; every class, attr
 ├── 08-collaboration/
 │   ├── application-collaboration.puml/.mmd/.png  # Communication Diagram with Numbered Messages
 │
+├── passport-automation-system.mdj                # Complete Native StarUML Project File
+│
 ├── scripts/
-│   └── build_uml_pngs.mjs                        # Automated high-resolution PNG generation tool
+│   ├── build_uml_pngs.mjs                        # Automated high-resolution PNG generation tool
+│   └── generate_staruml.mjs                      # StarUML (.mdj) JSON model and view generator
 │
 ├── README.md                                     # This academic overview
 └── UML-INDEX.md                                  # Complete diagram registry & Viva mapping table
@@ -117,3 +120,31 @@ To rebuild all 20 diagram images at high resolution:
 node scripts/build_uml_pngs.mjs
 ```
 The script reads each `.puml` file, transmits it to the Kroki rendering engine, and generates the corresponding crisp `.png` file in its folder.
+
+---
+
+## 6. StarUML (.mdj) Native Project File
+
+For software engineering laboratories and viva presentations using **StarUML**, a complete native StarUML project file is provided at:
+👉 **[`/UML/passport-automation-system.mdj`](file:///c:/Users/Rohith/Documents/GitHub/passport-automation-system/UML/passport-automation-system.mdj)**
+
+### Included StarUML Views & Diagrams:
+1. **01 - Use Case View**: Contains all 5 actors, 24 use cases, and `01 - System Use Case Diagram` with complete view coordinate layouts.
+2. **02 - Domain Class View**: Contains all Prisma models (classes, attributes, operations with visibility) and `02 - Domain Class Diagram`.
+3. **03 - Statechart View**: Contains the Application FSM (`UMLStateMachine` + `UMLRegion`) with all 18 states, pseudostates, transitions, and `03 - Application Lifecycle Statechart`.
+4. **04 - Sequence Views**: Contains `UMLInteraction` with lifelines, sequence messages, and `04 - Application Submission Sequence Diagram`.
+5. **05 - Object View**: Contains concrete system instance specifications (`UMLObject`) and `05 - System Runtime Snapshot (Object Diagram)`.
+6. **06 - Component View**: Contains layered architectural components and `06 - Component Architecture Diagram`.
+7. **07 - Deployment View**: Contains execution nodes, devices, cloud clusters, and `07 - Physical & Cloud Deployment Diagram`.
+8. **08 - Collaboration View**: Contains communication interaction lifelines, numbered messages, and `08 - Application Processing Collaboration Diagram`.
+
+### How to Open and Edit in StarUML:
+1. Open **StarUML** on your computer.
+2. Click **File ➔ Open...** (or press `Ctrl + O`).
+3. Select `passport-automation-system\UML\passport-automation-system.mdj`.
+4. In the left **Model Explorer** panel, expand any of the 8 views and double-click the diagram you wish to view or present!
+
+To regenerate or modify the `.mdj` file programmatically:
+```bash
+node scripts/generate_staruml.mjs
+```

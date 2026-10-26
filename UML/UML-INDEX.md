@@ -2,6 +2,8 @@
 
 This document acts as the master directory of all UML 2.5 specification models designed for the **Passport Automation System**. Each diagram directly models the actual implementation in the repository.
 
+> **StarUML Native Project**: A complete, native StarUML project file is provided at [`passport-automation-system.mdj`](file:///c:/Users/Rohith/Documents/GitHub/passport-automation-system/UML/passport-automation-system.mdj). It contains all 8 model views, actors, classes with attributes/operations, state machine transitions, sequence lifelines, and component nodes with pre-arranged visual canvas coordinates.
+
 ---
 
 ## 1. Master Diagram Registry
