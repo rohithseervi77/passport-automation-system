@@ -1,0 +1,90 @@
+@startuml
+skinparam node {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+}
+skinparam artifact {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 10
+}
+skinparam database {
+  BackgroundColor White
+  BorderColor #002B49
+}
+
+title Passport Automation System (PAS) - Physical & Cloud Deployment Architecture\nDeployment Diagram (UML 2.5)
+
+node "Citizen Client Device\n<<device: Desktop / Smartphone>>" as CitizenDev {
+  node "Web Browser\n<<execution environment: Chrome / Firefox / Safari>>" as CitizenBrowser {
+    artifact "React SPA Client Bundle\n(HTML5 / JavaScript / Tailwind CSS)" as ClientArtifact
+  }
+}
+
+node "Passport Seva Kendra (PSK) Workstation\n<<device: Desk Computer>>" as PskDev {
+  node "Official Browser\n<<execution environment>>" as PskBrowser {
+    artifact "PSK Staff Portal App" as PskArtifact
+  }
+  node "Biometric Scanner & Doc Camera\n<<peripherals>>" as PskPeripherals
+  PskBrowser ..> PskPeripherals : USB WebUSB / Driver
+}
+
+node "Police Station Terminal\n<<device: PC / Tablet>>" as PoliceDev {
+  node "Station Browser\n<<execution environment>>" as PoliceBrowser {
+    artifact "Police Verification Portal App" as PoliceArtifact
+  }
+}
+
+node "Edge Delivery Tier\n<<cloud: Vercel Global Edge Network>>" as EdgeTier {
+  node "Edge Proxy & CDN\n<<execution environment>>" as EdgeProxy {
+    artifact "Anycast DNS & SSL Termination\n(TLS 1.3 / HTTPS:443)" as EdgeSSL
+    artifact "Static Asset Cache\n(Images, Static Chunks, Favicon)" as StaticCache
+  }
+}
+
+node "Application Server Tier\n<<cloud: Vercel Serverless Infrastructure>>" as AppServer {
+  node "Node.js Serverless Execution Runtime\n<<execution environment: Next.js 16+ App Router>>" as NodeRuntime {
+    artifact "Server Actions & API Routes\n(/api/auth, /api/applications, /api/payments)" as ServerRoutes
+    artifact "PAS Domain & FSM Engine\n(lib/fsm.ts, lib/feeCalculator.ts)" as DomainLib
+    artifact "Prisma ORM Engine\n(@prisma/client 6.x)" as PrismaLib
+  }
+}
+
+node "Database Tier\n<<cloud: Supabase / PostgreSQL Managed Cluster>>" as DBTier {
+  node "PostgreSQL Database Engine\n<<database system: PostgreSQL 15>>" as PostgresNode {
+    database "PAS Relational Schema\n(25 Normalized Tables & Enums)" as PasDB
+  }
+  node "Connection Pooler\n<<service: Supavisor / pgBouncer>>" as Pooler
+  Pooler --> PostgresNode : High-concurrency Pooling
+}
+
+node "External Payment Gateway\n<<cloud service: SBI ePay / UPI>>" as GatewayNode {
+  artifact "Payment Settlement API" as GatewayAPI
+}
+
+node "Postal Logistics Network\n<<cloud service: India Post API>>" as PostalNode {
+  artifact "Consignment Tracking Endpoint" as PostalAPI
+}
+
+node "Transactional Mail Server\n<<cloud service: SMTP / Resend>>" as MailNode {
+  artifact "Secure Email Dispatch (TLS:587)" as MailAPI
+}
+
+' Communication paths
+CitizenBrowser -- EdgeProxy : HTTPS (TLS 1.3) / Port 443
+PskBrowser -- EdgeProxy : HTTPS (TLS 1.3) / Port 443
+PoliceBrowser -- EdgeProxy : HTTPS (TLS 1.3) / Port 443
+
+EdgeProxy -- NodeRuntime : Micro-routed Serverless Invocations
+ServerRoutes --> DomainLib
+DomainLib --> PrismaLib
+
+PrismaLib -- Pooler : TCP Connection Pool (PORT 6543 / 5432)
+ServerRoutes -- GatewayAPI : HTTPS / REST JSON
+ServerRoutes -- PostalAPI : HTTPS / REST JSON
+DomainLib -- MailAPI : SMTP / TLS 587
+
+@enduml

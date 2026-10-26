@@ -1,0 +1,51 @@
+flowchart TB
+    subgraph ClientDevices["Client Devices Tier"]
+        CitizenClient["Citizen Device (PC/Mobile)\nBrowser: Chrome/Safari\nHTTPS TLS 1.3"]
+        PskClient["PSK Officer Workstation\nBrowser + Biometric Scanner"]
+        PoliceClient["Police Station Terminal\nBrowser / Mobile App"]
+    end
+
+    subgraph EdgeTier["Vercel Global Edge Network"]
+        EdgeProxy["Anycast DNS & SSL Termination"]
+        StaticCDN["Static Asset CDN Cache (Images, JS)"]
+    end
+
+    subgraph ServerlessTier["Application Server Tier (Vercel Serverless)"]
+        subgraph NextRuntime["Node.js Next.js 16+ App Router Runtime"]
+            AppRouter["Server Components & Server Actions"]
+            ApiRoutes["REST API Route Handlers (/api/*)"]
+            FsmLib["FSM State Machine (lib/fsm.ts)"]
+            PrismaORM["Prisma Client ORM Layer"]
+        end
+    end
+
+    subgraph DatabaseTier["Managed Database Tier (Cloud PostgreSQL / Supabase)"]
+        ConnPooler["Supavisor / pgBouncer Connection Pooler"]
+        PostgresEngine[("PostgreSQL 15 Engine\n25 Tables & Enums")]
+    end
+
+    subgraph ExternalTiers["External Cloud Services Tier"]
+        PayGateway["SBI ePay / Bharatkosh Gateway"]
+        IndiaPost["India Post Tracking API"]
+        EmailGateway["SMTP / Transactional Email Service"]
+    end
+
+    CitizenClient -->|HTTPS:443| EdgeProxy
+    PskClient -->|HTTPS:443| EdgeProxy
+    PoliceClient -->|HTTPS:443| EdgeProxy
+
+    EdgeProxy --> StaticCDN
+    EdgeProxy -->|Forward Dynamic Requests| AppRouter
+    EdgeProxy -->|Forward API Invocations| ApiRoutes
+
+    AppRouter --> FsmLib
+    ApiRoutes --> FsmLib
+    FsmLib --> PrismaORM
+    AppRouter --> PrismaORM
+
+    PrismaORM -->|Encrypted TCP / Pool| ConnPooler
+    ConnPooler --> PostgresEngine
+
+    ApiRoutes -.->|HTTPS REST| PayGateway
+    ApiRoutes -.->|HTTPS REST| IndiaPost
+    FsmLib -.->|SMTP TLS:587| EmailGateway

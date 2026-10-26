@@ -1,0 +1,154 @@
+@startuml
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam handwritten false
+skinparam monochrome false
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+title Passport Automation System (PAS) - Comprehensive Use Case Diagram\nAcademic Software Engineering & OOAD Specification (UML 2.5)
+
+left to right direction
+
+' ==========================================
+' ACTORS
+' ==========================================
+actor "Citizen / Applicant" as Applicant <<Primary>>
+actor "Passport Officer" as Officer <<Internal Authority>>
+actor "Police Authority" as Police <<Verification Agency>>
+actor "System Administrator" as Admin <<Administrative>>
+actor "Public Visitor" as Visitor <<Unauthenticated>>
+
+Visitor <|-- Applicant
+
+' ==========================================
+' SYSTEM BOUNDARY
+' ==========================================
+rectangle "Passport Automation System (PAS) Application Boundary" {
+
+    ' --- Public & Authentication ---
+    package "Public & Authentication Services" {
+        usecase "UC-01: Browse Services & Gazette Notices" as UC_Browse
+        usecase "UC-02: Calculate Statutory Fees (GSR 516E)" as UC_CalcFee
+        usecase "UC-03: Locate PSK / POPSK Centres" as UC_Locate
+        usecase "UC-04: Track Application by ARN" as UC_Track
+        usecase "UC-05: Register Citizen Account" as UC_Register
+        usecase "UC-06: User Login & Session Auth" as UC_Login
+        usecase "UC-07: Reset Password via Email" as UC_ResetPwd
+    }
+
+    ' --- Citizen Application Lifecycle ---
+    package "Citizen Application Lifecycle" {
+        usecase "UC-08: Apply for Passport (Fresh/Reissue)" as UC_Apply
+        usecase "UC-09: Provide Minor Consent Declaration" as UC_MinorConsent
+        usecase "UC-10: Upload Identity & Address Proofs" as UC_UploadDocs
+        usecase "UC-11: Pay Application Fee Online" as UC_Payment
+        usecase "UC-12: Generate Digital Payment Receipt" as UC_Receipt
+        usecase "UC-13: Book PSK Appointment Slot" as UC_BookAppt
+        usecase "UC-14: Reschedule PSK Appointment" as UC_Reschedule
+        usecase "UC-15: Simulate PSK Counter Flow (A/B/C)" as UC_PskSim
+        usecase "UC-16: Submit Citizen Grievance" as UC_Grievance
+        usecase "UC-17: View Notifications & Alerts" as UC_Notifs
+    }
+
+    ' --- Passport Officer Scrutiny ---
+    package "Passport Officer Scrutiny & Issuance" {
+        usecase "UC-18: Scrutinize Application Dossier" as UC_Scrutinize
+        usecase "UC-19: Verify Uploaded Documents" as UC_VerifyDocs
+        usecase "UC-20: Request Applicant Clarification" as UC_Clarify
+        usecase "UC-21: Initiate Police Verification" as UC_InitPolice
+        usecase "UC-22: Grant Application Approval" as UC_Approve
+        usecase "UC-23: Issue Passport Booklet & Number" as UC_IssueBooklet
+        usecase "UC-24: Dispatch Passport via India Post" as UC_Dispatch
+        usecase "UC-25: Reject Application under Sec 6" as UC_Reject
+    }
+
+    ' --- Police Verification Workflow ---
+    package "Police Authority Verification" {
+        usecase "UC-26: View Jurisdictional Enquiry Queue" as UC_PoliceQueue
+        usecase "UC-27: Conduct Address & Criminal Verification" as UC_ConductVerify
+        usecase "UC-28: Submit Police Verification Report (PVR)" as UC_SubmitPVR
+    }
+
+    ' --- System Administration & Governance ---
+    package "System Administration & Departmental Registry" {
+        usecase "UC-29: Manage User Roles & Account States" as UC_AdminUsers
+        usecase "UC-30: Maintain Passport Services Registry" as UC_AdminServices
+        usecase "UC-31: Manage PSK / POPSK Centres" as UC_AdminCentres
+        usecase "UC-32: Configure Statutory Fee Schedules" as UC_AdminFees
+        usecase "UC-33: Publish Public Notices & Melas" as UC_AdminNotices
+        usecase "UC-34: Import Historical Notices (CSV/JSON)" as UC_ImportNotices
+        usecase "UC-35: Review Grievances & Provide Redress" as UC_AdminGrievance
+        usecase "UC-36: Audit Logs & Security Sessions" as UC_AdminSecurity
+    }
+}
+
+' ==========================================
+' ACTOR ASSOCIATIONS
+' ==========================================
+
+' Visitor Associations
+Visitor --> UC_Browse
+Visitor --> UC_CalcFee
+Visitor --> UC_Locate
+Visitor --> UC_Track
+Visitor --> UC_Register
+
+' Applicant Associations
+Applicant --> UC_Login
+Applicant --> UC_ResetPwd
+Applicant --> UC_Apply
+Applicant --> UC_UploadDocs
+Applicant --> UC_Payment
+Applicant --> UC_BookAppt
+Applicant --> UC_PskSim
+Applicant --> UC_Grievance
+Applicant --> UC_Notifs
+
+' Officer Associations
+Officer --> UC_Login
+Officer --> UC_Scrutinize
+Officer --> UC_VerifyDocs
+Officer --> UC_Clarify
+Officer --> UC_InitPolice
+Officer --> UC_Approve
+Officer --> UC_IssueBooklet
+Officer --> UC_Dispatch
+Officer --> UC_Reject
+
+' Police Associations
+Police --> UC_Login
+Police --> UC_PoliceQueue
+Police --> UC_ConductVerify
+Police --> UC_SubmitPVR
+
+' Admin Associations
+Admin --> UC_Login
+Admin --> UC_AdminUsers
+Admin --> UC_AdminServices
+Admin --> UC_AdminCentres
+Admin --> UC_AdminFees
+Admin --> UC_AdminNotices
+Admin --> UC_AdminGrievance
+Admin --> UC_AdminSecurity
+
+' ==========================================
+' USE CASE INCLUDES & EXTENDS
+' ==========================================
+
+UC_Apply ..> UC_UploadDocs : <<include>>
+UC_Apply <.. UC_MinorConsent : <<extend>>
+UC_Payment ..> UC_Receipt : <<include>>
+UC_BookAppt <.. UC_Reschedule : <<extend>>
+
+UC_Scrutinize ..> UC_VerifyDocs : <<include>>
+UC_Scrutinize <.. UC_Clarify : <<extend>>
+UC_Scrutinize <.. UC_Reject : <<extend>>
+UC_Approve ..> UC_IssueBooklet : <<include>>
+UC_IssueBooklet ..> UC_Dispatch : <<include>>
+
+UC_ConductVerify ..> UC_SubmitPVR : <<include>>
+UC_AdminNotices <.. UC_ImportNotices : <<extend>>
+
+@enduml

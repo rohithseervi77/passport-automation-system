@@ -1,0 +1,65 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - Passport Application Submission\nSequence Diagram (UML 2.5)
+
+actor Citizen
+participant "Browser / Client\n(ApplyPage Wizard)" as Client
+participant "Next.js API Route\n(/api/applications)" as AppAPI
+participant "Session Middleware\n(lib/auth.ts)" as Auth
+participant "FSM Engine\n(lib/fsm.ts)" as FSM
+participant "Fee Calculator\n(lib/feeCalculator.ts)" as FeeCalc
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(Application / History)" as DB
+
+Citizen -> Client : Complete Multi-Step Form (Personal, Family, Address, Disqualification Decl.)
+Citizen -> Client : Click "Save and Submit Application"
+
+Client -> AppAPI : POST /api/applications { applicationData }
+activate AppAPI
+
+AppAPI -> Auth : verifySession(request)
+Auth --> AppAPI : { user: { id: "usr_123", role: "APPLICANT" } }
+
+AppAPI -> AppAPI : generateArn() -> "ARN-2026-XXXXXX"
+
+AppAPI -> FSM : canTransition(current="DRAFT", next="SUBMITTED", role="APPLICANT")
+activate FSM
+FSM --> AppAPI : true (Allowed)
+deactivate FSM
+
+AppAPI -> FeeCalc : calculateStatutoryFee({ serviceType, bookletType, scheme })
+activate FeeCalc
+FeeCalc -> Prisma : feeSchedule.findFirst({ where: { serviceType, scheme } })
+Prisma -> DB : SELECT feeAmount FROM "FeeSchedule" WHERE ...
+DB --> Prisma : { amount: 1500 }
+FeeCalc --> AppAPI : { feeAmount: 1500, lateFee: 0 }
+deactivate FeeCalc
+
+AppAPI -> Prisma : $transaction(...)
+activate Prisma
+Prisma -> DB : INSERT INTO "Application" (\n  arn, applicantId, serviceType, schemeType, pages,\n  status="SUBMITTED", feeAmount=1500\n)
+Prisma -> DB : INSERT INTO "ApplicationStatusHistory" (\n  applicationId, fromStatus="DRAFT", toStatus="SUBMITTED",\n  changedBy="usr_123", remarks="Citizen submitted application online"\n)
+Prisma -> DB : UPDATE "Application" SET status="PAYMENT_PENDING"
+Prisma -> DB : INSERT INTO "ApplicationStatusHistory" (\n  applicationId, fromStatus="SUBMITTED", toStatus="PAYMENT_PENDING",\n  changedBy="SYSTEM", remarks="Awaiting statutory fee payment"\n)
+DB --> Prisma : Transaction Committed
+Prisma --> AppAPI : Created Application Record { id, arn, status: "PAYMENT_PENDING", feeAmount: 1500 }
+deactivate Prisma
+
+AppAPI --> Client : 201 Created { success: true, arn: "ARN-2026-XXXXXX", feeAmount: 1500 }
+deactivate AppAPI
+
+Client --> Citizen : Display Submission Receipt & Route to Fee Payment Screen
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+skinparam state {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+  StartColor #002B49
+  EndColor #002B49
+}
+
+title Passport Automation System (PAS) - Appointment Lifecycle\nStatechart Diagram (UML 2.5)
+
+[*] --> INITIAL : Application fee paid (PAYMENT_COMPLETED)
+
+state INITIAL {
+  INITIAL : Do: Display PSK calendar & quota availability
+}
+
+INITIAL --> BOOKED : Citizen selects PSK Centre, Date & Time Slot
+
+state BOOKED {
+  BOOKED : Entry: Generate unique Queue Token & Appointment Slip
+  BOOKED : Do: Block PSK capacity slot; send SMS/Email reminder
+}
+
+BOOKED --> RESCHEDULED : Citizen modifies appointment date/time\n[Reschedule count < Max Allowed (3)]
+state RESCHEDULED {
+  RESCHEDULED : Entry: Release old slot; decrement remaining reschedule quota
+  RESCHEDULED : Do: Allocate new date & time slot; re-issue appointment slip
+}
+RESCHEDULED --> BOOKED : Slot confirmed
+
+BOOKED --> CANCELLED : Citizen explicitly cancels slot OR application withdrawn
+RESCHEDULED --> CANCELLED : Citizen cancels slot
+state CANCELLED {
+  CANCELLED : Entry: Release reserved PSK slot back to public quota pool
+  CANCELLED : Do: Log cancellation event in AppointmentHistory
+}
+
+BOOKED --> CHECKED_IN : Citizen arrives at PSK & presents Token at Counter A
+state CHECKED_IN {
+  CHECKED_IN : Entry: Biometric scan & physical arrival timestamp logged
+  CHECKED_IN : Do: Direct applicant to Counter B (Document Scrutiny)
+}
+
+CHECKED_IN --> COMPLETED : PSK processing finished (Counters A, B & C traversed)
+state COMPLETED {
+  COMPLETED : Entry: Generate PSK Exit Acknowledgment Slip
+  COMPLETED : Do: Mark appointment status as COMPLETED in DB
+}
+
+CHECKED_IN --> NO_SHOW : Candidate departed without completing verification
+BOOKED --> NO_SHOW : Citizen fails to report by scheduled slot time window
+state NO_SHOW {
+  NO_SHOW : Entry: Mark forfeiture of scheduled appointment
+  NO_SHOW : Do: Require fresh appointment booking
+}
+
+NO_SHOW --> BOOKED : Citizen re-books appointment with valid application
+
+COMPLETED --> [*] : Appointment cycle terminated
+CANCELLED --> [*] : Appointment terminated
+@enduml

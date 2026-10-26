@@ -1,0 +1,97 @@
+@startuml
+skinparam component {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+}
+skinparam interface {
+  BackgroundColor White
+  BorderColor #002B49
+}
+
+title Passport Automation System (PAS) - Component Diagram\nComponent Diagram (UML 2.5)
+
+package "Presentation Layer (Next.js React Client)" {
+  [Citizen Portal UI\n(ApplyWizard, PayModal, ApptModal)] as CitizenUI
+  [Officer Desk UI\n(Scrutiny, Granting, Dispatch)] as OfficerUI
+  [Police Station UI\n(PVR Enquiries, Dossier Review)] as PoliceUI
+  [Admin Dashboard UI\n(Fee Schedule, PSK Centers, Notices)] as AdminUI
+  [Public Services UI\n(ARN Tracking, Fee Calculator, PSK Locator)] as PublicUI
+}
+
+package "API & Route Handler Layer (Next.js Server)" {
+  interface "HTTP / REST API" as HttpAPI
+
+  [Auth Controller\n(/api/auth/*)] as AuthCtrl
+  [Application Controller\n(/api/applications/*)] as AppCtrl
+  [Appointment Controller\n(/api/appointments/*)] as ApptCtrl
+  [Document Controller\n(/api/documents/*)] as DocCtrl
+  [Police Verification Controller\n(/api/police/*)] as PoliceCtrl
+  [Grievance Controller\n(/api/grievance/*)] as GrvCtrl
+  [Admin Controller\n(/api/admin/*)] as AdminCtrl
+}
+
+package "Domain & Business Logic Layer (lib/)" {
+  [Finite State Machine (FSM)\n(lib/fsm.ts)] as FSM
+  [Fee Calculation Engine\n(lib/feeCalculator.ts)] as FeeEngine
+  [Slot Booking Manager\n(lib/appointmentSlotManager.ts)] as SlotEngine
+  [Authentication & Session Guard\n(lib/auth.ts)] as AuthGuard
+  [Notification Service\n(lib/notifications.ts & lib/email.ts)] as NotifyService
+}
+
+package "Data Access & Persistence Layer" {
+  [Prisma ORM Client\n(lib/prisma.ts)] as PrismaClient
+  database "Relational Database\n(PostgreSQL / SQLite)" as Database
+}
+
+package "External Integrated Services" {
+  [Payment Gateway\n(SBI ePay / UPI Service)] as ExtGateway
+  [Speed Post Logistics\n(India Post API)] as ExtPostal
+  [SMTP Mail Server\n(Transactional Mailer)] as ExtMail
+}
+
+' Presentation to API Connections
+CitizenUI ..> HttpAPI : HTTP/JSON
+OfficerUI ..> HttpAPI : HTTP/JSON
+PoliceUI ..> HttpAPI : HTTP/JSON
+AdminUI ..> HttpAPI : HTTP/JSON
+PublicUI ..> HttpAPI : HTTP/JSON
+
+HttpAPI -- AuthCtrl
+HttpAPI -- AppCtrl
+HttpAPI -- ApptCtrl
+HttpAPI -- DocCtrl
+HttpAPI -- PoliceCtrl
+HttpAPI -- GrvCtrl
+HttpAPI -- AdminCtrl
+
+' Controller to Business Logic
+AuthCtrl --> AuthGuard : verifies credentials & sessions
+AppCtrl --> FSM : enforces valid state transitions
+AppCtrl --> FeeEngine : queries statutory rates
+ApptCtrl --> SlotEngine : reserves PSK quotas
+ApptCtrl --> FSM : validates appointment booking
+DocCtrl --> FSM : updates verification status
+PoliceCtrl --> FSM : submits PVR & advances workflow
+AdminCtrl --> AuthGuard : checks ADMIN role
+
+' Business Logic to Data Access
+AuthGuard --> PrismaClient : reads User & Session
+FSM --> PrismaClient : logs ApplicationStatusHistory
+FeeEngine --> PrismaClient : queries FeeSchedule
+SlotEngine --> PrismaClient : updates Appointment quotas
+AppCtrl --> PrismaClient : CRUD Application & Documents
+PoliceCtrl --> PrismaClient : writes PoliceReport
+GrvCtrl --> PrismaClient : writes Grievance
+
+PrismaClient --> Database : SQL queries / Prisma Driver Adapter
+
+' External Integrations
+AppCtrl ..> ExtGateway : creates orders & verifies signatures
+AppCtrl ..> ExtPostal : tracks consignment
+NotifyService ..> ExtMail : dispatches email receipts & alerts
+AppCtrl --> NotifyService : triggers notifications
+
+@enduml

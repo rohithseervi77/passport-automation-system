@@ -1,0 +1,51 @@
+sequenceDiagram
+    autonumber
+    actor Citizen
+    participant Client as Browser / Client (GrievancePage)
+    participant GrvAPI as Next.js API (/api/grievance)
+    participant OfficerUI as Officer Desk UI
+    actor Officer as Grievance Officer
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database
+    participant Notify as Notification Service
+
+    Citizen->>Client: Submit Grievance Ticket (Subject, ARN, Details)
+    Client->>GrvAPI: POST /api/grievance
+    activate GrvAPI
+
+    GrvAPI->>GrvAPI: generateTicketNumber() -> GRV-2026-00319
+    GrvAPI->>Prisma: Create Grievance (status: OPEN)
+    Prisma->>DB: INSERT Grievance
+    DB-->>Prisma: Inserted
+    Prisma-->>GrvAPI: Record
+
+    GrvAPI->>Notify: Send acknowledgment email
+    GrvAPI-->>Client: 201 Created { ticketNumber }
+    deactivate GrvAPI
+
+    Client-->>Citizen: Display Confirmation with Ticket ID
+
+    Officer->>OfficerUI: View open complaints
+    OfficerUI->>GrvAPI: GET /api/grievance?status=OPEN
+    GrvAPI->>Prisma: Fetch open grievances
+    Prisma-->>GrvAPI: Open tickets
+    GrvAPI-->>OfficerUI: Return ticket list
+
+    Officer->>OfficerUI: Assign to self (IN_REVIEW)
+    OfficerUI->>GrvAPI: PATCH status -> IN_REVIEW
+    GrvAPI->>Prisma: Update status
+
+    Officer->>OfficerUI: Enter resolution remarks & Submit
+    OfficerUI->>GrvAPI: POST /api/grievance/{id}/resolve
+    activate GrvAPI
+    GrvAPI->>Prisma: UPDATE Grievance (status: RESOLVED, notes, timestamp)
+    Prisma->>DB: Persist resolution
+    GrvAPI->>Notify: Email resolution details to citizen
+    GrvAPI-->>OfficerUI: 200 OK (Resolved)
+    deactivate GrvAPI
+
+    Citizen->>Client: Acknowledge resolution & Close ticket
+    Client->>GrvAPI: POST /api/grievance/{id}/close
+    GrvAPI->>Prisma: UPDATE Grievance (status: CLOSED)
+    GrvAPI-->>Client: 200 OK (Closed)
+    Client-->>Citizen: Ticket closed with satisfaction feedback

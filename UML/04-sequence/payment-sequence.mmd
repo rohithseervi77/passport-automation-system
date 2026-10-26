@@ -1,0 +1,55 @@
+sequenceDiagram
+    autonumber
+    actor Citizen
+    participant Client as Browser / Client (PaymentModal)
+    participant PayAPI as Next.js API (/api/payments)
+    participant Gateway as Payment Gateway (ePay/UPI)
+    participant FSM as FSM Engine (lib/fsm.ts)
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database (Payment/Application)
+    participant Notify as Notification Service
+
+    Citizen->>Client: Choose payment method and click Pay
+    Client->>PayAPI: POST /api/payments { applicationId, method }
+    activate PayAPI
+
+    PayAPI->>Prisma: Fetch application and statutory fee
+    Prisma-->>PayAPI: Application fee: 1500 INR
+
+    PayAPI->>Prisma: Create Payment record (status: PENDING)
+    Prisma->>DB: INSERT INTO Payment
+    DB-->>Prisma: Payment record created
+
+    PayAPI->>Gateway: Create checkout session
+    Gateway-->>PayAPI: Return session orderId
+    PayAPI-->>Client: Return paymentUrl & orderId
+    deactivate PayAPI
+
+    Client->>Gateway: Complete payment via UPI / Netbanking
+    Gateway-->>Client: Payment success callback with signature
+
+    Client->>PayAPI: POST /api/payments/verify { txnId, signature }
+    activate PayAPI
+
+    PayAPI->>Gateway: Verify transaction integrity
+    Gateway-->>PayAPI: Signature Valid (SUCCESS)
+
+    PayAPI->>FSM: canTransition("PAYMENT_PENDING", "PAYMENT_COMPLETED")
+    FSM-->>PayAPI: Allowed (true)
+
+    PayAPI->>Prisma: $transaction(update payment & application status)
+    activate Prisma
+    Prisma->>DB: UPDATE Payment SET status=COMPLETED
+    Prisma->>DB: UPDATE Application SET status=PAYMENT_COMPLETED
+    Prisma->>DB: INSERT ApplicationStatusHistory
+    DB-->>Prisma: Transaction committed
+    Prisma-->>PayAPI: Updated records
+    deactivate Prisma
+
+    PayAPI->>Notify: Send digital payment receipt
+    Notify-->>PayAPI: Sent
+
+    PayAPI-->>Client: 200 OK { success: true, receiptUrl }
+    deactivate PayAPI
+
+    Client-->>Citizen: Show Payment Receipt & Enable Appointment Booking

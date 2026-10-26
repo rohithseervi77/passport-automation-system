@@ -1,0 +1,52 @@
+stateDiagram-v2
+    [*] --> INITIAL : Application fee paid (PAYMENT_COMPLETED)
+    
+    state INITIAL {
+        [*] --> SlotSelection
+        SlotSelection : Display PSK calendar and slot quota
+    }
+
+    INITIAL --> BOOKED : Citizen selects PSK, Date and Time Slot
+
+    state BOOKED {
+        [*] --> SlotReserved
+        SlotReserved : Generate Queue Token and Appointment Slip
+    }
+
+    BOOKED --> RESCHEDULED : Citizen modifies slot [Quota < 3]
+    state RESCHEDULED {
+        [*] --> SlotUpdated
+        SlotUpdated : Release previous slot, reassign new slot
+    }
+    RESCHEDULED --> BOOKED : Slot confirmed
+
+    BOOKED --> CANCELLED : Citizen cancels slot / Application cancelled
+    RESCHEDULED --> CANCELLED : Citizen cancels slot
+    state CANCELLED {
+        [*] --> SlotReleased
+        SlotReleased : Slot returned to public availability pool
+    }
+
+    BOOKED --> CHECKED_IN : Citizen arrives at PSK (Counter A Entry)
+    state CHECKED_IN {
+        [*] --> SecurityAndBiometrics
+        SecurityAndBiometrics : Token verified, routed to Counter B
+    }
+
+    CHECKED_IN --> COMPLETED : PSK counters completed
+    state COMPLETED {
+        [*] --> AcknowledgmentIssued
+        AcknowledgmentIssued : Exit slip issued, appointment marked COMPLETED
+    }
+
+    BOOKED --> NO_SHOW : Citizen fails to report for appointment slot
+    CHECKED_IN --> NO_SHOW : Citizen leaves before verification completed
+    state NO_SHOW {
+        [*] --> ForfeitureLogged
+        ForfeitureLogged : Slot expired, requires fresh booking
+    }
+
+    NO_SHOW --> BOOKED : Citizen rebooks slot
+
+    COMPLETED --> [*]
+    CANCELLED --> [*]

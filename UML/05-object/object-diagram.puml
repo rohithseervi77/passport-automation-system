@@ -1,0 +1,155 @@
+@startuml
+skinparam object {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+}
+
+title Passport Automation System (PAS) - System Snapshot (Object Diagram)\nObject Diagram (UML 2.5)
+
+object "<u>usr_9041 : User</u>" as user1 {
+  id = "usr_9041"
+  email = "rajesh.kumar@example.com"
+  role = APPLICANT
+  isActive = true
+  failedAttempts = 0
+  lockedUntil = null
+}
+
+object "<u>app_8210 : Applicant</u>" as applicant1 {
+  id = "app_8210"
+  userId = "usr_9041"
+  fullName = "Rajesh Kumar"
+  gender = "MALE"
+  dateOfBirth = 1995-08-14
+  placeOfBirth = "New Delhi"
+  phone = "+91 98765 43210"
+  address = "B-42, Connaught Place, New Delhi"
+}
+
+object "<u>pas_app_501 : Application</u>" as app1 {
+  id = "pas_app_501"
+  arn = "ARN-2026-004218"
+  applicantId = "app_8210"
+  serviceType = "FRESH"
+  schemeType = "NORMAL"
+  bookletType = "36_PAGES"
+  status = "DISPATCHED"
+  feeAmount = 1500
+  isPaid = true
+  appliedAt = 2026-10-18T09:30:00Z
+}
+
+object "<u>pay_301 : Payment</u>" as pay1 {
+  id = "pay_301"
+  applicationId = "pas_app_501"
+  txnId = "TXN-2026-982114"
+  amount = 1500.00
+  method = "UPI"
+  status = "COMPLETED"
+  paidAt = 2026-10-18T10:15:22Z
+}
+
+object "<u>psk_dl01 : PassportCenter</u>" as center1 {
+  id = "psk_dl01"
+  code = "DL-01"
+  name = "PSK Herald House, ITO, New Delhi"
+  city = "New Delhi"
+  jurisdiction = "Delhi & NCR"
+  dailyCapacity = 400
+}
+
+object "<u>appt_401 : Appointment</u>" as appt1 {
+  id = "appt_401"
+  applicationId = "pas_app_501"
+  centerId = "psk_dl01"
+  tokenNumber = "TOK-A-108"
+  appointmentDate = 2026-10-20
+  timeSlot = "10:00 AM - 10:15 AM"
+  status = "COMPLETED"
+}
+
+object "<u>doc_101 : Document</u>" as doc1 {
+  id = "doc_101"
+  applicationId = "pas_app_501"
+  type = "PROOF_OF_ADDRESS"
+  fileName = "aadhaar_card_masked.pdf"
+  fileSize = 412850
+  status = "VERIFIED"
+  verifiedBy = "off_102"
+}
+
+object "<u>doc_102 : Document</u>" as doc2 {
+  id = "doc_102"
+  applicationId = "pas_app_501"
+  type = "PROOF_OF_DOB"
+  fileName = "birth_certificate.pdf"
+  fileSize = 523100
+  status = "VERIFIED"
+  verifiedBy = "off_102"
+}
+
+object "<u>pol_801 : Police</u>" as police1 {
+  id = "pol_801"
+  stationName = "Tilak Marg Police Station"
+  district = "New Delhi"
+  badgeNumber = "SI-9021"
+}
+
+object "<u>pvr_201 : PoliceReport</u>" as pvr1 {
+  id = "pvr_201"
+  applicationId = "pas_app_501"
+  policeId = "pol_801"
+  pvrNumber = "PVR-DL-2026-0089"
+  status = "CLEARED"
+  criminalRecord = false
+  addressVerified = true
+  applicantMet = true
+  citizenshipVerified = true
+  stayDurationYears = 5
+  reportDate = 2026-10-22
+}
+
+object "<u>off_102 : PassportOfficer</u>" as officer1 {
+  id = "off_102"
+  employeeId = "RPO-DEL-41"
+  fullName = "Sunil Sharma"
+  counterType = "COUNTER_C_GRANTING"
+}
+
+object "<u>pass_701 : Passport</u>" as pass1 {
+  id = "pass_701"
+  applicationId = "pas_app_501"
+  passportNumber = "P9041285"
+  trackingNumber = "EM123456789IN"
+  issueDate = 2026-10-24
+  expiryDate = 2036-10-23
+  status = "ACTIVE"
+}
+
+object "<u>hist_501 : ApplicationStatusHistory</u>" as hist1 {
+  id = "hist_501"
+  applicationId = "pas_app_501"
+  fromStatus = "PRINTING"
+  toStatus = "DISPATCHED"
+  changedBy = "off_102"
+  changedAt = 2026-10-25T14:30:00Z
+  remarks = "Dispatched via India Post Speed Post EM123456789IN"
+}
+
+user1 -- applicant1 : owns
+applicant1 -- app1 : submits
+app1 -- pay1 : fee settled by
+app1 -- appt1 : scheduled for
+appt1 -- center1 : located at
+app1 -- doc1 : includes
+app1 -- doc2 : includes
+app1 -- pvr1 : verified through
+pvr1 -- police1 : executed by
+app1 -- pass1 : results in
+pass1 -- officer1 : granted by
+app1 -- hist1 : logs transition
+
+@enduml

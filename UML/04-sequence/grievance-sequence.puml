@@ -1,0 +1,80 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - Citizen Grievance Redressal\nSequence Diagram (UML 2.5)
+
+actor Citizen
+participant "Browser / Client\n(GrievancePage)" as Client
+participant "Next.js API Route\n(/api/grievance)" as GrvAPI
+participant "Officer UI\n(GrievanceDesk)" as OfficerUI
+actor "Grievance Redressal\nOfficer" as Officer
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(Grievance / User)" as DB
+participant "Notification Service\n(lib/email.ts)" as Notify
+
+Citizen -> Client : Fill Grievance Form (Category, ARN, Subject, Description, Priority)
+Client -> GrvAPI : POST /api/grievance { category, applicationId, subject, description, priority }
+activate GrvAPI
+
+GrvAPI -> GrvAPI : generateTicketNumber() -> "GRV-2026-00319"
+GrvAPI -> Prisma : grievance.create({\n  data: { ticketNumber, userId, applicationId, category, subject, description, status: "OPEN" }\n})
+activate Prisma
+Prisma -> DB : INSERT INTO "Grievance" (...)
+DB --> Prisma : Grievance record created
+Prisma --> GrvAPI : Grievance entity
+deactivate Prisma
+
+GrvAPI -> Notify : sendGrievanceAcknowledgment(userEmail, ticketNumber)
+Notify --> GrvAPI : Acknowledgment Sent
+
+GrvAPI --> Client : 201 Created { ticketNumber: "GRV-2026-00319", status: "OPEN" }
+deactivate GrvAPI
+Client --> Citizen : Display Grievance Lodged Card with Ticket ID
+
+Officer -> OfficerUI : Open Grievance Redressal Dashboard
+OfficerUI -> GrvAPI : GET /api/grievance/admin?status=OPEN
+GrvAPI -> Prisma : grievance.findMany({ where: { status: "OPEN" } })
+Prisma --> GrvAPI : Open grievances
+GrvAPI --> OfficerUI : List of open tickets
+
+Officer -> OfficerUI : Claim Ticket & Investigate Delay
+OfficerUI -> GrvAPI : PATCH /api/grievance/{id} { status: "IN_REVIEW", assignedOfficer: officerId }
+GrvAPI -> Prisma : grievance.update({ where: { id }, data: { status: "IN_REVIEW" } })
+Prisma -> DB : UPDATE "Grievance" SET status="IN_REVIEW"
+
+Officer -> OfficerUI : Submit Resolution ("Police verification delay expedited with SP Office. Cleared.")
+OfficerUI -> GrvAPI : POST /api/grievance/{id}/resolve { resolutionNotes, status: "RESOLVED" }
+activate GrvAPI
+
+GrvAPI -> Prisma : grievance.update({\n  where: { id },\n  data: { status: "RESOLVED", resolutionNotes, resolvedBy: officerId, resolvedAt: now() }\n})
+activate Prisma
+Prisma -> DB : UPDATE "Grievance" SET status="RESOLVED", resolutionNotes = ?, resolvedAt = now()
+DB --> Prisma : Updated
+Prisma --> GrvAPI : Resolved record
+deactivate Prisma
+
+GrvAPI -> Notify : sendGrievanceResolvedEmail(userEmail, ticketNumber, resolutionNotes)
+Notify --> GrvAPI : Email Dispatched
+
+GrvAPI --> OfficerUI : 200 OK (Grievance Marked RESOLVED)
+deactivate GrvAPI
+OfficerUI --> Officer : Ticket closed successfully
+
+Citizen -> Client : View Resolved Grievance & Rate Service (5 Stars)
+Client -> GrvAPI : POST /api/grievance/{id}/close { rating: 5, status: "CLOSED" }
+GrvAPI -> Prisma : grievance.update({ where: { id }, data: { status: "CLOSED" } })
+GrvAPI --> Client : 200 OK (Ticket Closed)
+Client --> Citizen : Thank you message rendered
+
+@enduml

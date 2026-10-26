@@ -1,0 +1,50 @@
+stateDiagram-v2
+    [*] --> INITIATED : Counter B Document Verification Completed
+
+    state INITIATED {
+        [*] --> DossierRouting
+        DossierRouting : Electronic dossier routed to jurisdictional Police Station
+    }
+
+    INITIATED --> PENDING : Dossier arrived at Police Station Portal
+
+    state PENDING {
+        [*] --> AssignFieldOfficer
+        AssignFieldOfficer : Station in-charge assigns case to verification officer
+    }
+
+    PENDING --> IN_PROGRESS : Verification officer assigned
+
+    state IN_PROGRESS {
+        [*] --> FieldVisit
+        FieldVisit : Address verification, neighbor inquiries, CCTNS criminal check
+    }
+
+    IN_PROGRESS --> CLARIFICATION_REQUIRED : Applicant not found / Neighbor testimony missing
+    state CLARIFICATION_REQUIRED {
+        [*] --> RevisitScheduled
+        RevisitScheduled : Notice issued for second visit or station inquiry
+    }
+    CLARIFICATION_REQUIRED --> IN_PROGRESS : Supplementary evidence provided
+
+    IN_PROGRESS --> CLEARED : Valid address, no criminal record, citizenship confirmed
+    state CLEARED {
+        [*] --> ClearReport
+        ClearReport : Clear PVR prepared and digitally signed
+    }
+
+    IN_PROGRESS --> ADVERSE : Criminal history found / False address / Non-citizen
+    state ADVERSE {
+        [*] --> AdverseReport
+        AdverseReport : Adverse PVR prepared detailing FIR and grounds
+    }
+
+    CLEARED --> TRANSMITTED_TO_RPO : PVR transmitted to RPO system
+    ADVERSE --> TRANSMITTED_TO_RPO : PVR transmitted to RPO system
+
+    state TRANSMITTED_TO_RPO {
+        [*] --> DossierAttached
+        DossierAttached : Attached to Passport Office granting queue
+    }
+
+    TRANSMITTED_TO_RPO --> [*]

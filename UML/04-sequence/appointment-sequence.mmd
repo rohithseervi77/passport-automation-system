@@ -1,0 +1,55 @@
+sequenceDiagram
+    autonumber
+    actor Citizen
+    participant Client as Browser / Client (AppointmentPage)
+    participant ApptAPI as Next.js API (/api/appointments)
+    participant SlotMgr as Slot Manager (lib/slotManager)
+    participant FSM as FSM Engine (lib/fsm.ts)
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database (Appointment/Center)
+
+    Citizen->>Client: View PSK slots for chosen date
+    Client->>ApptAPI: GET /api/appointments/slots?centerId=...&date=...
+    activate ApptAPI
+
+    ApptAPI->>SlotMgr: getAvailableSlots(centerId, date)
+    activate SlotMgr
+    SlotMgr->>Prisma: Query center capacity & existing bookings
+    Prisma->>DB: Aggregation query
+    DB-->>Prisma: Booked count per slot
+    SlotMgr-->>ApptAPI: Array of available slots
+    deactivate SlotMgr
+
+    ApptAPI-->>Client: 200 OK (Slots available)
+    deactivate ApptAPI
+
+    Citizen->>Client: Select Slot & Confirm Booking
+    Client->>ApptAPI: POST /api/appointments { applicationId, slot }
+    activate ApptAPI
+
+    ApptAPI->>Prisma: Verify application fee status (PAYMENT_COMPLETED)
+    Prisma-->>ApptAPI: Valid
+
+    ApptAPI->>SlotMgr: Check slot capacity
+    SlotMgr-->>ApptAPI: Capacity available
+
+    ApptAPI->>FSM: canTransition("PAYMENT_COMPLETED", "APPOINTMENT_BOOKED")
+    FSM-->>ApptAPI: Allowed
+
+    ApptAPI->>SlotMgr: generateQueueToken() -> "TOK-A-108"
+    SlotMgr-->>ApptAPI: Token generated
+
+    ApptAPI->>Prisma: $transaction(create appointment & update application)
+    activate Prisma
+    Prisma->>DB: INSERT Appointment (status: BOOKED, token: TOK-A-108)
+    Prisma->>DB: INSERT AppointmentHistory
+    Prisma->>DB: UPDATE Application (status: APPOINTMENT_BOOKED)
+    Prisma->>DB: INSERT ApplicationStatusHistory
+    DB-->>Prisma: Committed
+    Prisma-->>ApptAPI: Completed record
+    deactivate Prisma
+
+    ApptAPI-->>Client: 201 Created { tokenNumber, appointmentSlipUrl }
+    deactivate ApptAPI
+
+    Client-->>Citizen: Render Appointment Slip with QR code

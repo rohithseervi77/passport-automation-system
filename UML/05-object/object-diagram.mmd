@@ -1,0 +1,109 @@
+classDiagram
+    direction TB
+    note "Passport Automation System - Concrete Object Snapshot"
+
+    class user1 {
+        <<usr_9041 : User>>
+        email = "rajesh.kumar@example.com"
+        role = APPLICANT
+        isActive = true
+        failedAttempts = 0
+    }
+
+    class applicant1 {
+        <<app_8210 : Applicant>>
+        fullName = "Rajesh Kumar"
+        gender = "MALE"
+        dateOfBirth = 1995-08-14
+        phone = "+91 98765 43210"
+        address = "B-42, Connaught Place, New Delhi"
+    }
+
+    class app1 {
+        <<pas_app_501 : Application>>
+        arn = "ARN-2026-004218"
+        serviceType = "FRESH"
+        schemeType = "NORMAL"
+        bookletType = "36_PAGES"
+        status = "DISPATCHED"
+        feeAmount = 1500
+        isPaid = true
+    }
+
+    class pay1 {
+        <<pay_301 : Payment>>
+        txnId = "TXN-2026-982114"
+        amount = 1500.00
+        method = "UPI"
+        status = "COMPLETED"
+    }
+
+    class center1 {
+        <<psk_dl01 : PassportCenter>>
+        code = "DL-01"
+        name = "PSK Herald House, ITO"
+        city = "New Delhi"
+        dailyCapacity = 400
+    }
+
+    class appt1 {
+        <<appt_401 : Appointment>>
+        tokenNumber = "TOK-A-108"
+        appointmentDate = 2026-10-20
+        timeSlot = "10:00 AM - 10:15 AM"
+        status = "COMPLETED"
+    }
+
+    class doc1 {
+        <<doc_101 : Document>>
+        type = "PROOF_OF_ADDRESS"
+        fileName = "aadhaar_card_masked.pdf"
+        status = "VERIFIED"
+    }
+
+    class doc2 {
+        <<doc_102 : Document>>
+        type = "PROOF_OF_DOB"
+        fileName = "birth_certificate.pdf"
+        status = "VERIFIED"
+    }
+
+    class pvr1 {
+        <<pvr_201 : PoliceReport>>
+        pvrNumber = "PVR-DL-2026-0089"
+        status = "CLEARED"
+        criminalRecord = false
+        addressVerified = true
+    }
+
+    class police1 {
+        <<pol_801 : Police>>
+        stationName = "Tilak Marg PS"
+        badgeNumber = "SI-9021"
+    }
+
+    class officer1 {
+        <<off_102 : PassportOfficer>>
+        fullName = "Sunil Sharma"
+        counterType = "COUNTER_C_GRANTING"
+    }
+
+    class pass1 {
+        <<pass_701 : Passport>>
+        passportNumber = "P9041285"
+        trackingNumber = "EM123456789IN"
+        issueDate = 2026-10-24
+        status = "ACTIVE"
+    }
+
+    user1 -- applicant1 : owns
+    applicant1 -- app1 : submits
+    app1 -- pay1 : fee settled by
+    app1 -- appt1 : scheduled for
+    appt1 -- center1 : located at
+    app1 -- doc1 : includes
+    app1 -- doc2 : includes
+    app1 -- pvr1 : verified through
+    pvr1 -- police1 : executed by
+    app1 -- pass1 : results in
+    pass1 -- officer1 : granted by

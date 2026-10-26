@@ -1,0 +1,229 @@
+%% Passport Automation System (PAS) - Class Diagram (Mermaid)
+classDiagram
+    class User {
+        +int id
+        +string authUserId
+        +string username
+        +string email
+        +string role
+        +boolean isActive
+        +int failedLoginAttempts
+        +DateTime lockedUntil
+        +DateTime lastLoginAt
+        +validatePassword(plainText) boolean
+        +recordLoginSuccess(ip) void
+        +recordLoginFailure() void
+        +lockAccount(minutes) void
+    }
+
+    class Applicant {
+        +int id
+        +string applicantId
+        +string name
+        +DateTime dob
+        +string address
+        +int userId
+        +createApplication(service) Application
+        +uploadDocument(docType, file) Document
+        +scheduleAppointment(psk, slot) Appointment
+        +submitGrievance(subject, desc) Grievance
+    }
+
+    class PassportOfficer {
+        +int id
+        +string officerId
+        +string branchLocation
+        +int userId
+        +scrutinizeApplication(appId) void
+        +verifyDocument(docId, status) void
+        +initiatePoliceVerification(appId) void
+        +grantApproval(appId, remarks) void
+        +issuePassportBooklet(appId) Passport
+        +rejectApplication(appId, reason) void
+    }
+
+    class Police {
+        +int id
+        +string stationCode
+        +string badgeNumber
+        +int userId
+        +fetchStationEnquiries(stationCode) List
+        +conductFieldEnquiry(appId) void
+        +submitPoliceReport(appId, status, remarks) PoliceReport
+    }
+
+    class Admin {
+        +int id
+        +string adminCode
+        +int userId
+        +updateUserRole(userId, newRole) void
+        +configurePassportCenter(data) PassportCenter
+        +updateFeeSchedule(data) FeeSchedule
+        +broadcastNotice(data) Notice
+        +resolveGrievance(ticketId, res) void
+    }
+
+    class Application {
+        +int id
+        +string applicationId
+        +string passportType
+        +string serviceType
+        +string applicationCategory
+        +string bookletType
+        +string rpoLocation
+        +string status
+        +DateTime submissionDate
+        +string givenName
+        +string surname
+        +string aadhaarNumber
+        +string policeStation
+        +boolean isMinor
+        +string pskStatus
+        +int applicantId
+        +int officerId
+        +submit() void
+        +transitionStatus(newStatus, actor) void
+        +assignOfficer(officerId) void
+        +requestClarification(reason) void
+    }
+
+    class Document {
+        +int id
+        +string docId
+        +string documentType
+        +string fileStatus
+        +string fileUrl
+        +string verificationStatus
+        +string verifiedBy
+        +DateTime verifiedAt
+        +int applicationId
+        +markVerified(officerId) void
+        +flagCorrection(reason) void
+    }
+
+    class Appointment {
+        +int id
+        +string appointmentId
+        +string quota
+        +string location
+        +DateTime date
+        +string timeSlot
+        +string status
+        +int rescheduleCount
+        +int applicationId
+        +reschedule(newDate, newSlot) void
+        +markCompleted() void
+        +cancel() void
+    }
+
+    class AppointmentHistory {
+        +int id
+        +int appointmentId
+        +int applicationId
+        +DateTime previousDate
+        +string previousSlot
+        +DateTime newDate
+        +string newSlot
+        +string location
+        +DateTime rescheduledAt
+        +string reason
+    }
+
+    class Payment {
+        +int id
+        +string transactionId
+        +float amount
+        +float baseFee
+        +float additionalFee
+        +string status
+        +string paymentMethod
+        +int applicationId
+        +processTransaction(method) boolean
+        +generateReceipt() Object
+    }
+
+    class PoliceReport {
+        +int id
+        +string reportId
+        +string clearanceStatus
+        +string remarks
+        +string adverseReason
+        +string stationCode
+        +DateTime verifiedAt
+        +int applicationId
+        +int policeId
+        +recordClearance(isClear, remarks) void
+    }
+
+    class Passport {
+        +int id
+        +string passportNumber
+        +DateTime issueDate
+        +DateTime expiryDate
+        +string dispatchStatus
+        +string trackingNumber
+        +int applicationId
+        +int officerId
+        +generatePassportNumber() string
+        +markPrinted() void
+        +dispatchBooklet(trackingNo) void
+    }
+
+    class Grievance {
+        +int id
+        +string ticketId
+        +string category
+        +string subject
+        +string description
+        +string status
+        +string response
+        +DateTime respondedAt
+        +int userId
+        +addResponse(reply, author) void
+        +closeTicket() void
+    }
+
+    class PassportCenter {
+        +int id
+        +string centerCode
+        +string name
+        +string type
+        +string city
+        +string state
+        +int dailyCapacity
+        +int slotCapacity
+        +getAvailableSlots(date) List
+        +reserveSlot(slot) boolean
+    }
+
+    class FeeSchedule {
+        +int id
+        +string serviceType
+        +string applicationCategory
+        +string bookletType
+        +float normalFee
+        +float tatkaalFee
+        +float discountPercentage
+        +calculateFee(age, category, pages) float
+    }
+
+    User "1" *-- "0..1" Applicant : has
+    User "1" *-- "0..1" PassportOfficer : has
+    User "1" *-- "0..1" Police : has
+    User "1" *-- "0..1" Admin : has
+    User "1" o-- "0..*" Grievance : files
+
+    Applicant "1" -- "0..*" Application : lodges
+    PassportOfficer "0..1" -- "0..*" Application : scrutinizes
+    PassportOfficer "0..1" -- "0..*" Passport : authorizes
+    Police "0..1" -- "0..*" PoliceReport : inspects
+
+    Application "1" *-- "0..*" Document : contains
+    Application "1" *-- "0..1" Appointment : schedules
+    Appointment "1" *-- "0..*" AppointmentHistory : tracks
+    Application "1" *-- "0..*" Payment : settles
+    Application "1" *-- "0..*" PoliceReport : verifies
+    Application "1" *-- "0..1" Passport : generates
+
+    PassportCenter "1" ..> "0..*" Appointment : hosts
+    FeeSchedule "1" ..> "0..*" Payment : calculates

@@ -1,0 +1,75 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - Statutory Fee Payment\nSequence Diagram (UML 2.5)
+
+actor Citizen
+participant "Browser / Client\n(PaymentModal)" as Client
+participant "Next.js API Route\n(/api/payments)" as PayAPI
+participant "Payment Gateway\n(SBI ePay / Bharatkosh)" as Gateway
+participant "FSM Engine\n(lib/fsm.ts)" as FSM
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(Payment / Application)" as DB
+participant "Email / SMS\n(lib/notifications.ts)" as Notify
+
+Citizen -> Client : Select Payment Method (UPI / NetBanking / Card) & Click "Pay Now"
+Client -> PayAPI : POST /api/payments { applicationId, paymentMethod, amount }
+activate PayAPI
+
+PayAPI -> Prisma : application.findUnique({ where: { id: applicationId } })
+Prisma -> DB : SELECT * FROM "Application" WHERE id = ?
+DB --> Prisma : { id, arn, status: "PAYMENT_PENDING", feeAmount: 1500 }
+Prisma --> PayAPI : Application record
+
+PayAPI -> PayAPI : generateTransactionRef() -> "TXN-2026-XXXXXX"
+PayAPI -> Prisma : payment.create({\n  data: { applicationId, amount: 1500, method: "UPI", status: "PENDING", txnId }\n})
+Prisma -> DB : INSERT INTO "Payment" (...)
+DB --> Prisma : Payment record created
+
+PayAPI -> Gateway : createOrder({ txnId, amount: 1500, currency: "INR" })
+Gateway --> PayAPI : { orderId: "ORD_789", paymentUrl: "..." }
+PayAPI --> Client : 200 OK { txnId, orderId, paymentUrl }
+deactivate PayAPI
+
+Client -> Gateway : Open Secure Gateway / Authenticate Payment (UPI PIN / OTP)
+Gateway -> Gateway : Process Transaction Settlement
+Gateway --> Client : Redirect with Gateway Signature & Success Status
+
+Client -> PayAPI : POST /api/payments/verify { txnId, gatewaySignature, status: "SUCCESS" }
+activate PayAPI
+
+PayAPI -> Gateway : verifySignature(gatewaySignature, txnId)
+Gateway --> PayAPI : Signature Verified (SUCCESS)
+
+PayAPI -> FSM : canTransition(current="PAYMENT_PENDING", next="PAYMENT_COMPLETED", role="APPLICANT")
+FSM --> PayAPI : true (Allowed)
+
+PayAPI -> Prisma : $transaction(...)
+activate Prisma
+Prisma -> DB : UPDATE "Payment" SET status="COMPLETED", paidAt=now() WHERE txnId = ?
+Prisma -> DB : UPDATE "Application" SET status="PAYMENT_COMPLETED", isPaid=true WHERE id = ?
+Prisma -> DB : INSERT INTO "ApplicationStatusHistory" (\n  applicationId, fromStatus="PAYMENT_PENDING", toStatus="PAYMENT_COMPLETED",\n  changedBy=userId, remarks="Statutory fee INR 1500 paid online"\n)
+DB --> Prisma : Transaction Committed
+Prisma --> PayAPI : Updated Records
+deactivate Prisma
+
+PayAPI -> Notify : sendPaymentReceiptNotification(applicantEmail, txnId, 1500)
+Notify --> PayAPI : Notification Dispatched
+
+PayAPI --> Client : 200 OK { success: true, receiptUrl: "/receipts/TXN-2026-XXXXXX" }
+deactivate PayAPI
+
+Client --> Citizen : Display Payment Success Screen with Download Receipt Button & "Book Appointment" CTA
+
+@enduml

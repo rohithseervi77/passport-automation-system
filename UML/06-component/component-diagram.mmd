@@ -1,0 +1,63 @@
+flowchart TD
+    subgraph PresentationLayer["Presentation Layer (Next.js React Client)"]
+        CitizenUI["Citizen Portal UI (Apply, Pay, Book)"]
+        OfficerUI["Officer Desk UI (Scrutiny, Granting)"]
+        PoliceUI["Police Station UI (PVR Enquiries)"]
+        AdminUI["Admin Dashboard UI (Fees, PSKs, Notices)"]
+        PublicUI["Public Services UI (Tracking, PSK Locator)"]
+    end
+
+    subgraph ApiLayer["API & Route Handler Layer (Next.js Server)"]
+        AuthCtrl["Auth Controller (/api/auth)"]
+        AppCtrl["Application Controller (/api/applications)"]
+        ApptCtrl["Appointment Controller (/api/appointments)"]
+        DocCtrl["Document Controller (/api/documents)"]
+        PoliceCtrl["Police Controller (/api/police)"]
+        GrvCtrl["Grievance Controller (/api/grievance)"]
+        AdminCtrl["Admin Controller (/api/admin)"]
+    end
+
+    subgraph DomainLayer["Domain & Business Logic Layer (lib/)"]
+        FSM["Finite State Machine (lib/fsm.ts)"]
+        FeeEngine["Fee Engine (lib/feeCalculator.ts)"]
+        SlotEngine["Slot Manager (lib/appointmentSlotManager.ts)"]
+        AuthGuard["Security & Auth Guard (lib/auth.ts)"]
+        NotifyService["Notification Service (lib/email.ts)"]
+    end
+
+    subgraph DataLayer["Data Access & Persistence Layer"]
+        PrismaClient["Prisma ORM Client (lib/prisma.ts)"]
+        DB[("Relational Database (PostgreSQL / SQLite)")]
+    end
+
+    subgraph ExternalServices["External Integrated Services"]
+        ExtGateway["Payment Gateway (SBI ePay / UPI)"]
+        ExtPostal["India Post Speed Post Tracking"]
+        ExtMail["SMTP Mail Server"]
+    end
+
+    PresentationLayer -->|HTTPS / JSON REST API| ApiLayer
+
+    AuthCtrl --> AuthGuard
+    AppCtrl --> FSM
+    AppCtrl --> FeeEngine
+    ApptCtrl --> SlotEngine
+    ApptCtrl --> FSM
+    DocCtrl --> FSM
+    PoliceCtrl --> FSM
+    AdminCtrl --> AuthGuard
+
+    AuthGuard --> PrismaClient
+    FSM --> PrismaClient
+    FeeEngine --> PrismaClient
+    SlotEngine --> PrismaClient
+    AppCtrl --> PrismaClient
+    PoliceCtrl --> PrismaClient
+    GrvCtrl --> PrismaClient
+
+    PrismaClient --> DB
+
+    AppCtrl -.-> ExtGateway
+    AppCtrl -.-> ExtPostal
+    NotifyService -.-> ExtMail
+    AppCtrl --> NotifyService

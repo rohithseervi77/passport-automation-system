@@ -1,0 +1,108 @@
+%% Passport Automation System (PAS) - Use Case Diagram (Mermaid)
+flowchart LR
+    subgraph Actors["System Actors"]
+        Visitor["Public Visitor"]
+        Applicant["Citizen / Applicant"]
+        Officer["Passport Officer"]
+        Police["Police Authority"]
+        Admin["System Administrator"]
+    end
+
+    Visitor -.-> Applicant
+
+    subgraph PAS["Passport Automation System Boundary"]
+        subgraph Auth["Public & Authentication"]
+            UC01["UC-01: Browse Services & Notices"]
+            UC02["UC-02: Calculate Statutory Fees"]
+            UC03["UC-03: Locate PSK / POPSK"]
+            UC04["UC-04: Track Application by ARN"]
+            UC05["UC-05: Register Account"]
+            UC06["UC-06: User Login & Session Auth"]
+        end
+
+        subgraph CitizenWorkflows["Citizen Lifecycle"]
+            UC08["UC-08: Apply for Passport"]
+            UC09["UC-09: Minor Consent Declaration"]
+            UC10["UC-10: Upload Identity & Address Proofs"]
+            UC11["UC-11: Pay Application Fee Online"]
+            UC12["UC-12: Digital Payment Receipt"]
+            UC13["UC-13: Book PSK Appointment Slot"]
+            UC14["UC-14: Reschedule PSK Appointment"]
+            UC15["UC-15: Simulate PSK Counter Flow"]
+            UC16["UC-16: Submit Grievance"]
+        end
+
+        subgraph OfficerWorkflows["Passport Officer Operations"]
+            UC18["UC-18: Scrutinize Application Dossier"]
+            UC19["UC-19: Verify Uploaded Documents"]
+            UC20["UC-20: Request Clarification"]
+            UC21["UC-21: Initiate Police Verification"]
+            UC22["UC-22: Grant Application Approval"]
+            UC23["UC-23: Issue Passport Booklet & Number"]
+            UC24["UC-24: Dispatch Passport via India Post"]
+            UC25["UC-25: Reject Application (Sec 6)"]
+        end
+
+        subgraph PoliceWorkflows["Police Verification"]
+            UC26["UC-26: View Station Queue"]
+            UC27["UC-27: Conduct Field Verification"]
+            UC28["UC-28: Submit Police Report (PVR)"]
+        end
+
+        subgraph AdminWorkflows["Administration & Registry"]
+            UC29["UC-29: Manage User Accounts & Roles"]
+            UC30["UC-30: Maintain Services Registry"]
+            UC31["UC-31: Manage Passport Centres"]
+            UC32["UC-32: Configure Fee Schedules"]
+            UC33["UC-33: Publish Public Notices"]
+            UC34["UC-34: Redress Grievances"]
+            UC35["UC-35: Audit Logs & Security Sessions"]
+        end
+    end
+
+    Visitor --- UC01
+    Visitor --- UC02
+    Visitor --- UC03
+    Visitor --- UC04
+    Visitor --- UC05
+
+    Applicant --- UC06
+    Applicant --- UC08
+    Applicant --- UC10
+    Applicant --- UC11
+    Applicant --- UC13
+    Applicant --- UC15
+    Applicant --- UC16
+
+    Officer --- UC06
+    Officer --- UC18
+    Officer --- UC19
+    Officer --- UC20
+    Officer --- UC21
+    Officer --- UC22
+    Officer --- UC23
+    Officer --- UC24
+    Officer --- UC25
+
+    Police --- UC06
+    Police --- UC26
+    Police --- UC27
+    Police --- UC28
+
+    Admin --- UC06
+    Admin --- UC29
+    Admin --- UC30
+    Admin --- UC31
+    Admin --- UC32
+    Admin --- UC33
+    Admin --- UC34
+    Admin --- UC35
+
+    UC08 -.->|includes| UC10
+    UC08 -.->|extends| UC09
+    UC11 -.->|includes| UC12
+    UC13 -.->|extends| UC14
+    UC18 -.->|includes| UC19
+    UC22 -.->|includes| UC23
+    UC23 -.->|includes| UC24
+    UC27 -.->|includes| UC28

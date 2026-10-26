@@ -1,0 +1,51 @@
+@startuml
+skinparam state {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+  StartColor #002B49
+  EndColor #002B49
+}
+
+title Passport Automation System (PAS) - Citizen Grievance Lifecycle\nStatechart Diagram (UML 2.5)
+
+[*] --> OPEN : Citizen submits grievance ticket (Service Delay, Dispatch, PSK Facility, Document Query)
+
+state OPEN {
+  OPEN : Entry: Generate unique Ticket Number (GRV-YYYY-XXXXX) & set initial priority (LOW/MEDIUM/HIGH/URGENT)
+  OPEN : Do: Awaiting Helpdesk / Public Grievance Officer triage
+}
+
+OPEN --> IN_REVIEW : Officer opens ticket & commences inquiry
+
+state IN_REVIEW {
+  IN_REVIEW : Entry: Assign ticket to specific nodal officer
+  IN_REVIEW : Do: Scrutinize application logs, dispatch tracking, or PSK CCTV records
+}
+
+IN_REVIEW --> RESPONDED : Interim response or inquiry request dispatched to citizen
+state RESPONDED {
+  RESPONDED : Do: Citizen reviews officer clarification; provides supplementary feedback if needed
+}
+RESPONDED --> IN_REVIEW : Citizen responds with supplementary details
+
+IN_REVIEW --> RESOLVED : Grievance grievance addressed & formal remedy enacted
+state RESOLVED {
+  RESOLVED : Entry: Log detailed resolutionNotes, resolvedBy, and resolvedAt timestamp
+  RESOLVED : Do: Send resolution notification email/SMS to citizen
+}
+
+RESPONDED --> RESOLVED : Issue amicably addressed without further escalation
+
+RESOLVED --> CLOSED : Citizen confirms resolution OR auto-closed after 7 days of inactivity
+state CLOSED {
+  CLOSED : Entry: Record citizen satisfaction rating & archive ticket
+  CLOSED : Do: Prevent further edits to ticket
+}
+
+OPEN --> CLOSED : Spurious / Duplicate / Malicious ticket rejected with justification
+
+CLOSED --> [*] : Grievance lifecycle terminated
+@enduml

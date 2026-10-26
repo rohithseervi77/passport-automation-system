@@ -1,0 +1,76 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - PSK Appointment Scheduling\nSequence Diagram (UML 2.5)
+
+actor Citizen
+participant "Browser / Client\n(AppointmentPage)" as Client
+participant "Next.js API Route\n(/api/appointments)" as ApptAPI
+participant "Slot Engine\n(lib/appointmentSlotManager.ts)" as SlotMgr
+participant "FSM Engine\n(lib/fsm.ts)" as FSM
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(Appointment / Center)" as DB
+
+Citizen -> Client : Select Regional PSK Centre & View Slot Calendar
+Client -> ApptAPI : GET /api/appointments/slots?centerId=psk_delhi&date=2026-11-05
+activate ApptAPI
+
+ApptAPI -> SlotMgr : getAvailableSlots(centerId, date)
+activate SlotMgr
+SlotMgr -> Prisma : passportCenter.findUnique({ where: { id: centerId } })
+Prisma -> DB : SELECT dailyCapacity, openingTime, closingTime FROM "PassportCenter"
+DB --> Prisma : { dailyCapacity: 400, slotDuration: 15 }
+
+SlotMgr -> Prisma : appointment.groupBy({ where: { centerId, date, status: "BOOKED" } })
+Prisma -> DB : SELECT timeSlot, COUNT(*) FROM "Appointment" GROUP BY timeSlot
+DB --> Prisma : Booked counts per slot
+SlotMgr --> ApptAPI : Available time slots matrix
+deactivate SlotMgr
+
+ApptAPI --> Client : 200 OK { slots: [{ time: "10:00 AM", available: 12 }, ...] }
+deactivate ApptAPI
+
+Citizen -> Client : Choose Slot ("10:00 AM") & Submit "Book Appointment"
+Client -> ApptAPI : POST /api/appointments { applicationId, centerId, date, timeSlot }
+activate ApptAPI
+
+ApptAPI -> Prisma : application.findUnique({ where: { id: applicationId } })
+Prisma -> DB : SELECT status, isPaid FROM "Application" WHERE id = ?
+DB --> Prisma : { status: "PAYMENT_COMPLETED", isPaid: true }
+
+ApptAPI -> SlotMgr : checkSlotAvailable(centerId, date, timeSlot)
+SlotMgr --> ApptAPI : true (Capacity available)
+
+ApptAPI -> FSM : canTransition(current="PAYMENT_COMPLETED", next="APPOINTMENT_BOOKED", role="APPLICANT")
+FSM --> ApptAPI : true (Allowed)
+
+ApptAPI -> SlotMgr : generateQueueToken(centerId, date)
+SlotMgr --> ApptAPI : "TOK-A-108"
+
+ApptAPI -> Prisma : $transaction(...)
+activate Prisma
+Prisma -> DB : INSERT INTO "Appointment" (\n  applicationId, centerId, appointmentDate, timeSlot,\n  status="BOOKED", tokenNumber="TOK-A-108"\n)
+Prisma -> DB : INSERT INTO "AppointmentHistory" (\n  appointmentId, action="BOOKED", changedBy=userId, remarks="Initial booking"\n)
+Prisma -> DB : UPDATE "Application" SET status="APPOINTMENT_BOOKED" WHERE id = ?
+Prisma -> DB : INSERT INTO "ApplicationStatusHistory" (\n  applicationId, fromStatus="PAYMENT_COMPLETED", toStatus="APPOINTMENT_BOOKED",\n  changedBy=userId, remarks="Slot reserved at PSK Delhi"\n)
+DB --> Prisma : Transaction Committed
+Prisma --> ApptAPI : Appointment Record
+deactivate Prisma
+
+ApptAPI --> Client : 201 Created { success: true, tokenNumber: "TOK-A-108", appointmentSlipUrl: "..." }
+deactivate ApptAPI
+
+Client --> Citizen : Display Appointment Confirmation & Download PDF Appointment Slip
+
+@enduml

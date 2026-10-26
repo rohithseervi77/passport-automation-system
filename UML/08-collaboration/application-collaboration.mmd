@@ -1,0 +1,29 @@
+graph LR
+    %% Collaboration Diagram for Passport Automation System
+
+    Citizen[":Citizen"]
+    Portal["portal : CitizenPortal"]
+    Ctrl["ctrl : ApplicationController"]
+    FSM["fsm : FSM_Engine"]
+    Fee["fee : FeeEngine"]
+    Slot["slot : SlotManager"]
+    DB[("db : PrismaClient")]
+    Officer["officer : OfficerDesk"]
+    Police["police : PoliceStation"]
+    Notify["notify : NotificationService"]
+
+    Citizen -->|"1: submitApplication()<br>5: submitPayment()<br>7: selectPskSlot()"| Portal
+    Portal -->|"2: postApplication()<br>6: verifyPayment()<br>8: bookAppointment()"| Ctrl
+    Ctrl -->|"3: validateTransition()<br>9: transitionPaid()<br>10: transitionAppt()"| FSM
+    Ctrl -->|"4: calculateFee()"| Fee
+    Ctrl -->|"8.1: reserveSlot()"| Slot
+    Ctrl -->|"4.1: persistApp()<br>6.1: recordPay()<br>8.2: recordAppt()"| DB
+    Ctrl -->|"6.2: sendReceipt()<br>8.3: sendApptSlip()"| Notify
+
+    Officer -->|"11: verifyProofs()<br>14: grantPassport()<br>15: dispatchBooklet()"| FSM
+    Officer -->|"11.1: updateDocStatus()<br>14.1: createPassportRecord()<br>15.1: updateTracking()"| DB
+    Officer -->|"15.2: sendTrackingAlert()"| Notify
+
+    FSM -->|"12: routeStation()"| Police
+    Police -->|"13: submitPVR(CLEARED)"| FSM
+    Police -->|"13.1: recordPVR()"| DB

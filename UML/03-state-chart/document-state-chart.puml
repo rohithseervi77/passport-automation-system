@@ -1,0 +1,60 @@
+@startuml
+skinparam state {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+  StartColor #002B49
+  EndColor #002B49
+}
+
+title Passport Automation System (PAS) - Document Verification Lifecycle\nStatechart Diagram (UML 2.5)
+
+[*] --> UPLOADED : Citizen uploads PDF/JPG file (Address / DOB / Non-ECR / Annexure)
+
+state UPLOADED {
+  UPLOADED : Entry: Virus scan & MIME type validation (PDF/JPEG <= 2MB)
+  UPLOADED : Do: Persist document metadata & storage URI
+}
+
+UPLOADED --> PENDING_VERIFICATION : Document attached to submitted application
+
+state PENDING_VERIFICATION {
+  PENDING_VERIFICATION : Do: Queue in Verifying Officer (Counter B) scrutiny portal
+}
+
+PENDING_VERIFICATION --> UNDER_SCRUTINY : Verifying Officer opens document preview
+state UNDER_SCRUTINY {
+  UNDER_SCRUTINY : Do: Cross-check document details with biographical application entries\n& inspect physical original proofs at Counter B
+}
+
+UNDER_SCRUTINY --> VERIFIED : All details match physical original document
+state VERIFIED {
+  VERIFIED : Entry: Set verifiedAt timestamp and record Officer ID
+  VERIFIED : Do: Lock document against further citizen edits
+}
+
+UNDER_SCRUTINY --> CORRECTION_REQUIRED : Illegible scan, missing pages, or address mismatch
+state CORRECTION_REQUIRED {
+  CORRECTION_REQUIRED : Entry: Record officer remarks / required defect rectifications
+  CORRECTION_REQUIRED : Do: Send notification to citizen; enable document replacement UI
+}
+
+CORRECTION_REQUIRED --> UPLOADED : Citizen uploads corrected document scan
+
+UNDER_SCRUTINY --> REJECTED : Fraudulent document, forged stamp, or invalid issuer
+state REJECTED {
+  REJECTED : Entry: Log statutory rejection reason & flag application
+  REJECTED : Do: Trigger Passport Act Sec 6 refusal / vigilance report
+}
+
+VERIFIED --> ARCHIVED : Application finalized (DELIVERED / ARCHIVED)
+REJECTED --> ARCHIVED : Final refusal recorded
+
+state ARCHIVED {
+  ARCHIVED : Do: Retain in secure encrypted storage per regulatory retention schedule
+}
+
+ARCHIVED --> [*] : Document lifecycle finalized
+@enduml

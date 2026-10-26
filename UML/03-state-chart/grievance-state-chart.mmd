@@ -1,0 +1,39 @@
+stateDiagram-v2
+    [*] --> OPEN : Citizen lodges grievance ticket
+
+    state OPEN {
+        [*] --> TicketGenerated
+        TicketGenerated : Unique Ticket ID assigned, queued for triage
+    }
+
+    OPEN --> IN_REVIEW : Grievance Officer opens and claims ticket
+
+    state IN_REVIEW {
+        [*] --> UnderInvestigation
+        UnderInvestigation : System audit logs scrutinized, internal inquiry conducted
+    }
+
+    IN_REVIEW --> RESPONDED : Officer requests clarification / sends interim update
+    state RESPONDED {
+        [*] --> CitizenReview
+        CitizenReview : Citizen evaluates interim response
+    }
+    RESPONDED --> IN_REVIEW : Citizen submits supplementary information
+
+    IN_REVIEW --> RESOLVED : Formal remedy applied & resolution notes recorded
+    RESPONDED --> RESOLVED : Matter addressed to satisfaction of citizen
+
+    state RESOLVED {
+        [*] --> SolutionLogged
+        SolutionLogged : Resolution notes persisted, citizen notified
+    }
+
+    RESOLVED --> CLOSED : Citizen accepts resolution or auto-closed after timeout
+    OPEN --> CLOSED : Spurious / duplicate ticket closed with reason
+
+    state CLOSED {
+        [*] --> TicketArchived
+        TicketArchived : Case closed, satisfaction rating recorded
+    }
+
+    CLOSED --> [*]

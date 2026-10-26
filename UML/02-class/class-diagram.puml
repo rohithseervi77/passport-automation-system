@@ -1,0 +1,383 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam roundcorner 5
+skinparam shadowing false
+skinparam monochrome false
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam linetype ortho
+
+title Passport Automation System (PAS) - Detailed Domain Class Diagram\nAcademic Object-Oriented Analysis & Design (OOAD) Specification
+
+' =====================================================
+' CORE USER & ROLE HIERARCHY
+' =====================================================
+
+class User {
+  + id : Int [PK]
+  + authUserId : String [Unique]
+  + username : String [Unique]
+  + email : String [Unique]
+  + role : String = "APPLICANT"
+  + isActive : Boolean = true
+  + failedLoginAttempts : Int = 0
+  + lockedUntil : DateTime?
+  + lastLoginAt : DateTime?
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + validatePassword(plainText: String) : Boolean
+  + recordLoginSuccess(ip: String) : Void
+  + recordLoginFailure() : Void
+  + lockAccount(durationMinutes: Int) : Void
+}
+
+class Applicant {
+  + id : Int [PK]
+  + applicantId : String [Unique]
+  + name : String
+  + dob : DateTime
+  + address : String
+  + userId : Int [FK]
+  --
+  + createApplication(service: String) : Application
+  + uploadDocument(docType: String, file: File) : Document
+  + scheduleAppointment(psk: String, slot: String) : Appointment
+  + submitGrievance(subject: String, desc: String) : Grievance
+}
+
+class PassportOfficer {
+  + id : Int [PK]
+  + officerId : String [Unique]
+  + branchLocation : String
+  + userId : Int [FK]
+  --
+  + scrutinizeApplication(appId: Int) : Void
+  + verifyDocument(docId: Int, status: String) : Void
+  + initiatePoliceVerification(appId: Int) : Void
+  + grantApproval(appId: Int, remarks: String) : Void
+  + issuePassportBooklet(appId: Int) : Passport
+  + rejectApplication(appId: Int, reason: String) : Void
+}
+
+class Police {
+  + id : Int [PK]
+  + stationCode : String
+  + badgeNumber : String [Unique]
+  + userId : Int [FK]
+  --
+  + fetchStationEnquiries(stationCode: String) : List<Application>
+  + conductFieldEnquiry(appId: Int) : Void
+  + submitPoliceReport(appId: Int, status: String, remarks: String) : PoliceReport
+}
+
+class Admin {
+  + id : Int [PK]
+  + adminCode : String [Unique]
+  + userId : Int [FK]
+  --
+  + updateUserRole(userId: Int, newRole: String) : Void
+  + configurePassportCenter(centerData: Object) : PassportCenter
+  + updateFeeSchedule(feeData: Object) : FeeSchedule
+  + broadcastNotice(noticeData: Object) : Notice
+  + resolveGrievance(ticketId: String, res: String) : Void
+}
+
+' =====================================================
+' APPLICATION & LIFECYCLE
+' =====================================================
+
+class Application {
+  + id : Int [PK]
+  + applicationId : String [Unique, ARN]
+  + passportType : String = "REGULAR (36 Pages)"
+  + serviceType : String = "FRESH"
+  + applicationCategory : String = "NORMAL"
+  + bookletType : String = "36_PAGES"
+  + rpoLocation : String = "RPO Chennai"
+  + status : String = "DRAFT"
+  + submissionDate : DateTime?
+  + givenName : String?
+  + surname : String?
+  + gender : String?
+  + dob : DateTime?
+  + placeOfBirth : String?
+  + citizenship : String = "By Birth"
+  + aadhaarNumber : String?
+  + pan : String?
+  + voterId : String?
+  + fatherName : String?
+  + motherName : String?
+  + presentAddressLine1 : String?
+  + presentCity : String?
+  + policeStation : String?
+  + isMinor : Boolean = false
+  + parentConsent : Boolean = false
+  + priority : String = "NORMAL"
+  + pskStatus : String = "NOT_ARRIVED"
+  + pskToken : String?
+  + clarificationReason : String?
+  + rejectionReason : String?
+  + applicantId : Int [FK]
+  + officerId : Int? [FK]
+  --
+  + submit() : Void
+  + transitionStatus(newStatus: String, actor: String) : Void
+  + assignOfficer(officerId: Int) : Void
+  + requestClarification(reason: String) : Void
+  + recordCounterProgress(stage: String) : Void
+}
+
+class ApplicationStatusHistory {
+  + id : Int [PK]
+  + applicationId : Int [FK]
+  + fromStatus : String
+  + toStatus : String
+  + remarks : String?
+  + performedBy : String?
+  + role : String = "SYSTEM"
+  + changedById : Int?
+  + changedAt : DateTime
+}
+
+' =====================================================
+' DOCUMENTS & APPOINTMENTS
+' =====================================================
+
+class Document {
+  + id : Int [PK]
+  + docId : String [Unique]
+  + documentType : String
+  + fileStatus : String = "UPLOADED"
+  + fileUrl : String?
+  + fileName : String?
+  + fileSize : Int?
+  + mimeType : String?
+  + verificationStatus : String = "PENDING"
+  + verifiedBy : String?
+  + verifiedAt : DateTime?
+  + uploadedAt : DateTime
+  + applicationId : Int [FK]
+  --
+  + markVerified(officerId: String) : Void
+  + flagCorrection(reason: String) : Void
+}
+
+class Appointment {
+  + id : Int [PK]
+  + appointmentId : String [Unique]
+  + quota : String = "NORMAL"
+  + location : String
+  + date : DateTime
+  + timeSlot : String
+  + status : String = "BOOKED"
+  + rescheduleCount : Int = 0
+  + applicationId : Int [FK, Unique]
+  --
+  + reschedule(newDate: DateTime, newSlot: String) : Void
+  + markCompleted() : Void
+  + cancel() : Void
+}
+
+class AppointmentHistory {
+  + id : Int [PK]
+  + appointmentId : Int [FK]
+  + applicationId : Int
+  + previousDate : DateTime
+  + previousSlot : String
+  + newDate : DateTime
+  + newSlot : String
+  + location : String
+  + rescheduledAt : DateTime
+  + reason : String?
+}
+
+' =====================================================
+' FINANCIAL & STATUTORY ISSUANCE
+' =====================================================
+
+class Payment {
+  + id : Int [PK]
+  + transactionId : String [Unique]
+  + amount : Float
+  + baseFee : Float = 1500
+  + additionalFee : Float = 0
+  + status : String = "PENDING"
+  + paymentMethod : String?
+  + paymentReference : String?
+  + createdAt : DateTime
+  + applicationId : Int [FK]
+  --
+  + processTransaction(method: String) : Boolean
+  + generateReceipt() : Object
+}
+
+class PoliceReport {
+  + id : Int [PK]
+  + reportId : String [Unique, PVR]
+  + clearanceStatus : String
+  + remarks : String?
+  + adverseReason : String?
+  + stationCode : String?
+  + verifiedAt : DateTime?
+  + applicationId : Int [FK]
+  + policeId : Int? [FK]
+  --
+  + recordClearance(isClear: Boolean, remarks: String) : Void
+}
+
+class Passport {
+  + id : Int [PK]
+  + passportNumber : String [Unique]
+  + issueDate : DateTime
+  + expiryDate : DateTime
+  + dispatchStatus : String = "PRINTING"
+  + trackingNumber : String?
+  + applicationId : Int [FK, Unique]
+  + officerId : Int? [FK]
+  --
+  + generatePassportNumber() : String
+  + markPrinted() : Void
+  + dispatchBooklet(trackingNo: String) : Void
+}
+
+' =====================================================
+' CITIZEN SUPPORT, NOTICES & MASTER DATA
+' =====================================================
+
+class Grievance {
+  + id : Int [PK]
+  + ticketId : String [Unique]
+  + category : String
+  + subject : String
+  + description : String
+  + attachmentUrl : String?
+  + status : String = "OPEN"
+  + response : String?
+  + respondedAt : DateTime?
+  + respondedBy : String?
+  + createdAt : DateTime
+  + userId : Int [FK]
+  --
+  + addResponse(reply: String, author: String) : Void
+  + closeTicket() : Void
+}
+
+class FeeSchedule {
+  + id : Int [PK]
+  + serviceType : String
+  + applicationCategory : String = "NORMAL"
+  + bookletType : String = "36_PAGES"
+  + minAge : Int = 0
+  + maxAge : Int = 120
+  + isLostOrDamaged : Boolean = false
+  + normalFee : Float
+  + tatkaalFee : Float?
+  + discountPercentage : Float = 0
+  + gazetteReference : String
+  + isActive : Boolean = true
+  --
+  + calculateFee(age: Int, category: String, pages: String) : Float
+}
+
+class PassportCenter {
+  + id : Int [PK]
+  + centerCode : String [Unique]
+  + name : String
+  + type : String = "PSK"
+  + address : String
+  + city : String
+  + state : String
+  + pinCode : String
+  + associatedRpo : String
+  + operatingHours : String
+  + status : String = "ACTIVE"
+  + dailyCapacity : Int = 200
+  + slotCapacity : Int = 20
+  --
+  + getAvailableSlots(date: DateTime) : List<String>
+  + reserveSlot(slot: String) : Boolean
+}
+
+class Notice {
+  + id : Int [PK]
+  + noticeId : String [Unique]
+  + slug : String [Unique]
+  + title : String
+  + summary : String
+  + content : String
+  + category : String
+  + priority : String = "NORMAL"
+  + status : String = "PUBLISHED"
+  + isPinned : Boolean = false
+  + publishedAt : DateTime
+  + region : String?
+  --
+  + publish() : Void
+  + archive() : Void
+}
+
+class PassportService {
+  + id : Int [PK]
+  + serviceCode : String [Unique]
+  + title : String
+  + shortDescription : String
+  + category : String = "CITIZEN"
+  + normalFee : Int?
+  + tatkaalFee : Int?
+  + eligibility : String
+  + documentChecklist : String
+  + isActive : Boolean = true
+}
+
+class Notification {
+  + id : Int [PK]
+  + userId : Int [FK]
+  + title : String
+  + message : String
+  + isRead : Boolean = false
+  + type : String = "INFO"
+  + createdAt : DateTime
+}
+
+class AuditLog {
+  + id : Int [PK]
+  + userId : Int? [FK]
+  + action : String
+  + entityId : String?
+  + details : String?
+  + ipAddress : String?
+  + createdAt : DateTime
+}
+
+' =====================================================
+' RELATIONSHIPS & MULTIPLICITIES
+' =====================================================
+
+User "1" *-- "0..1" Applicant : profiles
+User "1" *-- "0..1" PassportOfficer : profiles
+User "1" *-- "0..1" Police : profiles
+User "1" *-- "0..1" Admin : profiles
+User "1" o-- "0..*" Notification : receives
+User "1" o-- "0..*" AuditLog : audits
+User "1" o-- "0..*" Grievance : files
+
+Applicant "1" -- "0..*" Application : lodges >
+PassportOfficer "0..1" -- "0..*" Application : scrutinizes >
+PassportOfficer "0..1" -- "0..*" Passport : authorizes >
+Police "0..1" -- "0..*" PoliceReport : inspects >
+
+Application "1" *-- "0..*" Document : contains >
+Application "1" *-- "0..1" Appointment : schedules >
+Appointment "1" *-- "0..*" AppointmentHistory : tracks >
+Application "1" *-- "0..*" Payment : settles >
+Application "1" *-- "0..*" PoliceReport : verifies >
+Application "1" *-- "0..1" Passport : generates >
+Application "1" *-- "1..*" ApplicationStatusHistory : logs >
+
+PassportCenter "1" ..> "0..*" Appointment : hosts >
+FeeSchedule "1" ..> "0..*" Payment : determines rates >
+PassportService "1" ..> "0..*" Application : specifies >
+
+@enduml

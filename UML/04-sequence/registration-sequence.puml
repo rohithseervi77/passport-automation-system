@@ -1,0 +1,72 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+  BoxBorderColor #002B49
+}
+
+title Passport Automation System (PAS) - Citizen Registration Sequence\nSequence Diagram (UML 2.5)
+
+actor Citizen
+participant "Browser / Client\n(RegisterPage)" as Client
+participant "Next.js API Route\n(/api/auth/register)" as AuthAPI
+participant "Security / Hash\n(bcryptjs & Captcha)" as Security
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(User / Applicant)" as DB
+participant "Email Service\n(lib/email.ts)" as Mailer
+
+Citizen -> Client : Fill Registration Form (Name, Email, Phone, Password, Captcha)
+Client -> Client : Perform Client-side validation (Zod schema)
+
+Client -> AuthAPI : POST /api/auth/register { fullName, email, phone, password, captchaToken }
+activate AuthAPI
+
+AuthAPI -> Security : verifyCaptcha(captchaToken)
+alt Captcha Invalid
+  Security --> AuthAPI : Verification Failed
+  AuthAPI --> Client : 400 Bad Request ("Invalid security captcha")
+  Client --> Citizen : Display Captcha error message
+else Captcha Valid
+  Security --> AuthAPI : Verification Passed
+end
+
+AuthAPI -> Prisma : user.findUnique({ where: { email } })
+activate Prisma
+Prisma -> DB : SELECT * FROM "User" WHERE email = ?
+DB --> Prisma : Record result (null if not registered)
+Prisma --> AuthAPI : User query result
+deactivate Prisma
+
+alt User Already Exists
+  AuthAPI --> Client : 409 Conflict ("Email already registered")
+  Client --> Citizen : Display "Account already exists. Please login"
+else User Not Found
+  AuthAPI -> Security : hash(password, saltRounds=10)
+  Security --> AuthAPI : hashedPassword
+
+  AuthAPI -> Prisma : $transaction(createUser & createApplicant)
+  activate Prisma
+  Prisma -> DB : INSERT INTO "User" (email, passwordHash, role="APPLICANT", isActive=true)
+  Prisma -> DB : INSERT INTO "Applicant" (userId, fullName, phone)
+  DB --> Prisma : Created User & Applicant records
+  Prisma --> AuthAPI : Committed Transaction Data
+  deactivate Prisma
+
+  AuthAPI -> Mailer : sendWelcomeEmail(email, fullName)
+  Mailer --> AuthAPI : Email Dispatched
+
+  AuthAPI --> Client : 201 Created { success: true, message: "Registration successful" }
+  deactivate AuthAPI
+
+  Client --> Citizen : Redirect to Login with Success Toast
+end
+
+@enduml

@@ -1,0 +1,61 @@
+@startuml
+skinparam state {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+  StartColor #002B49
+  EndColor #002B49
+}
+
+title Passport Automation System (PAS) - Police Verification Lifecycle (PVR)\nStatechart Diagram (UML 2.5)
+
+[*] --> INITIATED : Counter B Document Verification Completed
+
+state INITIATED {
+  INITIATED : Entry: Generate PVR Tracking Reference
+  INITIATED : Do: Route electronic dossier to jurisdictional District Police Headquarters / Station
+}
+
+INITIATED --> PENDING : Electronic dossier queued at Station dashboard
+
+state PENDING {
+  PENDING : Do: Station In-Charge assigns dossier to Field Verification Officer (Constable/SI)
+}
+
+PENDING --> IN_PROGRESS : Field Officer assigned & enquiry scheduled
+
+state IN_PROGRESS {
+  IN_PROGRESS : Entry: Capture fieldOfficerName & fieldOfficerRank
+  IN_PROGRESS : Do: Physical site visit to applicant's present address,\nverify citizenship, interview 2 local neighbours, cross-check CCTNS criminal database
+}
+
+IN_PROGRESS --> CLARIFICATION_REQUIRED : Applicant unavailable / Address disputed / Incomplete duration proof
+state CLARIFICATION_REQUIRED {
+  CLARIFICATION_REQUIRED : Entry: Record verification query in PVR remarks
+  CLARIFICATION_REQUIRED : Do: Citizen / Police station contact for re-enquiry schedule
+}
+CLARIFICATION_REQUIRED --> IN_PROGRESS : Additional evidence submitted / Re-visit conducted
+
+IN_PROGRESS --> CLEARED : addressVerified=true, criminalRecord=false, applicantMet=true, citizenshipVerified=true
+state CLEARED {
+  CLEARED : Entry: Generate Favourable Police Verification Report (Clear PVR)
+  CLEARED : Do: Field Officer & Station SHO digitally sign & submit report
+}
+
+IN_PROGRESS --> ADVERSE : criminalRecord=true OR addressVerified=false OR citizenshipVerified=false
+state ADVERSE {
+  ADVERSE : Entry: Generate Adverse PVR with FIR numbers, criminal sections or non-residence grounds
+  ADVERSE : Do: Station SHO signs & submits adverse dossier
+}
+
+CLEARED --> TRANSMITTED_TO_RPO : Electronic PVR dossier dispatched to Passport Office
+ADVERSE --> TRANSMITTED_TO_RPO : Electronic PVR dossier dispatched to Passport Office
+
+state TRANSMITTED_TO_RPO {
+  TRANSMITTED_TO_RPO : Do: PVR attached to Application; triggers OFFICER_REVIEW queue
+}
+
+TRANSMITTED_TO_RPO --> [*] : Police verification cycle concluded
+@enduml

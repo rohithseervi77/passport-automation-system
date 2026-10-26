@@ -1,0 +1,54 @@
+sequenceDiagram
+    autonumber
+    actor Officer as Verifying Officer (Counter B)
+    actor Citizen as Citizen at Desk
+    participant UI as Officer Portal (Scrutiny)
+    participant DocAPI as Next.js API (/api/officer/documents)
+    participant FSM as FSM Engine (lib/fsm.ts)
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database
+    participant Notify as Notification Service
+
+    Citizen->>Officer: Hand over physical original certificates
+    Officer->>UI: View applicant documents for ARN
+    UI->>DocAPI: GET /api/officer/applications/{id}/documents
+    DocAPI->>Prisma: Fetch document list
+    Prisma->>DB: Query Document table
+    DB-->>Prisma: Document records
+    Prisma-->>DocAPI: Return proofs
+    DocAPI-->>UI: Display document preview gallery
+
+    loop Scrutinize Each Proof (Address, DOB, Non-ECR)
+        Officer->>Officer: Verify physical original matches digital scan
+        alt Deficient or Illegible Proof
+            Officer->>UI: Mark CORRECTION_REQUIRED with remarks
+            UI->>DocAPI: PATCH document { status: CORRECTION_REQUIRED }
+            DocAPI->>Prisma: Update document status
+        else Authentic & Matched
+            Officer->>UI: Mark VERIFIED
+            UI->>DocAPI: PATCH document { status: VERIFIED }
+            DocAPI->>Prisma: Update document status with timestamp
+        end
+    end
+
+    alt Has Deficient Documents
+        Officer->>UI: Submit Clarification Request
+        UI->>DocAPI: POST transition -> CLARIFICATION_REQUIRED
+        DocAPI->>FSM: Validate transition
+        DocAPI->>Prisma: Update Application status
+        DocAPI->>Notify: Send SMS/Email to Citizen
+        DocAPI-->>UI: Status updated
+        UI-->>Officer: Clarification request dispatched
+    else All Proofs Verified
+        Officer->>UI: Finalize Counter B Approval
+        UI->>DocAPI: POST transition -> DOCUMENT_VERIFIED
+        DocAPI->>FSM: Validate transition
+        DocAPI->>Prisma: Update Application status
+        DocAPI-->>UI: Verified successfully
+
+        UI->>DocAPI: Transmit to Police Verification
+        DocAPI->>FSM: Transition -> POLICE_VERIFICATION_PENDING
+        DocAPI->>Prisma: Create PoliceReport (status: PENDING)
+        DocAPI-->>UI: Dossier routed to Police
+        UI-->>Officer: Case successfully routed to Police Station
+    end

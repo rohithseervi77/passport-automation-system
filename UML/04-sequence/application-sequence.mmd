@@ -1,0 +1,44 @@
+sequenceDiagram
+    autonumber
+    actor Citizen
+    participant Client as Browser / Client (ApplyPage)
+    participant AppAPI as Next.js API (/api/applications)
+    participant Auth as Session Auth (lib/auth.ts)
+    participant FSM as FSM Engine (lib/fsm.ts)
+    participant FeeCalc as Fee Engine (lib/feeCalculator.ts)
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database (Application)
+
+    Citizen->>Client: Submit Form (Personal, Address, Declarations)
+    Client->>AppAPI: POST /api/applications { formData }
+    activate AppAPI
+
+    AppAPI->>Auth: verifySession(req)
+    Auth-->>AppAPI: Authenticated Session (APPLICANT)
+
+    AppAPI->>AppAPI: generateArn() -> "ARN-2026-XXXXXX"
+
+    AppAPI->>FSM: canTransition("DRAFT", "SUBMITTED", "APPLICANT")
+    FSM-->>AppAPI: Transition Allowed (true)
+
+    AppAPI->>FeeCalc: calculateStatutoryFee(serviceType, scheme)
+    activate FeeCalc
+    FeeCalc->>Prisma: feeSchedule.findFirst()
+    Prisma-->>FeeCalc: Fee rate: 1500 INR
+    FeeCalc-->>AppAPI: Calculated statutory fee (1500)
+    deactivate FeeCalc
+
+    AppAPI->>Prisma: $transaction(create application & transition to PAYMENT_PENDING)
+    activate Prisma
+    Prisma->>DB: INSERT Application (status=SUBMITTED, arn=ARN-2026-XXXXXX)
+    Prisma->>DB: INSERT ApplicationStatusHistory (DRAFT -> SUBMITTED)
+    Prisma->>DB: UPDATE Application (status=PAYMENT_PENDING)
+    Prisma->>DB: INSERT ApplicationStatusHistory (SUBMITTED -> PAYMENT_PENDING)
+    DB-->>Prisma: Transaction committed
+    Prisma-->>AppAPI: Application record with fee amount
+    deactivate Prisma
+
+    AppAPI-->>Client: 201 Created { arn, feeAmount, status: "PAYMENT_PENDING" }
+    deactivate AppAPI
+
+    Client-->>Citizen: Display Confirmation & Route to Payment Screen

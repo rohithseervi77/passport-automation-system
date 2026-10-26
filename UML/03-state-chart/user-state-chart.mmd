@@ -1,0 +1,56 @@
+stateDiagram-v2
+    [*] --> REGISTERED : User signs up on portal
+
+    state REGISTERED {
+        [*] --> PendingVerification
+        PendingVerification : Awaiting email confirmation or admin approval
+    }
+
+    REGISTERED --> ACTIVE : Email confirmed / Account initialized
+
+    state ACTIVE {
+        [*] --> ReadyForLogin
+        ReadyForLogin : normal operation, failedAttempts = 0
+    }
+
+    ACTIVE --> ACTIVE : Successful login with Captcha (reset failedAttempts)
+
+    ACTIVE --> FAILED_ATTEMPT : Incorrect password or invalid Captcha
+    state FAILED_ATTEMPT {
+        [*] --> CounterIncremented
+        CounterIncremented : failedAttempts incremented (1 to 4)
+    }
+
+    FAILED_ATTEMPT --> ACTIVE : Successful login on retry
+    FAILED_ATTEMPT --> FAILED_ATTEMPT : Repeated invalid credential (< 5)
+
+    FAILED_ATTEMPT --> LOCKED : 5 consecutive failures
+    state LOCKED {
+        [*] --> LockoutEnforced
+        LockoutEnforced : Account locked for 30 minutes, IP logged
+    }
+
+    LOCKED --> ACTIVE : Lockout duration expires + valid credentials
+
+    ACTIVE --> PASSWORD_RESET_PENDING : User requests password reset
+    LOCKED --> PASSWORD_RESET_PENDING : User requests password recovery
+
+    state PASSWORD_RESET_PENDING {
+        [*] --> ResetTokenActive
+        ResetTokenActive : Token sent to user email, valid 1 hour
+    }
+
+    PASSWORD_RESET_PENDING --> ACTIVE : Password reset completed successfully
+    PASSWORD_RESET_PENDING --> ACTIVE : Token expired without use
+
+    ACTIVE --> DEACTIVATED : Admin disables user (isActive=false)
+    LOCKED --> DEACTIVATED : Security administrator blocks user
+
+    state DEACTIVATED {
+        [*] --> AccessRevoked
+        AccessRevoked : Sessions invalidated, all logins blocked
+    }
+
+    DEACTIVATED --> ACTIVE : Administrator re-activates account
+
+    DEACTIVATED --> [*]

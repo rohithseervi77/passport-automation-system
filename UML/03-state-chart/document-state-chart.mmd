@@ -1,0 +1,50 @@
+stateDiagram-v2
+    [*] --> UPLOADED : Citizen uploads PDF/JPG file
+    
+    state UPLOADED {
+        [*] --> StoragePersistence
+        StoragePersistence : Validation of file format and file size
+    }
+
+    UPLOADED --> PENDING_VERIFICATION : Linked to submitted passport application
+
+    state PENDING_VERIFICATION {
+        [*] --> OfficerQueue
+        OfficerQueue : Queued for Counter B scrutiny
+    }
+
+    PENDING_VERIFICATION --> UNDER_SCRUTINY : Verifying Officer opens document
+    state UNDER_SCRUTINY {
+        [*] --> PhysicalCrossCheck
+        PhysicalCrossCheck : Scrutinize against physical original proofs
+    }
+
+    UNDER_SCRUTINY --> VERIFIED : Document authentic & matched
+    state VERIFIED {
+        [*] --> LockedAndStamped
+        LockedAndStamped : Stamped with verifiedAt and officerId
+    }
+
+    UNDER_SCRUTINY --> CORRECTION_REQUIRED : Illegible scan or detail discrepancy
+    state CORRECTION_REQUIRED {
+        [*] --> CorrectionNotice
+        CorrectionNotice : Remarks recorded, upload slot reopened for citizen
+    }
+
+    CORRECTION_REQUIRED --> UPLOADED : Citizen re-uploads corrected file
+
+    UNDER_SCRUTINY --> REJECTED : Fraudulent / forged document detected
+    state REJECTED {
+        [*] --> FraudLogged
+        FraudLogged : Rejection grounds logged for statutory action
+    }
+
+    VERIFIED --> ARCHIVED : Passport workflow completed
+    REJECTED --> ARCHIVED : Finalized case archived
+
+    state ARCHIVED {
+        [*] --> RetentionStorage
+        RetentionStorage : Encrypted digital archive
+    }
+
+    ARCHIVED --> [*]

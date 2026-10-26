@@ -1,0 +1,72 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - Public ARN Status Tracking\nSequence Diagram (UML 2.5)
+
+actor Citizen
+participant "Browser / Client\n(TrackApplicationPage)" as Client
+participant "Next.js API Route\n(/api/applications/track)" as TrackAPI
+participant "Security\n(Captcha Verification)" as Security
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(Application / History / Passport)" as DB
+participant "Postal API\n(India Post Speed Post)" as IndiaPost
+
+Citizen -> Client : Enter Application Reference Number (ARN), Date of Birth, and Captcha
+Citizen -> Client : Click "Track Status"
+
+Client -> TrackAPI : GET /api/applications/track?arn=ARN-2026-004218&dob=1995-08-14&captcha=...
+activate TrackAPI
+
+TrackAPI -> Security : verifyCaptcha(captcha)
+alt Captcha Verification Failed
+  Security --> TrackAPI : Invalid
+  TrackAPI --> Client : 400 Bad Request ("Invalid Captcha")
+  Client --> Citizen : Display Captcha error message
+else Captcha Verification Passed
+  Security --> TrackAPI : OK
+end
+
+TrackAPI -> Prisma : application.findFirst({\n  where: { arn, applicant: { dateOfBirth: dob } },\n  include: { statusHistory: true, passport: true, appointments: true }\n})
+activate Prisma
+Prisma -> DB : SELECT * FROM "Application" a\nJOIN "Applicant" ap ON a.applicantId = ap.id\nWHERE a.arn = ? AND ap.dateOfBirth = ?
+DB --> Prisma : Application record with relations
+Prisma --> TrackAPI : Application Dataset
+deactivate Prisma
+
+alt Application Not Found
+  TrackAPI --> Client : 404 Not Found ("No passport application found matching ARN and DOB")
+  Client --> Citizen : Display "Record Not Found" banner
+else Application Found
+  TrackAPI -> TrackAPI : calculateLifecycleStage(application.status)
+  note right of TrackAPI
+    Stage mapping:
+    - SUBMITTED / PAYMENT_PENDING -> Stage 1
+    - APPOINTMENT_BOOKED / DOC_VERIFIED -> Stage 2
+    - POLICE_VERIFICATION -> Stage 3
+    - OFFICER_REVIEW / PRINTING -> Stage 4
+    - DISPATCHED / DELIVERED -> Stage 5
+  end note
+
+  opt If status == "DISPATCHED" or "DELIVERED"
+    TrackAPI -> IndiaPost : getConsignmentStatus(passport.trackingNumber)
+    IndiaPost --> TrackAPI : { currentCity: "New Delhi NSH", status: "In Transit", expectedDelivery: "2026-11-08" }
+  end
+
+  TrackAPI --> Client : 200 OK {\n  arn: "ARN-2026-004218",\n  currentStatus: "DISPATCHED",\n  currentStage: 5,\n  statusHistory: [...],\n  dispatchInfo: { trackingNumber: "EM123456789IN", postalStatus: "In Transit" }\n}
+  deactivate TrackAPI
+
+  Client --> Citizen : Render Stepper Progress Bar, Milestone Timeline & Speed Post Tracking Card
+end
+
+@enduml

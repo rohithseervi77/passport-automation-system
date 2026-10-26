@@ -1,0 +1,40 @@
+@startuml
+skinparam object {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+}
+
+title Passport Automation System (PAS) - Passport Processing Collaboration Diagram\nCommunication / Collaboration Diagram (UML 2.5)
+
+object "<u>:Citizen</u>" as citizen
+object "<u>portal : CitizenPortal</u>" as portal
+object "<u>ctrl : ApplicationController</u>" as ctrl
+object "<u>fsm : FSM_Engine</u>" as fsm
+object "<u>fee : FeeEngine</u>" as fee
+object "<u>slot : SlotManager</u>" as slot
+object "<u>officer : OfficerDesk</u>" as officer
+object "<u>police : PoliceStation</u>" as police
+object "<u>notify : NotificationService</u>" as notify
+object "<u>db : PrismaClient</u>" as db
+
+citizen -- portal : 1: submitApplication(formData) >\n5: submitPayment(txnDetails) >\n7: selectPskSlot(centerId, slot) >
+portal -- ctrl : 2: postApplication() >\n6: verifyPayment() >\n8: bookAppointment() >
+ctrl -- fsm : 3: canTransition(DRAFT, SUBMITTED) >\n9: canTransition(PAY_PENDING, PAY_COMPLETED) >\n10: canTransition(PAY_COMPLETED, APPT_BOOKED) >
+ctrl -- fee : 4: calculateFee(service, scheme) >
+ctrl -- slot : 8.1: checkAndReserveSlot(centerId, slot) >
+ctrl -- db : 4.1: persistApplication(arn, status) >\n6.1: recordPayment(txnId, amount) >\n8.2: recordAppointment(tokenNumber) >
+
+officer -- fsm : 11: verifyProofs(DOCUMENT_VERIFIED) >\n14: grantPassport(APPROVED) >\n15: dispatchBooklet(DISPATCHED) >
+officer -- db : 11.1: updateDocumentStatus(VERIFIED) >\n14.1: createPassportRecord(passportNo) >\n15.1: updateTracking(IndiaPost) >
+
+fsm -- police : 12: routeToJurisdictionalStation() >
+police -- fsm : 13: submitPVR(status=CLEARED) >
+police -- db : 13.1: recordPoliceReport(pvrNumber) >
+
+ctrl -- notify : 6.2: sendPaymentReceipt() >\n8.3: sendAppointmentSlip() >
+officer -- notify : 15.2: sendSpeedPostTrackingAlert() >
+
+@enduml

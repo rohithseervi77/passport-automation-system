@@ -1,0 +1,89 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - Police Verification Sequence\nSequence Diagram (UML 2.5)
+
+actor "Police Field Officer\n(Verification Constable/SI)" as Police
+actor "Citizen / Neighbors\n(Present Address)" as Citizen
+participant "Police Web Portal\n(PoliceDashboard)" as Portal
+participant "Next.js API Route\n(/api/police/reports)" as PoliceAPI
+participant "CCTNS / Criminal DB\n(Mock System)" as CCTNS
+participant "FSM Engine\n(lib/fsm.ts)" as FSM
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(PoliceReport / Application)" as DB
+
+Police -> Portal : Log in with Station Credentials & View Assigned Queue
+Portal -> PoliceAPI : GET /api/police/pending
+PoliceAPI -> Prisma : policeReport.findMany({ where: { status: "PENDING" } })
+Prisma -> DB : SELECT * FROM "PoliceReport" WHERE status="PENDING"
+DB --> Prisma : Pending verification cases
+Prisma --> PoliceAPI : Dossier list
+PoliceAPI --> Portal : Render assigned cases table
+
+Police -> Portal : Select Case & Click "Begin Enquiry"
+Portal -> PoliceAPI : PATCH /api/police/reports/{id} { status: "IN_PROGRESS", fieldOfficerName, fieldOfficerRank }
+PoliceAPI -> Prisma : policeReport.update(...)
+Prisma -> DB : UPDATE "PoliceReport" SET status="IN_PROGRESS"
+PoliceAPI --> Portal : Case assigned & active
+
+Police -> Citizen : Visit residence, examine address proof, interview 2 local referees
+Citizen --> Police : Statements & signatures recorded
+Police -> CCTNS : Query applicant name & aliases in crime record database
+CCTNS --> Police : Criminal search record (Clean / FIR found)
+
+Police -> Portal : Open PVR submission form & populate findings
+note right of Police
+  Fields:
+  - addressVerified: true/false
+  - criminalRecord: false/true
+  - applicantMet: true/false
+  - citizenshipVerified: true/false
+  - stayDurationYears: 3
+  - remarks: "Good conduct confirmed by local references"
+end note
+
+alt Clean Verification (No Crime, Address Verified)
+  Police -> Portal : Submit PVR as "CLEARED"
+  Portal -> PoliceAPI : POST /api/police/reports/{id}/submit { status: "CLEARED", reportData }
+  activate PoliceAPI
+
+  PoliceAPI -> FSM : canTransition("POLICE_VERIFICATION_PENDING", "POLICE_VERIFICATION_COMPLETED", "POLICE")
+  FSM --> PoliceAPI : true (Allowed)
+
+  PoliceAPI -> Prisma : $transaction(...)
+  activate Prisma
+  Prisma -> DB : UPDATE "PoliceReport" SET status="CLEARED", reportDate=now(), ...
+  Prisma -> DB : UPDATE "Application" SET status="POLICE_VERIFICATION_COMPLETED"
+  Prisma -> DB : INSERT INTO "ApplicationStatusHistory" (\n  applicationId, fromStatus="POLICE_VERIFICATION_PENDING",\n  toStatus="POLICE_VERIFICATION_COMPLETED",\n  changedBy=policeId, remarks="Clear PVR submitted by Station"\n)
+  DB --> Prisma : Committed
+  Prisma --> PoliceAPI : Updated Records
+  deactivate Prisma
+
+  PoliceAPI --> Portal : 200 OK { success: true, message: "Clear PVR transmitted to RPO" }
+  deactivate PoliceAPI
+  Portal --> Police : Case Completed & Removed from Active Queue
+else Adverse Verification (Criminal Record or False Address)
+  Police -> Portal : Submit PVR as "ADVERSE" with FIR details
+  Portal -> PoliceAPI : POST /api/police/reports/{id}/submit { status: "ADVERSE", reportData }
+  activate PoliceAPI
+  PoliceAPI -> Prisma : $transaction(update PoliceReport to ADVERSE & Application to POLICE_VERIFICATION_COMPLETED)
+  Prisma -> DB : UPDATE "PoliceReport" SET status="ADVERSE", remarks="FIR No. 42/2024 pending"
+  Prisma -> DB : UPDATE "Application" SET status="POLICE_VERIFICATION_COMPLETED"
+  DB --> Prisma : Committed
+  PoliceAPI --> Portal : 200 OK { success: true, message: "Adverse PVR transmitted for Officer Review" }
+  deactivate PoliceAPI
+  Portal --> Police : Case Finalized (Flagged Adverse)
+end
+
+@enduml

@@ -1,0 +1,108 @@
+stateDiagram-v2
+    [*] --> DRAFT : Citizen initiates application
+    
+    state DRAFT {
+        [*] --> DraftEditing
+        DraftEditing : Populate personal, family, and address particulars
+    }
+    
+    DRAFT --> SUBMITTED : Form finalized & signed
+    DRAFT --> CANCELLED : Citizen abandons application
+
+    state SUBMITTED {
+        [*] --> ValidationCheck
+        ValidationCheck : Biographical checks & document requirements
+    }
+
+    SUBMITTED --> PAYMENT_PENDING : Fee assessment completed
+    SUBMITTED --> CANCELLED : Citizen withdraws
+
+    state PAYMENT_PENDING {
+        [*] --> AwaitingGateway
+    }
+
+    PAYMENT_PENDING --> PAYMENT_PROCESSING : Transaction initiated
+    PAYMENT_PROCESSING --> PAYMENT_COMPLETED : Payment SUCCESS
+    PAYMENT_PROCESSING --> PAYMENT_FAILED : Payment Declined / Timeout
+    PAYMENT_FAILED --> PAYMENT_PENDING : Retry payment
+
+    state PAYMENT_COMPLETED {
+        [*] --> ReceiptIssued
+        ReceiptIssued : PSK appointment quota unlocked
+    }
+
+    PAYMENT_COMPLETED --> APPOINTMENT_BOOKED : Citizen reserves PSK slot
+
+    state APPOINTMENT_BOOKED {
+        [*] --> SlotReserved
+        SlotReserved : Appointment slip generated
+    }
+
+    APPOINTMENT_BOOKED --> APPOINTMENT_BOOKED : Reschedule slot (allowed quota)
+    APPOINTMENT_BOOKED --> DOCUMENT_VERIFICATION : Citizen checks in at PSK (Counter A)
+
+    state DOCUMENT_VERIFICATION {
+        [*] --> ScrutinyCounterB
+        ScrutinyCounterB : Verifying Officer reviews original proofs
+    }
+
+    DOCUMENT_VERIFICATION --> CLARIFICATION_REQUIRED : Deficient or illegible documents
+    CLARIFICATION_REQUIRED --> DOCUMENT_VERIFICATION : Applicant re-uploads required proofs
+    DOCUMENT_VERIFICATION --> DOCUMENT_VERIFIED : Counter B approves all proofs
+    DOCUMENT_VERIFICATION --> REJECTED : Fraudulent / counterfeit documents
+
+    state DOCUMENT_VERIFIED {
+        [*] --> BiometricsCaptured
+        BiometricsCaptured : Fingerprints and photo captured
+    }
+
+    DOCUMENT_VERIFIED --> POLICE_VERIFICATION_PENDING : Transmitted to local Police Station
+    DOCUMENT_VERIFIED --> OFFICER_REVIEW : Tatkaal / Prior clearance exemption
+
+    state POLICE_VERIFICATION_PENDING {
+        [*] --> FieldEnquiry
+        FieldEnquiry : Jurisdictional physical verification & criminal check
+    }
+
+    POLICE_VERIFICATION_PENDING --> POLICE_VERIFICATION_COMPLETED : PVR submitted (CLEARED / ADVERSE)
+
+    state POLICE_VERIFICATION_COMPLETED {
+        [*] --> PvrAttached
+        PvrAttached : Police report attached to applicant dossier
+    }
+
+    POLICE_VERIFICATION_COMPLETED --> OFFICER_REVIEW : Transmit to Granting Officer (Counter C)
+
+    state OFFICER_REVIEW {
+        [*] --> StatutoryDecision
+        StatutoryDecision : Statutory review under Passports Act 1967
+    }
+
+    OFFICER_REVIEW --> CLARIFICATION_REQUIRED : Officer requests affidavits / declarations
+    OFFICER_REVIEW --> REJECTED : Statutory disqualification (Section 6)
+    OFFICER_REVIEW --> APPROVED : Granting Officer approves issuance
+
+    state APPROVED {
+        [*] --> PassportNumberIssued
+        PassportNumberIssued : Unique passport booklet number generated
+    }
+
+    APPROVED --> PRINTING : Sent to security printing queue
+
+    state PRINTING {
+        [*] --> SecurityPersonalization
+        SecurityPersonalization : Laser engraving & chip personalization
+    }
+
+    PRINTING --> DISPATCHED : Handed over to India Post Speed Post
+
+    state DISPATCHED {
+        [*] --> PostalTransit
+        PostalTransit : Speed Post tracking number active
+    }
+
+    DISPATCHED --> DELIVERED : Successful physical delivery to applicant
+
+    DELIVERED --> [*] : Application Completed
+    REJECTED --> [*] : Process Refused
+    CANCELLED --> [*] : Process Terminated

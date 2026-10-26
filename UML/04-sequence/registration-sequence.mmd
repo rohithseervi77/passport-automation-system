@@ -1,0 +1,52 @@
+sequenceDiagram
+    autonumber
+    actor Citizen
+    participant Client as Browser / Client (RegisterPage)
+    participant AuthAPI as Next.js API (/api/auth/register)
+    participant Security as Security (bcrypt & Captcha)
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database (User / Applicant)
+    participant Mailer as Email Service (lib/email.ts)
+
+    Citizen->>Client: Fill Registration Form (Details, Password, Captcha)
+    Client->>Client: Validate input fields
+    Client->>AuthAPI: POST /api/auth/register
+    activate AuthAPI
+
+    AuthAPI->>Security: verifyCaptcha(captchaToken)
+    alt Captcha Invalid
+        Security-->>AuthAPI: Verification Failed
+        AuthAPI-->>Client: 400 Bad Request ("Invalid Captcha")
+        Client-->>Citizen: Display Captcha Error
+    else Captcha Valid
+        Security-->>AuthAPI: Captcha OK
+    end
+
+    AuthAPI->>Prisma: user.findUnique({ where: { email } })
+    activate Prisma
+    Prisma->>DB: Query existing user by email
+    DB-->>Prisma: Result
+    Prisma-->>AuthAPI: User result
+    deactivate Prisma
+
+    alt Email Exists
+        AuthAPI-->>Client: 409 Conflict ("Email already registered")
+        Client-->>Citizen: Display "Email already registered"
+    else New Citizen
+        AuthAPI->>Security: hash(password, 10)
+        Security-->>AuthAPI: passwordHash
+
+        AuthAPI->>Prisma: $transaction(createUser + createApplicant)
+        activate Prisma
+        Prisma->>DB: INSERT User & Applicant records
+        DB-->>Prisma: Records inserted
+        Prisma-->>AuthAPI: Transaction committed
+        deactivate Prisma
+
+        AuthAPI->>Mailer: sendWelcomeEmail(email, fullName)
+        Mailer-->>AuthAPI: Dispatched
+
+        AuthAPI-->>Client: 201 Created { success: true }
+        deactivate AuthAPI
+        Client-->>Citizen: Redirect to Login with success toast
+    end

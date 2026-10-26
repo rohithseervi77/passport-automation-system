@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    actor Police as Police Field Officer
+    actor Citizen as Citizen / Neighbor
+    participant Portal as Police Station Portal
+    participant PoliceAPI as Next.js API (/api/police/reports)
+    participant CCTNS as CCTNS Crime Record Database
+    participant FSM as FSM Engine (lib/fsm.ts)
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database
+
+    Police->>Portal: View assigned station cases
+    Portal->>PoliceAPI: GET /api/police/pending
+    PoliceAPI->>Prisma: Fetch pending PVR dossiers
+    Prisma->>DB: Query PoliceReport
+    DB-->>Prisma: Case list
+    Prisma-->>PoliceAPI: Return cases
+    PoliceAPI-->>Portal: Render verification queue
+
+    Police->>Portal: Assign self to case
+    Portal->>PoliceAPI: PATCH /api/police/reports/{id} { status: IN_PROGRESS }
+    PoliceAPI->>Prisma: Update status to IN_PROGRESS
+
+    Police->>Citizen: Conduct physical address verification & witness interviews
+    Citizen-->>Police: Provide statements and identity documents
+    Police->>CCTNS: Check applicant against crime database
+    CCTNS-->>Police: Criminal background check result
+
+    alt Clean Verification
+        Police->>Portal: Submit Clear PVR (CLEARED)
+        Portal->>PoliceAPI: POST /api/police/reports/{id}/submit { status: CLEARED }
+        activate PoliceAPI
+        PoliceAPI->>FSM: Validate transition
+        PoliceAPI->>Prisma: $transaction(update PoliceReport + Application to POLICE_VERIFICATION_COMPLETED)
+        Prisma->>DB: Commit changes
+        Prisma-->>PoliceAPI: Success
+        PoliceAPI-->>Portal: 200 OK (Clear PVR submitted)
+        deactivate PoliceAPI
+        Portal-->>Police: Verification completed successfully
+    else Adverse Verification
+        Police->>Portal: Submit Adverse PVR (ADVERSE) with FIR details
+        Portal->>PoliceAPI: POST /api/police/reports/{id}/submit { status: ADVERSE }
+        activate PoliceAPI
+        PoliceAPI->>Prisma: Update PoliceReport (ADVERSE) and Application
+        Prisma->>DB: Commit changes
+        PoliceAPI-->>Portal: 200 OK (Adverse PVR submitted)
+        deactivate PoliceAPI
+        Portal-->>Police: Adverse report forwarded to RPO
+    end

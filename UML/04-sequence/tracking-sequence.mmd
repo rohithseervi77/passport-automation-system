@@ -1,0 +1,46 @@
+sequenceDiagram
+    autonumber
+    actor Citizen
+    participant Client as Browser / Client (TrackStatus)
+    participant TrackAPI as Next.js API (/api/applications/track)
+    participant Security as Captcha Validator
+    participant Prisma as Prisma Client (lib/prisma.ts)
+    participant DB as Database (Application/History)
+    participant IndiaPost as India Post Tracking API
+
+    Citizen->>Client: Enter ARN, DOB, and Captcha
+    Client->>TrackAPI: GET /api/applications/track?arn=...&dob=...
+    activate TrackAPI
+
+    TrackAPI->>Security: verifyCaptcha(token)
+    alt Invalid Captcha
+        Security-->>TrackAPI: Fail
+        TrackAPI-->>Client: 400 Bad Request
+        Client-->>Citizen: Show Captcha Error
+    else Valid Captcha
+        Security-->>TrackAPI: Pass
+    end
+
+    TrackAPI->>Prisma: Query Application with relations
+    activate Prisma
+    Prisma->>DB: SELECT Application, StatusHistory, Passport
+    DB-->>Prisma: Application data
+    Prisma-->>TrackAPI: Records
+    deactivate Prisma
+
+    alt Application Not Found
+        TrackAPI-->>Client: 404 Not Found
+        Client-->>Citizen: Show Application Not Found
+    else Application Located
+        TrackAPI->>TrackAPI: Map status to milestone stage (1-5)
+
+        opt Dispatched / In Transit
+            TrackAPI->>IndiaPost: Fetch consignment status (Speed Post tracking)
+            IndiaPost-->>TrackAPI: Live postal transit details
+        end
+
+        TrackAPI-->>Client: 200 OK { currentStatus, stage, timeline, postalDetails }
+        deactivate TrackAPI
+
+        Client-->>Citizen: Render visual timeline with milestones & postal status
+    end

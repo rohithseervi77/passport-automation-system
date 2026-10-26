@@ -1,0 +1,124 @@
+@startuml
+skinparam state {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+  StartColor #002B49
+  EndColor #002B49
+}
+
+title Passport Automation System (PAS) - Application Finite State Machine (FSM)\nAcademic Statechart Diagram (UML 2.5)
+
+[*] --> DRAFT : Citizen initiates application
+
+state DRAFT {
+  DRAFT : Entry: Generate Draft ARN
+  DRAFT : Do: Populate applicant, family, address particulars
+}
+
+DRAFT --> SUBMITTED : Form finalized & signed
+DRAFT --> CANCELLED : Citizen abandons draft
+
+state SUBMITTED {
+  SUBMITTED : Entry: Lock biographical edits
+  SUBMITTED : Do: Validate mandatory proofs & eligibility
+}
+
+SUBMITTED --> PAYMENT_PENDING : Calculate statutory fees (GSR 516E)
+SUBMITTED --> CANCELLED : Citizen withdraws application
+
+state PAYMENT_PENDING {
+  PAYMENT_PENDING : Do: Awaiting gateway fee settlement
+}
+
+PAYMENT_PENDING --> PAYMENT_PROCESSING : Transaction initiated
+state PAYMENT_PROCESSING {
+  PAYMENT_PROCESSING : Do: Bank/UPI gateway settlement
+}
+
+PAYMENT_PROCESSING --> PAYMENT_COMPLETED : Payment SUCCESS
+PAYMENT_PROCESSING --> PAYMENT_FAILED : Gateway timeout / decline
+PAYMENT_FAILED --> PAYMENT_PENDING : Retry payment
+
+state PAYMENT_COMPLETED {
+  PAYMENT_COMPLETED : Entry: Issue digital receipt
+  PAYMENT_COMPLETED : Do: Unlock PSK appointment quota
+}
+
+PAYMENT_COMPLETED --> APPOINTMENT_BOOKED : Citizen reserves PSK slot
+
+state APPOINTMENT_BOOKED {
+  APPOINTMENT_BOOKED : Entry: Generate Appointment Slip
+  APPOINTMENT_BOOKED : Do: Awaiting physical PSK visit date
+}
+
+APPOINTMENT_BOOKED --> APPOINTMENT_BOOKED : Reschedule slot (max allowed)
+APPOINTMENT_BOOKED --> DOCUMENT_VERIFICATION : Citizen checks in at PSK (Counter A)
+
+state DOCUMENT_VERIFICATION {
+  DOCUMENT_VERIFICATION : Do: Verifying Officer (Counter B) scrutinizes original proofs
+}
+
+DOCUMENT_VERIFICATION --> CLARIFICATION_REQUIRED : Incomplete / illegible documents
+CLARIFICATION_REQUIRED --> DOCUMENT_VERIFICATION : Citizen uploads requested clarification
+
+DOCUMENT_VERIFICATION --> DOCUMENT_VERIFIED : Counter B approves all proofs
+DOCUMENT_VERIFICATION --> REJECTED : Fraudulent proofs detected (Sec 6)
+
+state DOCUMENT_VERIFIED {
+  DOCUMENT_VERIFIED : Entry: Biometrics & digital signature captured
+}
+
+DOCUMENT_VERIFIED --> POLICE_VERIFICATION_PENDING : Transmit to local Police Station
+DOCUMENT_VERIFIED --> OFFICER_REVIEW : Tatkaal / Exemption category
+
+state POLICE_VERIFICATION_PENDING {
+  POLICE_VERIFICATION_PENDING : Do: Jurisdictional field enquiry & criminal record search
+}
+
+POLICE_VERIFICATION_PENDING --> POLICE_VERIFICATION_COMPLETED : PVR submitted (CLEARED / ADVERSE)
+
+state POLICE_VERIFICATION_COMPLETED {
+  POLICE_VERIFICATION_COMPLETED : Entry: PVR dossier attached to application
+}
+
+POLICE_VERIFICATION_COMPLETED --> OFFICER_REVIEW : Transmit to Granting Officer (Counter C)
+
+state OFFICER_REVIEW {
+  OFFICER_REVIEW : Do: Statutory scrutiny under Passports Act, 1967
+}
+
+OFFICER_REVIEW --> CLARIFICATION_REQUIRED : Officer demands additional affidavits
+OFFICER_REVIEW --> REJECTED : Statutory disqualification (Section 6)
+OFFICER_REVIEW --> APPROVED : Granting Officer approves issuance
+
+state APPROVED {
+  APPROVED : Entry: Generate unique Passport Number (Pxxxxxxx)
+}
+
+APPROVED --> PRINTING : Sent to security printing queue
+
+state PRINTING {
+  PRINTING : Do: Laser engraving & contactless chip personalization
+}
+
+PRINTING --> DISPATCHED : Handed over to India Post Speed Post
+
+state DISPATCHED {
+  DISPATCHED : Entry: Generate Tracking Number (INxxxxxxxxxxTRK)
+  DISPATCHED : Do: Transit to applicant present address
+}
+
+DISPATCHED --> DELIVERED : Successful physical delivery
+
+state DELIVERED
+state REJECTED
+state CANCELLED
+
+DELIVERED --> [*] : Application Completed
+REJECTED --> [*] : Refusal Finalized
+CANCELLED --> [*] : Process Terminated
+
+@enduml

@@ -1,0 +1,82 @@
+@startuml
+skinparam sequence {
+  ArrowColor #002B49
+  ActorBorderColor #002B49
+  LifeLineBorderColor #002B49
+  LifeLineBackgroundColor #F0F4F8
+  ParticipantBorderColor #002B49
+  ParticipantBackgroundColor White
+  ParticipantFontName "Segoe UI", Arial, sans-serif
+  ParticipantFontSize 11
+  ActorFontName "Segoe UI", Arial, sans-serif
+  ActorFontSize 11
+}
+
+title Passport Automation System (PAS) - PSK Document Scrutiny (Counter B)\nSequence Diagram (UML 2.5)
+
+actor "Passport Officer\n(Counter B Scrutiny)" as Officer
+actor "Citizen\n(At PSK Desk)" as Citizen
+participant "Officer Portal UI\n(OfficerApplicationDetail)" as UI
+participant "Next.js API Route\n(/api/officer/documents)" as DocAPI
+participant "FSM Engine\n(lib/fsm.ts)" as FSM
+participant "Prisma Client\n(lib/prisma.ts)" as Prisma
+database "Database\n(Document / Application)" as DB
+participant "Notification Service\n(lib/notifications.ts)" as Notify
+
+Citizen -> Officer : Present physical original documents at Counter B
+Officer -> UI : Open Application Dossier by ARN (Status: DOCUMENT_VERIFICATION)
+UI -> DocAPI : GET /api/officer/applications/{id}/documents
+DocAPI -> Prisma : document.findMany({ where: { applicationId } })
+Prisma -> DB : SELECT * FROM "Document" WHERE applicationId = ?
+DB --> Prisma : List of uploaded proof documents
+Prisma --> DocAPI : Documents dataset
+DocAPI --> UI : Render document preview panel
+
+loop For Each Mandatory Document (Address, DOB, Non-ECR)
+  Officer -> Officer : Compare physical original certificate with uploaded digital scan
+  alt Document Deficient / Illegible
+    Officer -> UI : Click "Flag Correction Required" & enter remarks
+    UI -> DocAPI : PATCH /api/officer/documents/{docId} { status: "CORRECTION_REQUIRED", remarks }
+    DocAPI -> Prisma : document.update({ where: { id: docId }, data: { status: "CORRECTION_REQUIRED", remarks } })
+    Prisma -> DB : UPDATE "Document" SET status="CORRECTION_REQUIRED", remarks = ?
+    DB --> Prisma : Updated
+  else Document Valid & Authentic
+    Officer -> UI : Click "Approve & Verify"
+    UI -> DocAPI : PATCH /api/officer/documents/{docId} { status: "VERIFIED", officerId }
+    DocAPI -> Prisma : document.update({ where: { id: docId }, data: { status: "VERIFIED", verifiedAt: now(), verifiedBy } })
+    Prisma -> DB : UPDATE "Document" SET status="VERIFIED", verifiedAt = now()
+    DB --> Prisma : Updated
+  end
+end
+
+alt Any Document Flagged Correction Required
+  Officer -> UI : Submit "Request Citizen Clarification"
+  UI -> DocAPI : POST /api/officer/applications/{id}/transition { toStatus: "CLARIFICATION_REQUIRED" }
+  DocAPI -> FSM : canTransition("DOCUMENT_VERIFICATION", "CLARIFICATION_REQUIRED", "PASSPORT_OFFICER")
+  FSM --> DocAPI : true (Allowed)
+  DocAPI -> Prisma : $transaction(update Application & add StatusHistory)
+  Prisma -> DB : UPDATE "Application" SET status="CLARIFICATION_REQUIRED"
+  DocAPI -> Notify : notifyCitizenClarificationNeeded(applicantId, remarks)
+  DocAPI --> UI : 200 OK (Application transitioned to CLARIFICATION_REQUIRED)
+  UI --> Officer : Confirmation & Exit Token returned to Citizen
+else All Mandatory Documents Verified
+  Officer -> UI : Submit "Finalize Scrutiny & Approve Proofs"
+  UI -> DocAPI : POST /api/officer/applications/{id}/transition { toStatus: "DOCUMENT_VERIFIED" }
+  DocAPI -> FSM : canTransition("DOCUMENT_VERIFICATION", "DOCUMENT_VERIFIED", "PASSPORT_OFFICER")
+  FSM --> DocAPI : true (Allowed)
+  DocAPI -> Prisma : $transaction(...)
+  Prisma -> DB : UPDATE "Application" SET status="DOCUMENT_VERIFIED"
+  Prisma -> DB : INSERT INTO "ApplicationStatusHistory" (..., fromStatus="DOCUMENT_VERIFICATION", toStatus="DOCUMENT_VERIFIED")
+  DB --> Prisma : Committed
+  DocAPI --> UI : 200 OK (DOCUMENT_VERIFIED)
+
+  UI -> DocAPI : POST /api/officer/applications/{id}/route-police
+  DocAPI -> FSM : canTransition("DOCUMENT_VERIFIED", "POLICE_VERIFICATION_PENDING", "SYSTEM")
+  FSM --> DocAPI : true
+  DocAPI -> Prisma : UPDATE "Application" SET status="POLICE_VERIFICATION_PENDING"
+  DocAPI -> Prisma : INSERT INTO "PoliceReport" (applicationId, status="PENDING")
+  DocAPI --> UI : 200 OK (Transmitted to Police Verification Queue)
+  UI --> Officer : Case Approved at Counter B; Routed to Police Station
+end
+
+@enduml

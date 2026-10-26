@@ -1,0 +1,72 @@
+@startuml
+skinparam state {
+  BackgroundColor White
+  BorderColor #002B49
+  FontName "Segoe UI", Arial, sans-serif
+  FontSize 11
+  ArrowColor #002B49
+  StartColor #002B49
+  EndColor #002B49
+}
+
+title Passport Automation System (PAS) - User Authentication & Account Security\nStatechart Diagram (UML 2.5)
+
+[*] --> REGISTERED : Citizen / Staff registers with credentials
+
+state REGISTERED {
+  REGISTERED : Entry: Generate verification link / default state
+  REGISTERED : Do: Verify email address or admin-sponsored activation
+}
+
+REGISTERED --> ACTIVE : Email verified / Initial login permitted
+
+state ACTIVE {
+  ACTIVE : Entry: failedAttempts = 0, lockedUntil = null
+  ACTIVE : Do: Allow authenticated access per role permissions
+}
+
+ACTIVE --> ACTIVE : Successful login with valid password & Captcha verification\n[failedAttempts reset to 0; LoginHistory logged]
+
+ACTIVE --> FAILED_ATTEMPT : Invalid credentials or incorrect Captcha\n[failedAttempts < 5]
+
+state FAILED_ATTEMPT {
+  FAILED_ATTEMPT : Entry: Increment failedAttempts counter by 1
+  FAILED_ATTEMPT : Do: Log security warning; prompt user to retry
+}
+
+FAILED_ATTEMPT --> ACTIVE : Successful login on subsequent attempt\n[failedAttempts reset to 0]
+FAILED_ATTEMPT --> FAILED_ATTEMPT : Repeated incorrect password\n[failedAttempts < 5]
+
+FAILED_ATTEMPT --> LOCKED : 5th consecutive failed login attempt\n[failedAttempts >= 5]
+
+state LOCKED {
+  LOCKED : Entry: Set lockedUntil = now() + 30 minutes
+  LOCKED : Do: Reject all login attempts; record IP in AuditLog
+}
+
+LOCKED --> ACTIVE : Lockout duration expires (30 min passed)\n& correct credentials entered
+
+ACTIVE --> PASSWORD_RESET_PENDING : User clicks "Forgot Password"
+FAILED_ATTEMPT --> PASSWORD_RESET_PENDING : User requests recovery link
+LOCKED --> PASSWORD_RESET_PENDING : User requests recovery email
+
+state PASSWORD_RESET_PENDING {
+  PASSWORD_RESET_PENDING : Entry: Generate cryptographically secure reset token (expires in 1 hr)
+  PASSWORD_RESET_PENDING : Do: Transmit password reset URL to registered email address
+}
+
+PASSWORD_RESET_PENDING --> ACTIVE : User clicks valid link & updates passwordHash\n[Token marked used, failedAttempts=0, lockedUntil=null]
+PASSWORD_RESET_PENDING --> ACTIVE : Reset token expires without being used (Account stays in previous state)
+
+ACTIVE --> DEACTIVATED : Administrator revokes user access (isActive = false)
+LOCKED --> DEACTIVATED : Malicious activity confirmed by Security Administrator
+
+state DEACTIVATED {
+  DEACTIVATED : Entry: Invalidate active sessions & cookies
+  DEACTIVATED : Do: Block all authentication attempts indefinitely
+}
+
+DEACTIVATED --> ACTIVE : Administrator re-activates account
+
+DEACTIVATED --> [*] : Account purged under data retention rules
+@enduml
