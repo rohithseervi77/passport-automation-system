@@ -53,7 +53,7 @@ export default function LoginPage() {
       } else if (data.user.role === "POLICE") {
         router.push("/police/dashboard");
       } else if (data.user.role === "ADMIN") {
-        router.push("/officer/dashboard");
+        router.push("/admin/dashboard");
       } else {
         setError("Unknown role assigned to user account.");
         setLoading(false);
@@ -119,7 +119,7 @@ export default function LoginPage() {
             <p className="text-[11px] font-bold uppercase tracking-wider text-blue-950 mb-2 flex items-center gap-1">
               <span>⚡ One-Click Demo Credentials:</span>
             </p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => fillCredentials("applicant_demo", "Applicant@123")}
@@ -141,6 +141,12 @@ export default function LoginPage() {
               >
                 👮 Police
               </button>
+              <Link
+                href="/admin/login"
+                className="py-1.5 px-2 rounded-md bg-purple-50 border border-purple-300 text-[11px] font-semibold text-purple-950 hover:bg-purple-100 transition shadow-2xs text-center flex items-center justify-center gap-1"
+              >
+                🛡️ Admin →
+              </Link>
             </div>
           </div>
 

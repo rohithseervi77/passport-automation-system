@@ -8,6 +8,7 @@ import {
   Calculator, 
   Clock, 
   ShieldCheck, 
+  Shield,
   CreditCard, 
   UserCheck, 
   MapPin, 
@@ -135,10 +136,22 @@ export default function Home() {
             <Link href="/locate-centre" className="hover:text-blue-900 transition">Locate Centre</Link>
             <Link href="/track" className="hover:text-blue-900 transition font-medium text-amber-700">Track Application</Link>
             <Link href="/grievance" className="hover:text-blue-900 transition">Grievance</Link>
+            <Link href="/admin/login" className="hover:text-purple-700 transition font-bold text-purple-900 flex items-center gap-1 bg-purple-50 px-2 py-1 rounded border border-purple-200">
+              <Shield className="w-3.5 h-3.5 text-purple-700" />
+              Admin
+            </Link>
           </nav>
 
           {/* Auth Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/admin/login"
+              className="rounded border border-purple-300 bg-purple-50 px-3 py-1.5 text-xs font-semibold text-purple-900 hover:bg-purple-100 hover:border-purple-400 transition shadow-xs flex items-center gap-1.5"
+            >
+              <Shield className="w-3.5 h-3.5 text-purple-700" />
+              <span className="hidden sm:inline">Admin Portal</span>
+              <span className="sm:hidden">Admin</span>
+            </Link>
             <Link
               href="/login"
               className="rounded border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:border-slate-400 transition shadow-xs"
@@ -239,13 +252,32 @@ export default function Home() {
                   </div>
                   <p className="text-[11px] text-slate-600 mt-1">Pass: <code className="bg-white px-1 py-0.5 rounded border border-emerald-200">Police@123</code></p>
                 </div>
+                <div className="p-2.5 rounded bg-purple-50 border border-purple-200">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-purple-950 flex items-center gap-1">
+                      <Shield className="w-3.5 h-3.5 text-purple-700" />
+                      Administrator
+                    </span>
+                    <span className="text-[10px] text-purple-700 font-mono">admin_demo</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 mt-1">Pass: <code className="bg-white px-1 py-0.5 rounded border border-purple-200">Admin@123</code></p>
+                </div>
               </div>
-              <Link
-                href="/login"
-                className="mt-4 block w-full text-center py-2 bg-blue-900 hover:bg-blue-800 text-white rounded text-xs font-semibold transition"
-              >
-                Go to Login Page →
-              </Link>
+              <div className="grid grid-cols-2 gap-2 mt-4">
+                <Link
+                  href="/login"
+                  className="py-2 bg-blue-900 hover:bg-blue-800 text-white rounded text-xs font-semibold text-center transition"
+                >
+                  Citizen Login →
+                </Link>
+                <Link
+                  href="/admin/login"
+                  className="py-2 bg-purple-900 hover:bg-purple-800 text-white rounded text-xs font-semibold text-center transition flex items-center justify-center gap-1"
+                >
+                  <Shield className="w-3.5 h-3.5" />
+                  Admin Login →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -511,6 +543,7 @@ export default function Home() {
                 <li><Link href="/login" className="hover:text-white">Applicant Dashboard</Link></li>
                 <li><Link href="/login" className="hover:text-white">Passport Officer Console</Link></li>
                 <li><Link href="/login" className="hover:text-white">Police Enquiry Terminal</Link></li>
+                <li><Link href="/admin/login" className="hover:text-purple-300 font-semibold text-purple-400">🛡️ Admin Management Console</Link></li>
                 <li><Link href="/track" className="hover:text-white">Public Verification</Link></li>
               </ul>
             </div>
