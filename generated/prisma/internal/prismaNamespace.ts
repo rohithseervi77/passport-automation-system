@@ -420,7 +420,8 @@ export const ModelName = {
   Notice: 'Notice',
   NoticeCategory: 'NoticeCategory',
   FeeSchedule: 'FeeSchedule',
-  PassportCenter: 'PassportCenter'
+  PassportCenter: 'PassportCenter',
+  PassportService: 'PassportService'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -436,7 +437,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "appointmentHistory" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory" | "grievance" | "adminInvitation" | "systemSetting" | "notice" | "noticeCategory" | "feeSchedule" | "passportCenter"
+    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "appointmentHistory" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory" | "grievance" | "adminInvitation" | "systemSetting" | "notice" | "noticeCategory" | "feeSchedule" | "passportCenter" | "passportService"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2216,6 +2217,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PassportService: {
+      payload: Prisma.$PassportServicePayload<ExtArgs>
+      fields: Prisma.PassportServiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PassportServiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PassportServiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>
+        }
+        findFirst: {
+          args: Prisma.PassportServiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PassportServiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>
+        }
+        findMany: {
+          args: Prisma.PassportServiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>[]
+        }
+        create: {
+          args: Prisma.PassportServiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>
+        }
+        createMany: {
+          args: Prisma.PassportServiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PassportServiceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>[]
+        }
+        delete: {
+          args: Prisma.PassportServiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>
+        }
+        update: {
+          args: Prisma.PassportServiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>
+        }
+        deleteMany: {
+          args: Prisma.PassportServiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PassportServiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PassportServiceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>[]
+        }
+        upsert: {
+          args: Prisma.PassportServiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportServicePayload>
+        }
+        aggregate: {
+          args: Prisma.PassportServiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePassportService>
+        }
+        groupBy: {
+          args: Prisma.PassportServiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PassportServiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PassportServiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PassportServiceCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2697,6 +2772,32 @@ export const PassportCenterScalarFieldEnum = {
 export type PassportCenterScalarFieldEnum = (typeof PassportCenterScalarFieldEnum)[keyof typeof PassportCenterScalarFieldEnum]
 
 
+export const PassportServiceScalarFieldEnum = {
+  id: 'id',
+  serviceCode: 'serviceCode',
+  title: 'title',
+  shortDescription: 'shortDescription',
+  category: 'category',
+  badge: 'badge',
+  badgeColor: 'badgeColor',
+  processingTime: 'processingTime',
+  normalFee: 'normalFee',
+  tatkaalFee: 'tatkaalFee',
+  validity: 'validity',
+  eligibility: 'eligibility',
+  documentChecklist: 'documentChecklist',
+  stepByStepGuide: 'stepByStepGuide',
+  officialSource: 'officialSource',
+  officialSourceUrl: 'officialSourceUrl',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PassportServiceScalarFieldEnum = (typeof PassportServiceScalarFieldEnum)[keyof typeof PassportServiceScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2964,6 +3065,7 @@ export type GlobalOmitConfig = {
   noticeCategory?: Prisma.NoticeCategoryOmit
   feeSchedule?: Prisma.FeeScheduleOmit
   passportCenter?: Prisma.PassportCenterOmit
+  passportService?: Prisma.PassportServiceOmit
 }
 
 /* Types for Logging */

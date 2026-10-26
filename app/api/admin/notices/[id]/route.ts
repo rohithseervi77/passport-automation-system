@@ -35,6 +35,7 @@ export async function PUT(
       sourceLabel,
       sourceUrl,
       attachmentName,
+      publishedAt,
       effectiveDate,
       expiryDate,
     } = body;
@@ -62,6 +63,7 @@ export async function PUT(
         sourceLabel: sourceLabel !== undefined ? sourceLabel?.trim() || null : undefined,
         sourceUrl: sourceUrl !== undefined ? sourceUrl?.trim() || null : undefined,
         attachmentName: attachmentName !== undefined ? attachmentName?.trim() || null : undefined,
+        publishedAt: publishedAt ? new Date(publishedAt) : undefined,
         effectiveDate: effectiveDate ? new Date(effectiveDate) : undefined,
         expiryDate: expiryDate ? new Date(expiryDate) : undefined,
         lastEditedBy: admin.username || "System Administrator",

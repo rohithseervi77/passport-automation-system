@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import AcademicDisclaimer from "@/components/AcademicDisclaimer";
+import { prisma } from "@/lib/prisma";
 import { 
   FileText, 
   Search, 
@@ -21,7 +22,15 @@ import {
   Bell
 } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const latestNotices = await prisma.notice.findMany({
+    where: { status: "PUBLISHED" },
+    orderBy: [
+      { isPinned: "desc" },
+      { publishedAt: "desc" },
+    ],
+    take: 3,
+  }).catch(() => []);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -304,77 +313,71 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-xl border border-rose-200 p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between">
-              <div className="absolute top-0 left-0 bottom-0 w-1 bg-rose-600" />
-              <div>
-                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
-                  <span className="font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded uppercase">Critical</span>
-                  <span>1 Jul 2026 Effective</span>
-                </div>
-                <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
-                  <Link href="/news/revised-passport-fee-schedule-july-2026">
-                    Gazette Notification: Revised Passport Fee Schedule Effective 1 July 2026
-                  </Link>
-                </h3>
-                <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
-                  Official Gazette G.S.R. 516(E) revises fresh adult passport to ₹2,500 and Tatkaal to ₹5,000 with 10% concessions.
-                </p>
+            {latestNotices.length === 0 ? (
+              <div className="col-span-3 bg-white p-8 rounded-xl border border-slate-200 text-center text-xs text-slate-500">
+                No active announcements in the database.
               </div>
-              <Link
-                href="/news/revised-passport-fee-schedule-july-2026"
-                className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
-              >
-                Read Gazette Details →
-              </Link>
-            </div>
-
-            <div className="bg-white rounded-xl border border-amber-200 p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between">
-              <div className="absolute top-0 left-0 bottom-0 w-1 bg-amber-500" />
-              <div>
-                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
-                  <span className="font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded uppercase">Important</span>
-                  <span>RPO Chennai</span>
-                </div>
-                <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
-                  <Link href="/news/special-saturday-passport-mela-chennai-psk">
-                    Special Saturday Passport Mela across RPO Chennai Kendras
-                  </Link>
-                </h3>
-                <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
-                  Over 1,500 additional appointment slots opened for Saligramam, Tambaram, and Aminjikarai kendras.
-                </p>
-              </div>
-              <Link
-                href="/news/special-saturday-passport-mela-chennai-psk"
-                className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
-              >
-                Read Mela Schedule →
-              </Link>
-            </div>
-
-            <div className="bg-white rounded-xl border border-slate-200 p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between">
-              <div className="absolute top-0 left-0 bottom-0 w-1 bg-blue-950" />
-              <div>
-                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
-                  <span className="font-bold text-blue-900 bg-blue-50 px-1.5 py-0.5 rounded uppercase">Advisory</span>
-                  <span>All India</span>
-                </div>
-                <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
-                  <Link href="/news/daily-appointment-slot-release-timing-advisory">
-                    Daily Appointment Quota Release Timing: 12:00 PM Normal & 02:00 PM Tatkaal
-                  </Link>
-                </h3>
-                <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
-                  Standardized slot opening protocol across all Regional Passport Offices and citizen seva kendras.
-                </p>
-              </div>
-              <Link
-                href="/news/daily-appointment-slot-release-timing-advisory"
-                className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
-              >
-                Read Slot Guidelines →
-              </Link>
-            </div>
+            ) : (
+              latestNotices.map((n) => {
+                const isCritical = n.priority === "CRITICAL";
+                const isImportant = n.priority === "IMPORTANT";
+                return (
+                  <div
+                    key={n.id}
+                    className={`bg-white rounded-xl border p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between ${
+                      isCritical
+                        ? "border-rose-200"
+                        : isImportant
+                        ? "border-amber-200"
+                        : "border-slate-200"
+                    }`}
+                  >
+                    <div
+                      className={`absolute top-0 left-0 bottom-0 w-1 ${
+                        isCritical ? "bg-rose-600" : isImportant ? "bg-amber-500" : "bg-blue-950"
+                      }`}
+                    />
+                    <div>
+                      <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
+                        <span
+                          className={`font-bold px-1.5 py-0.5 rounded uppercase ${
+                            isCritical
+                              ? "text-rose-700 bg-rose-50"
+                              : isImportant
+                              ? "text-amber-800 bg-amber-50"
+                              : "text-blue-900 bg-blue-50"
+                          }`}
+                        >
+                          {n.priority}
+                        </span>
+                        <span>
+                          {n.publishedAt
+                            ? new Date(n.publishedAt).toLocaleDateString("en-IN", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })
+                            : "Notice"}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
+                        <Link href={`/news/${n.slug}`}>{n.title}</Link>
+                      </h3>
+                      <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
+                        {n.summary}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/news/${n.slug}`}
+                      className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
+                    >
+                      <span>Read Notice Details</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </section>

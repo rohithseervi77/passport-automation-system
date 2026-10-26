@@ -42,6 +42,14 @@ export async function GET() {
       activeSessions,
       recentAuditLogs,
       recentApplications,
+      totalNotices,
+      publishedNotices,
+      draftNotices,
+      archivedNotices,
+      totalServices,
+      totalCentres,
+      totalFees,
+      noticesByYear,
     ] = await Promise.all([
       // Users
       prisma.user.count(),
@@ -93,6 +101,21 @@ export async function GET() {
           applicant: { select: { name: true } },
         },
       }),
+      // Database-Driven System Summaries
+      prisma.notice.count(),
+      prisma.notice.count({ where: { status: "PUBLISHED" } }),
+      prisma.notice.count({ where: { status: "DRAFT" } }),
+      prisma.notice.count({ where: { status: "ARCHIVED" } }),
+      prisma.passportService.count(),
+      prisma.passportCenter.count(),
+      prisma.feeSchedule.count(),
+      prisma.$queryRaw<{ year: number; count: number }[]>`
+        SELECT EXTRACT(YEAR FROM "publishedAt")::int as year, count(*)::int as count
+        FROM "Notice"
+        WHERE "publishedAt" IS NOT NULL
+        GROUP BY EXTRACT(YEAR FROM "publishedAt")
+        ORDER BY year DESC
+      `,
     ]);
 
     return NextResponse.json({
@@ -123,6 +146,18 @@ export async function GET() {
         loginsToday,
         failedLoginsToday,
         activeSessions,
+      },
+      databaseSummary: {
+        notices: {
+          total: totalNotices,
+          published: publishedNotices,
+          draft: draftNotices,
+          archived: archivedNotices,
+          byYear: noticesByYear || [],
+        },
+        servicesTotal: totalServices,
+        centresTotal: totalCentres,
+        feesTotal: totalFees,
       },
       recentAuditLogs,
       recentApplications,

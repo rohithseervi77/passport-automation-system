@@ -161,3 +161,8 @@ export type FeeSchedule = Prisma.FeeScheduleModel
  * 
  */
 export type PassportCenter = Prisma.PassportCenterModel
+/**
+ * Model PassportService
+ * 
+ */
+export type PassportService = Prisma.PassportServiceModel

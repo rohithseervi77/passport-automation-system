@@ -625,3 +625,35 @@ model PassportCenter {
   @@index([associatedRpo])
   @@index([status])
 }
+
+// =====================================================
+// PASSPORT SERVICES DIRECTORY (Database-Driven Services)
+// =====================================================
+
+model PassportService {
+  id                Int      @id @default(autoincrement())
+  serviceCode       String   @unique // e.g. FRESH_PASSPORT, REISSUE_PASSPORT, TATKAAL_SCHEME, etc.
+  title             String
+  shortDescription  String
+  category          String   @default("CITIZEN") // CITIZEN, EXPEDITED, CLEARANCE, OFFICIAL, CONSULAR, REGULATORY
+  badge             String?  // e.g. "Primary", "Expedited", "Statutory"
+  badgeColor        String?  @default("blue")
+  processingTime    String   @default("15-20 Working Days")
+  normalFee         Int?     @default(2500)
+  tatkaalFee        Int?     @default(5000)
+  validity          String?  @default("10 Years (Adult)")
+  eligibility       String
+  documentChecklist String   // JSON stringified array of required documents
+  stepByStepGuide   String   // JSON stringified array of steps
+  officialSource    String?  @default("Passport Seva Directorate (CPV Division, MEA)")
+  officialSourceUrl String?  @default("https://www.passportindia.gov.in")
+  displayOrder      Int      @default(1)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+
+  @@index([serviceCode])
+  @@index([category])
+  @@index([isActive])
+  @@index([displayOrder])
+}

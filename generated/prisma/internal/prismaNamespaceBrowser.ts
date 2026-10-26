@@ -74,7 +74,8 @@ export const ModelName = {
   Notice: 'Notice',
   NoticeCategory: 'NoticeCategory',
   FeeSchedule: 'FeeSchedule',
-  PassportCenter: 'PassportCenter'
+  PassportCenter: 'PassportCenter',
+  PassportService: 'PassportService'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -533,6 +534,32 @@ export const PassportCenterScalarFieldEnum = {
 } as const
 
 export type PassportCenterScalarFieldEnum = (typeof PassportCenterScalarFieldEnum)[keyof typeof PassportCenterScalarFieldEnum]
+
+
+export const PassportServiceScalarFieldEnum = {
+  id: 'id',
+  serviceCode: 'serviceCode',
+  title: 'title',
+  shortDescription: 'shortDescription',
+  category: 'category',
+  badge: 'badge',
+  badgeColor: 'badgeColor',
+  processingTime: 'processingTime',
+  normalFee: 'normalFee',
+  tatkaalFee: 'tatkaalFee',
+  validity: 'validity',
+  eligibility: 'eligibility',
+  documentChecklist: 'documentChecklist',
+  stepByStepGuide: 'stepByStepGuide',
+  officialSource: 'officialSource',
+  officialSourceUrl: 'officialSourceUrl',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PassportServiceScalarFieldEnum = (typeof PassportServiceScalarFieldEnum)[keyof typeof PassportServiceScalarFieldEnum]
 
 
 export const SortOrder = {

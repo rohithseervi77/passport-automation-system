@@ -17,6 +17,7 @@ export async function GET(req: Request) {
     const category = searchParams.get("category");
     const priority = searchParams.get("priority");
     const search = searchParams.get("search")?.trim() || "";
+    const yearParam = searchParams.get("year");
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
     const limit = Math.min(50, Math.max(1, parseInt(searchParams.get("limit") || "20", 10)));
     const skip = (page - 1) * limit;
@@ -35,16 +36,27 @@ export async function GET(req: Request) {
       where.priority = priority;
     }
 
+    if (yearParam && yearParam !== "ALL") {
+      const yr = parseInt(yearParam, 10);
+      if (!isNaN(yr)) {
+        where.publishedAt = {
+          gte: new Date(Date.UTC(yr, 0, 1)),
+          lte: new Date(Date.UTC(yr, 11, 31, 23, 59, 59, 999)),
+        };
+      }
+    }
+
     if (search) {
       where.OR = [
         { title: { contains: search, mode: "insensitive" } },
         { summary: { contains: search, mode: "insensitive" } },
         { noticeId: { contains: search, mode: "insensitive" } },
         { region: { contains: search, mode: "insensitive" } },
+        { sourceLabel: { contains: search, mode: "insensitive" } },
       ];
     }
 
-    const [notices, total, categories] = await Promise.all([
+    const [notices, total, categories, publishedCount, draftCount, archivedCount, yearStats] = await Promise.all([
       prisma.notice.findMany({
         where,
         orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
@@ -53,6 +65,16 @@ export async function GET(req: Request) {
       }),
       prisma.notice.count({ where }),
       prisma.noticeCategory.findMany({ orderBy: { displayOrder: "asc" } }),
+      prisma.notice.count({ where: { status: "PUBLISHED" } }),
+      prisma.notice.count({ where: { status: "DRAFT" } }),
+      prisma.notice.count({ where: { status: "ARCHIVED" } }),
+      prisma.$queryRaw<{ year: number; count: number }[]>`
+        SELECT EXTRACT(YEAR FROM "publishedAt")::int as year, count(*)::int as count
+        FROM "Notice"
+        WHERE "publishedAt" IS NOT NULL
+        GROUP BY EXTRACT(YEAR FROM "publishedAt")
+        ORDER BY year DESC
+      `,
     ]);
 
     return NextResponse.json({
@@ -60,12 +82,18 @@ export async function GET(req: Request) {
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / limit) || 1,
       categories,
+      stats: {
+        publishedCount,
+        draftCount,
+        archivedCount,
+        yearStats: yearStats || [],
+      },
     });
   } catch (error) {
     console.error("Admin notices GET error:", error);
-    return NextResponse.json({ error: "Failed to load notices." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load notices from database." }, { status: 500 });
   }
 }
 
@@ -86,31 +114,45 @@ export async function POST(req: Request) {
       priority = "NORMAL",
       status = "PUBLISHED",
       isPinned = false,
-      region,
-      affectedCentre,
-      sourceLabel,
-      sourceUrl,
-      attachmentName,
-      effectiveDate,
-      expiryDate,
+      region = "All India",
+      affectedCentre = null,
+      sourceLabel = "Ministry of External Affairs",
+      sourceUrl = "https://www.passportindia.gov.in/psp/News",
+      attachmentName = null,
+      publishedAt = null,
+      effectiveDate = null,
+      expiryDate = null,
     } = body;
 
     if (!title || !summary || !content || !category) {
-      return NextResponse.json({ error: "Title, summary, content, and category are required." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Title, summary, full content, and category are required." },
+        { status: 400 }
+      );
     }
 
-    const generatedSlug = (slug || title)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
+    const pubDate = publishedAt ? new Date(publishedAt) : new Date();
+    const year = pubDate.getFullYear();
+    const cleanSlug = slug
+      ? slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, "-")
+      : title.toLowerCase().trim().replace(/[^a-z0-9-]/g, "-");
 
-    const noticeCount = await prisma.notice.count();
-    const noticeId = `NOT-2026-${String(noticeCount + 1).padStart(3, "0")}`;
+    // Check slug uniqueness
+    const existing = await prisma.notice.findUnique({ where: { slug: cleanSlug } });
+    if (existing) {
+      return NextResponse.json(
+        { error: "A notice with this slug or title already exists in the database." },
+        { status: 409 }
+      );
+    }
+
+    const randNum = Math.floor(100 + Math.random() * 900);
+    const noticeId = `NOT-${year}-${randNum}`;
 
     const newNotice = await prisma.notice.create({
       data: {
         noticeId,
-        slug: generatedSlug,
+        slug: cleanSlug,
         title: title.trim(),
         summary: summary.trim(),
         content: content.trim(),
@@ -119,31 +161,34 @@ export async function POST(req: Request) {
         status,
         isPinned: Boolean(isPinned),
         isSimulated: true,
-        region: region?.trim() || null,
-        affectedCentre: affectedCentre?.trim() || null,
-        sourceLabel: sourceLabel?.trim() || "Passport Seva Directorate / Ministry of External Affairs",
-        sourceUrl: sourceUrl?.trim() || "https://www.passportindia.gov.in/psp/News",
-        attachmentName: attachmentName?.trim() || null,
-        author: admin.username || "System Administrator",
-        publishedAt: status === "PUBLISHED" ? new Date() : new Date(),
-        effectiveDate: effectiveDate ? new Date(effectiveDate) : null,
+        publishedAt: pubDate,
+        effectiveDate: effectiveDate ? new Date(effectiveDate) : pubDate,
         expiryDate: expiryDate ? new Date(expiryDate) : null,
+        region,
+        affectedCentre,
+        sourceLabel,
+        sourceUrl,
+        attachmentName,
+        author: admin.email || "Admin Desk",
       },
     });
 
     await logAuditEvent({
       userId: admin.id,
-      action: "NOTICE_CREATED",
+      action: "CREATE_NOTICE",
       entityId: newNotice.noticeId,
-      details: { title: newNotice.title, category: newNotice.category, status: newNotice.status },
+      details: {
+        title: newNotice.title,
+        status: newNotice.status,
+        category: newNotice.category,
+        publishedAt: newNotice.publishedAt,
+      },
+      ipAddress: req.headers.get("x-forwarded-for") || "127.0.0.1",
     });
 
-    return NextResponse.json({ message: "Notice published successfully.", notice: newNotice }, { status: 201 });
+    return NextResponse.json({ success: true, notice: newNotice });
   } catch (error: any) {
     console.error("Admin notices POST error:", error);
-    if (error.code === "P2002") {
-      return NextResponse.json({ error: "A notice with this slug or title already exists." }, { status: 409 });
-    }
-    return NextResponse.json({ error: "Failed to create notice." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create notice in database." }, { status: 500 });
   }
 }

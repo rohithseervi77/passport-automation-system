@@ -11,14 +11,15 @@ import {
   AlertTriangle, 
   FileText, 
   ArrowRight, 
-  ExternalLink,
-  ChevronRight,
-  Pin,
-  RefreshCw,
-  Clock,
-  ShieldCheck,
-  Building2,
-  FileCheck2
+  ExternalLink, 
+  ChevronRight, 
+  Pin, 
+  RefreshCw, 
+  Clock, 
+  ShieldCheck, 
+  Building2, 
+  FileCheck2,
+  ArrowUpDown
 } from "lucide-react";
 import AcademicDisclaimer from "@/components/AcademicDisclaimer";
 
@@ -52,14 +53,17 @@ export default function NewsPage() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [categories, setCategories] = useState<NoticeCategory[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   // Filters
   const [search, setSearch] = useState("");
+  const [selectedYear, setSelectedYear] = useState("ALL");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [selectedPriority, setSelectedPriority] = useState("ALL");
   const [selectedRegion, setSelectedRegion] = useState("ALL");
+  const [selectedSort, setSelectedSort] = useState<"newest" | "oldest">("newest");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -70,28 +74,33 @@ export default function NewsPage() {
     try {
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
+      if (selectedYear !== "ALL") params.set("year", selectedYear);
       if (selectedCategory !== "ALL") params.set("category", selectedCategory);
       if (selectedPriority !== "ALL") params.set("priority", selectedPriority);
       if (selectedRegion !== "ALL") params.set("region", selectedRegion);
+      params.set("sort", selectedSort);
       params.set("page", page.toString());
       params.set("limit", "10");
 
       const res = await fetch(`/api/news?${params.toString()}`);
-      if (!res.ok) throw new Error("Failed to load notices");
+      if (!res.ok) throw new Error("Failed to load notices from database");
       const data = await res.json();
 
       setNotices(data.notices || []);
       setCategories(data.categories || []);
       setRegions(data.regions || []);
+      if (data.years && Array.isArray(data.years)) {
+        setAvailableYears(data.years);
+      }
       setTotalPages(data.totalPages || 1);
       setTotal(data.total || 0);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError("Unable to connect to public announcement feed. Please check your network.");
+      setError("Unable to connect to public announcement database. Please check your connection.");
     } finally {
       setLoading(false);
     }
-  }, [search, selectedCategory, selectedPriority, selectedRegion, page]);
+  }, [search, selectedYear, selectedCategory, selectedPriority, selectedRegion, selectedSort, page]);
 
   useEffect(() => {
     fetchNotices();
@@ -99,13 +108,15 @@ export default function NewsPage() {
 
   function handleResetFilters() {
     setSearch("");
+    setSelectedYear("ALL");
     setSelectedCategory("ALL");
     setSelectedPriority("ALL");
     setSelectedRegion("ALL");
+    setSelectedSort("newest");
     setPage(1);
   }
 
-  // Pinned or Critical notices for top marquee / alert area
+  // Pinned or Critical notices for top alert area
   const pinnedNotices = notices.filter((n) => n.isPinned || n.priority === "CRITICAL");
 
   return (
@@ -176,7 +187,7 @@ export default function NewsPage() {
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm text-blue-200/90 max-w-2xl leading-relaxed">
                   Real-time statutory notifications, daily appointment quota schedules, Regional Passport Office
-                  circulars, fee revisions, and service advisories across India.
+                  circulars, fee revisions, and service advisories queried directly from the departmental database.
                 </p>
               </div>
 
@@ -200,7 +211,7 @@ export default function NewsPage() {
           </div>
         </section>
 
-        {/* Prominently Displayed Important Notice Banner (if any pinned/critical notice exists) */}
+        {/* Prominently Displayed Important Notice Banner */}
         {pinnedNotices.length > 0 && (
           <section className="bg-amber-50 border-b border-amber-200 px-4 py-3">
             <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -222,7 +233,62 @@ export default function NewsPage() {
 
         {/* Main Content Area */}
         <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
-          {/* Search & Filter Toolbar */}
+          {/* Dynamic Year Filter Pills (Derived 100% from database) */}
+          <div className="bg-white border border-slate-200 rounded-xl p-3.5 mb-4 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-slate-500 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 mr-1">
+                <Calendar className="w-3.5 h-3.5 text-blue-900" />
+                <span>Publication Year:</span>
+              </span>
+              <button
+                onClick={() => {
+                  setSelectedYear("ALL");
+                  setPage(1);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                  selectedYear === "ALL"
+                    ? "bg-blue-950 text-white shadow-xs font-bold"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+              >
+                All Years
+              </button>
+              {availableYears.map((yr) => (
+                <button
+                  key={yr}
+                  onClick={() => {
+                    setSelectedYear(yr.toString());
+                    setPage(1);
+                  }}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                    selectedYear === yr.toString()
+                      ? "bg-blue-950 text-white shadow-xs font-bold"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  {yr}
+                </button>
+              ))}
+            </div>
+
+            {/* Sort Toggle */}
+            <div className="flex items-center gap-2">
+              <span className="text-slate-400 text-[11px] font-medium">Sort Order:</span>
+              <select
+                value={selectedSort}
+                onChange={(e) => {
+                  setSelectedSort(e.target.value as "newest" | "oldest");
+                  setPage(1);
+                }}
+                className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-slate-700 font-semibold focus:outline-hidden"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Search & Multi-criteria Filter Toolbar */}
           <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs mb-8 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {/* Search Bar */}
@@ -236,7 +302,7 @@ export default function NewsPage() {
                     setPage(1);
                   }}
                   placeholder="Search title, summary, keyword..."
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-900"
                 />
               </div>
 
@@ -248,7 +314,7 @@ export default function NewsPage() {
                     setSelectedCategory(e.target.value);
                     setPage(1);
                   }}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-900"
                 >
                   <option value="ALL">All Categories ({categories.length})</option>
                   {categories.map((c) => (
@@ -267,7 +333,7 @@ export default function NewsPage() {
                     setSelectedPriority(e.target.value);
                     setPage(1);
                   }}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-900"
                 >
                   <option value="ALL">All Priority Levels</option>
                   <option value="CRITICAL">Critical Advisories</option>
@@ -284,7 +350,7 @@ export default function NewsPage() {
                     setSelectedRegion(e.target.value);
                     setPage(1);
                   }}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-900"
                 >
                   <option value="ALL">All Regions / RPOs</option>
                   {regions.map((r) => (
@@ -299,8 +365,11 @@ export default function NewsPage() {
             {/* Active Filters & Counter */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
               <div className="flex items-center gap-2">
-                <span>Showing <strong>{notices.length}</strong> of <strong>{total}</strong> published notices</span>
-                {(search || selectedCategory !== "ALL" || selectedPriority !== "ALL" || selectedRegion !== "ALL") && (
+                <span>
+                  Showing <strong>{notices.length}</strong> of <strong>{total}</strong> published notices
+                  {selectedYear !== "ALL" && ` for year ${selectedYear}`}
+                </span>
+                {(search || selectedYear !== "ALL" || selectedCategory !== "ALL" || selectedPriority !== "ALL" || selectedRegion !== "ALL") && (
                   <button
                     onClick={handleResetFilters}
                     className="text-xs text-blue-900 font-semibold hover:underline flex items-center gap-1"
@@ -311,7 +380,7 @@ export default function NewsPage() {
               </div>
 
               <div className="text-[11px] text-slate-400">
-                Sorted by: Pinned First • Newest Publication Date
+                Sorted by: Pinned First • {selectedSort === "newest" ? "Newest Published" : "Oldest Published"}
               </div>
             </div>
           </div>
@@ -338,7 +407,7 @@ export default function NewsPage() {
               <Bell className="w-8 h-8 text-slate-300 mx-auto mb-2" />
               <h3 className="text-sm font-bold text-slate-800">No Announcements Found</h3>
               <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                No published notices matched your selected filters or search terms. Try adjusting your search query.
+                No published notices in the database matched the selected year ({selectedYear}), filters, or search terms.
               </p>
               <button
                 onClick={handleResetFilters}
@@ -382,8 +451,12 @@ export default function NewsPage() {
                             </span>
                           )}
 
+                          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-900 font-semibold border border-blue-200/60">
+                            {notice.category}
+                          </span>
+
                           <span
-                            className={`font-bold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider ${
+                            className={`px-2 py-0.5 rounded font-bold uppercase text-[10px] ${
                               isCritical
                                 ? "bg-rose-100 text-rose-800"
                                 : isImportant
@@ -394,115 +467,108 @@ export default function NewsPage() {
                             {notice.priority}
                           </span>
 
-                          <span className="bg-blue-50 text-blue-900 font-semibold px-2 py-0.5 rounded border border-blue-100">
-                            {notice.category}
-                          </span>
-
                           {notice.region && (
-                            <span className="text-slate-500 flex items-center gap-1">
+                            <span className="inline-flex items-center gap-1 text-slate-500">
                               <MapPin className="w-3 h-3 text-slate-400" />
-                              {notice.region}
+                              <span>{notice.region}</span>
                             </span>
                           )}
 
-                          <span className="text-slate-400 flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {new Date(notice.publishedAt).toLocaleDateString("en-IN", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })}
+                          <span className="text-slate-400">•</span>
+
+                          <span className="text-slate-500 font-mono text-[11px]">
+                            {notice.noticeId}
                           </span>
                         </div>
 
                         {/* Title */}
-                        <h2 className="text-base sm:text-lg font-bold text-slate-900 hover:text-blue-950">
+                        <h2 className="text-base sm:text-lg font-bold text-slate-900 hover:text-blue-950 transition">
                           <Link href={`/news/${notice.slug}`} className="hover:underline">
                             {notice.title}
                           </Link>
                         </h2>
 
                         {/* Summary */}
-                        <p className="text-xs text-slate-600 leading-relaxed max-w-4xl">
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                           {notice.summary}
                         </p>
 
-                        {/* Affected Centre or Source citation */}
-                        {(notice.affectedCentre || notice.sourceLabel) && (
-                          <div className="pt-1 text-[11px] text-slate-500 flex flex-wrap gap-4">
-                            {notice.affectedCentre && (
-                              <span>
-                                Affected Centres: <strong className="text-slate-700">{notice.affectedCentre}</strong>
-                              </span>
-                            )}
-                            {notice.sourceLabel && (
-                              <span>
-                                Source: <span className="italic">{notice.sourceLabel}</span>
-                              </span>
-                            )}
-                          </div>
-                        )}
+                        {/* Footer Info */}
+                        <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-500 pt-2 border-t border-slate-100">
+                          <span className="inline-flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                            <span>
+                              Published:{" "}
+                              <strong>
+                                {notice.publishedAt
+                                  ? new Date(notice.publishedAt).toLocaleDateString("en-IN", {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    })
+                                  : "N/A"}
+                              </strong>
+                            </span>
+                          </span>
+
+                          {notice.affectedCentre && (
+                            <span className="inline-flex items-center gap-1">
+                              <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                              <span>Centres: {notice.affectedCentre}</span>
+                            </span>
+                          )}
+
+                          {notice.sourceLabel && (
+                            <span className="text-slate-400 italic">
+                              Source: {notice.sourceLabel}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Right Action Button */}
-                      <div className="shrink-0 flex items-center md:self-center pl-2 md:pl-0">
+                      {/* Right Action */}
+                      <div className="pl-2 md:pl-0 shrink-0 self-end md:self-center">
                         <Link
                           href={`/news/${notice.slug}`}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-950 text-white text-xs font-semibold hover:bg-blue-900 transition shadow-xs group"
+                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-100 hover:bg-blue-950 hover:text-white text-xs font-semibold text-slate-800 transition shadow-2xs"
                         >
-                          Read Notice
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          <span>Full Notice</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       </div>
                     </div>
                   </article>
                 );
               })}
+            </div>
+          )}
 
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="pt-6 flex items-center justify-between border-t border-slate-200 text-xs">
-                  <button
-                    disabled={page <= 1}
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    className="px-3 py-1.5 rounded border border-slate-300 bg-white font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    ← Previous
-                  </button>
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-4 text-xs">
+              <button
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 font-semibold disabled:opacity-40 hover:bg-slate-100 transition"
+              >
+                ← Previous Page
+              </button>
 
-                  <span className="text-slate-500">
-                    Page <strong>{page}</strong> of <strong>{totalPages}</strong>
-                  </span>
+              <span className="text-slate-600 font-medium">
+                Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+              </span>
 
-                  <button
-                    disabled={page >= totalPages}
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                    className="px-3 py-1.5 rounded border border-slate-300 bg-white font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    Next →
-                  </button>
-                </div>
-              )}
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 font-semibold disabled:opacity-40 hover:bg-slate-100 transition"
+              >
+                Next Page →
+              </button>
             </div>
           )}
         </section>
       </div>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>
-            Passport Automation System (PAS) • Academic Software Architecture & Workflow Simulation
-          </p>
-          <div className="flex items-center gap-4 text-slate-600">
-            <Link href="/" className="hover:underline">Home</Link>
-            <Link href="/news" className="hover:underline font-semibold text-blue-900">News Portal</Link>
-            <Link href="/fee-calculator" className="hover:underline">Fees</Link>
-            <Link href="/privacy" className="hover:underline">Privacy</Link>
-            <Link href="/terms" className="hover:underline">Terms</Link>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

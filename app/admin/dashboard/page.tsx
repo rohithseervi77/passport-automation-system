@@ -22,6 +22,11 @@ import {
   Shield,
   KeyRound,
   ExternalLink,
+  Database,
+  Bell,
+  Building2,
+  Calculator,
+  BookOpen,
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -254,6 +259,134 @@ export default function AdminDashboardPage() {
           <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg text-center space-y-1">
             <span className="text-[10px] font-bold uppercase text-rose-400 block">REJECTED</span>
             <span className="text-lg font-bold text-rose-300 font-mono">{apps.rejected ?? 0}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Database-Driven System Summary (Section 30) */}
+      <div className="bg-slate-950 border border-slate-800 rounded-xl p-6 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Database className="w-4 h-4 text-purple-400" />
+            <div>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                PostgreSQL Departmental Database Registry State
+              </h3>
+              <p className="text-xs text-slate-400">
+                Live database counts queried dynamically across departmental records.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] px-2 py-0.5 rounded bg-purple-950 border border-purple-800 text-purple-300 font-mono">
+            Single Source of Truth
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+          {/* News & Public Notices */}
+          <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-slate-300 flex items-center gap-1.5">
+                <Bell className="w-3.5 h-3.5 text-blue-400" />
+                Public Notices
+              </span>
+              <Link href="/admin/notices" className="text-blue-400 hover:underline text-[11px]">
+                Manage →
+              </Link>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono text-white">
+                {data?.databaseSummary?.notices?.total ?? 0}
+              </span>
+              <span className="text-xs text-slate-400">total in DB</span>
+            </div>
+            <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
+              <div className="flex justify-between">
+                <span>Published Live:</span>
+                <strong className="text-emerald-400">{data?.databaseSummary?.notices?.published ?? 0}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span>Drafts / Archived:</span>
+                <span className="text-slate-300">
+                  {data?.databaseSummary?.notices?.draft ?? 0} / {data?.databaseSummary?.notices?.archived ?? 0}
+                </span>
+              </div>
+              {data?.databaseSummary?.notices?.byYear && data.databaseSummary.notices.byYear.length > 0 && (
+                <div className="pt-1 flex flex-wrap gap-1">
+                  {data.databaseSummary.notices.byYear.map((ys: any) => (
+                    <span key={ys.year} className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-purple-300">
+                      {ys.year}: {ys.count}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Statutory Services */}
+          <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-slate-300 flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                Statutory Services
+              </span>
+              <Link href="/services" target="_blank" className="text-emerald-400 hover:underline text-[11px]">
+                Directory →
+              </Link>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono text-white">
+                {data?.databaseSummary?.servicesTotal ?? 13}
+              </span>
+              <span className="text-xs text-slate-400">services in DB</span>
+            </div>
+            <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+              Citizen core workflows, diplomatic passports, LoC permits, and annexures.
+            </div>
+          </div>
+
+          {/* Passport Centres */}
+          <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-slate-300 flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-indigo-400" />
+                Passport Centres
+              </span>
+              <Link href="/admin/centres" className="text-indigo-400 hover:underline text-[11px]">
+                Manage →
+              </Link>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono text-white">
+                {data?.databaseSummary?.centresTotal ?? 10}
+              </span>
+              <span className="text-xs text-slate-400">active PSKs / POPSKs</span>
+            </div>
+            <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+              National network with dynamic capacity allocation and earliest slot dates.
+            </div>
+          </div>
+
+          {/* Statutory Fees */}
+          <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-slate-300 flex items-center gap-1.5">
+                <Calculator className="w-3.5 h-3.5 text-amber-400" />
+                Fee Schedules
+              </span>
+              <Link href="/admin/fees" className="text-amber-400 hover:underline text-[11px]">
+                Inspect →
+              </Link>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold font-mono text-white">
+                {data?.databaseSummary?.feesTotal ?? 13}
+              </span>
+              <span className="text-xs text-slate-400">GSR 516(E) tiers</span>
+            </div>
+            <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+              Official statutory rates effective 1 July 2026 with 10% concession rules.
+            </div>
           </div>
         </div>
       </div>

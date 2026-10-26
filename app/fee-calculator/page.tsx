@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { 
@@ -15,15 +15,55 @@ import {
   ExternalLink,
   ShieldCheck,
   AlertTriangle,
-  RotateCcw
+  RotateCcw,
+  Database,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { calculatePassportFee, FeeCalculationParams } from "@/lib/feeSchedule";
+
+interface DbFeeSchedule {
+  id: number;
+  serviceType: string;
+  applicationCategory: string;
+  bookletType: string;
+  minAge: number;
+  maxAge: number;
+  normalFee: number;
+  tatkaalFee: number | null;
+  discountPercentage: number;
+  gazetteReference: string;
+  description?: string | null;
+}
 
 export default function FeeCalculatorPage() {
   const [serviceType, setServiceType] = useState<"FRESH" | "REISSUE" | "LOST_DAMAGED" | "PCC">("FRESH");
   const [quota, setQuota] = useState<"NORMAL" | "TATKAAL">("NORMAL");
   const [age, setAge] = useState<number>(25);
   const [bookletType, setBookletType] = useState<"36_PAGES" | "60_PAGES">("36_PAGES");
+  const [dbSchedules, setDbSchedules] = useState<DbFeeSchedule[]>([]);
+  const [loadingDb, setLoadingDb] = useState(false);
+  const [showDbTable, setShowDbTable] = useState(false);
+
+  useEffect(() => {
+    async function loadDbSchedules() {
+      try {
+        setLoadingDb(true);
+        const res = await fetch("/api/fees");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.schedules)) {
+            setDbSchedules(data.schedules);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load DB fee schedules:", e);
+      } finally {
+        setLoadingDb(false);
+      }
+    }
+    loadDbSchedules();
+  }, []);
 
   // Calculate using centralized statutory engine
   const calculation = useMemo(() => {
@@ -368,6 +408,88 @@ export default function FeeCalculatorPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Database-Driven Official Fee Schedule Registry Table */}
+          <div className="mt-10 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-blue-50 text-blue-900 rounded-lg">
+                  <Database className="w-5 h-5 text-blue-900" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-slate-900 text-sm">
+                    Statutory Fee Schedules in Database
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Live records served directly from PostgreSQL database ({dbSchedules.length} active fee categories)
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDbTable(!showDbTable)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
+              >
+                <span>{showDbTable ? "Hide Database Records" : "View Database Records"}</span>
+                {showDbTable ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {showDbTable && (
+              <div className="mt-4 overflow-x-auto">
+                {loadingDb ? (
+                  <div className="py-8 text-center text-xs text-slate-500">Loading database records...</div>
+                ) : dbSchedules.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-slate-500">No active fee schedules found in database.</div>
+                ) : (
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50/75 text-[11px] font-bold text-slate-600 uppercase">
+                        <th className="py-2.5 px-3">Service</th>
+                        <th className="py-2.5 px-3">Category</th>
+                        <th className="py-2.5 px-3">Pages</th>
+                        <th className="py-2.5 px-3">Age Range</th>
+                        <th className="py-2.5 px-3">Standard Fee</th>
+                        <th className="py-2.5 px-3">Tatkaal Fee</th>
+                        <th className="py-2.5 px-3">Concession</th>
+                        <th className="py-2.5 px-3">Statutory Gazette</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {dbSchedules.map((s) => (
+                        <tr key={s.id} className="hover:bg-slate-50/50 transition">
+                          <td className="py-2.5 px-3 font-semibold text-slate-900">{s.serviceType}</td>
+                          <td className="py-2.5 px-3 text-slate-600">{s.applicationCategory}</td>
+                          <td className="py-2.5 px-3 font-mono text-slate-600">{s.bookletType}</td>
+                          <td className="py-2.5 px-3 text-slate-600">
+                            {s.minAge === 0 && s.maxAge === 8
+                              ? "Minor (≤8 yrs)"
+                              : s.minAge === 60
+                              ? "Senior (≥60 yrs)"
+                              : `${s.minAge} - ${s.maxAge} yrs`}
+                          </td>
+                          <td className="py-2.5 px-3 font-mono font-bold text-slate-900">₹{s.normalFee}</td>
+                          <td className="py-2.5 px-3 font-mono text-slate-700">
+                            {s.tatkaalFee ? `₹${s.tatkaalFee}` : "—"}
+                          </td>
+                          <td className="py-2.5 px-3">
+                            {s.discountPercentage > 0 ? (
+                              <span className="inline-block px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                                {s.discountPercentage}% Off
+                              </span>
+                            ) : (
+                              <span className="text-slate-400">—</span>
+                            )}
+                          </td>
+                          <td className="py-2.5 px-3 text-[11px] text-slate-500">{s.gazetteReference}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
