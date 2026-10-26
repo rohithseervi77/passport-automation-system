@@ -655,7 +655,15 @@ export default async function Home() {
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
             <p>© 2026 Passport Automation System (Academic Simulation). All rights reserved.</p>
-            <p>Built with Next.js 16 • React 19 • TypeScript • Prisma • SQLite</p>
+            <div className="flex items-center gap-4">
+              <Link href="/privacy" className="hover:text-slate-300 underline underline-offset-2 transition">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="hover:text-slate-300 underline underline-offset-2 transition">
+                Terms of Service
+              </Link>
+            </div>
+            <p>Built with Next.js 16 • React 19 • TypeScript • Prisma • PostgreSQL</p>
           </div>
         </div>
       </footer>
