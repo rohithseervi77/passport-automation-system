@@ -17,7 +17,8 @@ import {
   HelpCircle,
   Building2,
   PhoneCall,
-  AlertTriangle
+  AlertTriangle,
+  Bell
 } from "lucide-react";
 
 export default function Home() {
@@ -81,7 +82,7 @@ export default function Home() {
   const faqs = [
     {
       q: "What is the standard processing fee for a Fresh Passport?",
-      a: "The standard fee for a 36-page Fresh adult passport (Normal quota) is ₹1,500. A 60-page jumbo booklet incurs an additional ₹500, while Tatkaal fast-track adds an urgent processing fee of ₹2,000.",
+      a: "Under the revised official schedule (Gazette G.S.R. 516(E) effective 1 July 2026), the standard statutory fee for a 36-page Fresh adult passport (Normal quota) is ₹2,500. A 60-page jumbo booklet is ₹3,500, while Tatkaal processing is ₹5,000 (inclusive of normal fee). Eligible fresh minor applications (up to 8 years) and senior citizens (60+) receive a 10% statutory concession.",
     },
     {
       q: "What documents are required for physical verification at the PSK?",
@@ -130,6 +131,7 @@ export default function Home() {
           {/* Nav Links */}
           <nav className="hidden lg:flex items-center gap-5 text-xs font-semibold text-slate-700">
             <Link href="/" className="text-blue-900 hover:text-blue-700">Home</Link>
+            <Link href="/news" className="hover:text-blue-900 transition font-bold text-blue-950">News & Notices</Link>
             <Link href="/services" className="hover:text-blue-900 transition">Services</Link>
             <Link href="/document-advisor" className="hover:text-blue-900 transition">Doc Advisor</Link>
             <Link href="/fee-calculator" className="hover:text-blue-900 transition">Fee Calculator</Link>
@@ -274,6 +276,104 @@ export default function Home() {
                   Admin Login →
                 </Link>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest News & Public Notices Section */}
+      <section className="py-8 bg-blue-50/50 border-b border-blue-100 px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-100 text-blue-900 text-[11px] font-bold uppercase tracking-wider mb-1">
+                <Bell className="w-3 h-3 text-amber-600" />
+                Public Announcements & Circulars
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+                Latest Portal Updates & Notices
+              </h2>
+            </div>
+            <Link
+              href="/news"
+              className="inline-flex items-center gap-1 text-xs font-bold text-blue-900 hover:text-blue-700 hover:underline"
+            >
+              <span>View All Announcements</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl border border-rose-200 p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute top-0 left-0 bottom-0 w-1 bg-rose-600" />
+              <div>
+                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
+                  <span className="font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded uppercase">Critical</span>
+                  <span>1 Jul 2026 Effective</span>
+                </div>
+                <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
+                  <Link href="/news/revised-passport-fee-schedule-july-2026">
+                    Gazette Notification: Revised Passport Fee Schedule Effective 1 July 2026
+                  </Link>
+                </h3>
+                <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
+                  Official Gazette G.S.R. 516(E) revises fresh adult passport to ₹2,500 and Tatkaal to ₹5,000 with 10% concessions.
+                </p>
+              </div>
+              <Link
+                href="/news/revised-passport-fee-schedule-july-2026"
+                className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
+              >
+                Read Gazette Details →
+              </Link>
+            </div>
+
+            <div className="bg-white rounded-xl border border-amber-200 p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute top-0 left-0 bottom-0 w-1 bg-amber-500" />
+              <div>
+                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
+                  <span className="font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded uppercase">Important</span>
+                  <span>RPO Chennai</span>
+                </div>
+                <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
+                  <Link href="/news/special-saturday-passport-mela-chennai-psk">
+                    Special Saturday Passport Mela across RPO Chennai Kendras
+                  </Link>
+                </h3>
+                <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
+                  Over 1,500 additional appointment slots opened for Saligramam, Tambaram, and Aminjikarai kendras.
+                </p>
+              </div>
+              <Link
+                href="/news/special-saturday-passport-mela-chennai-psk"
+                className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
+              >
+                Read Mela Schedule →
+              </Link>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200 p-4.5 shadow-2xs hover:shadow-sm transition relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute top-0 left-0 bottom-0 w-1 bg-blue-950" />
+              <div>
+                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2 pl-1.5">
+                  <span className="font-bold text-blue-900 bg-blue-50 px-1.5 py-0.5 rounded uppercase">Advisory</span>
+                  <span>All India</span>
+                </div>
+                <h3 className="font-bold text-xs text-slate-900 pl-1.5 line-clamp-2 hover:text-blue-900">
+                  <Link href="/news/daily-appointment-slot-release-timing-advisory">
+                    Daily Appointment Quota Release Timing: 12:00 PM Normal & 02:00 PM Tatkaal
+                  </Link>
+                </h3>
+                <p className="text-[11px] text-slate-600 mt-1 pl-1.5 line-clamp-2">
+                  Standardized slot opening protocol across all Regional Passport Offices and citizen seva kendras.
+                </p>
+              </div>
+              <Link
+                href="/news/daily-appointment-slot-release-timing-advisory"
+                className="mt-3 text-[11px] font-bold text-blue-950 hover:underline inline-flex items-center gap-1 pl-1.5"
+              >
+                Read Slot Guidelines →
+              </Link>
             </div>
           </div>
         </div>

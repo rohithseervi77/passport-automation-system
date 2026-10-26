@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { 
   Calendar, 
   Clock, 
@@ -21,6 +21,9 @@ import {
 
 export default function ApplicantAppointmentPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const locationParam = searchParams.get("location");
+
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
   const [applicant, setApplicant] = useState<any>(null);
@@ -31,7 +34,7 @@ export default function ApplicantAppointmentPage() {
 
   // Form selections
   const [selectedLocation, setSelectedLocation] = useState(
-    "PSK Chennai - Saligramam (Ground Floor, Bharani Colony)"
+    locationParam || "Passport Seva Kendra - Saligramam"
   );
   const [selectedDate, setSelectedDate] = useState(() => {
     const d = new Date();
@@ -45,14 +48,18 @@ export default function ApplicantAppointmentPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const locations = [
-    { name: "PSK Chennai - Saligramam (Ground Floor, Bharani Colony)", type: "PSK", rpo: "Chennai" },
-    { name: "PSK Chennai - Aminjikarai (Navin's Presidium)", type: "PSK", rpo: "Chennai" },
-    { name: "POPSK Vellore - Head Post Office Complex, Officers Line", type: "POPSK", rpo: "Chennai" },
-    { name: "PSK Coimbatore - Mayflower Valencia, Nava India", type: "PSK", rpo: "Coimbatore" },
-    { name: "PSK Madurai - Kochadai, Melakkal Main Road", type: "PSK", rpo: "Madurai" },
-    { name: "PSK Bengaluru - Lalbagh Road, Passport Seva Complex", type: "PSK", rpo: "Bengaluru" },
+  const defaultLocations = [
+    { name: "Passport Seva Kendra - Saligramam", type: "PSK", rpo: "RPO Chennai" },
+    { name: "Passport Seva Kendra - Aminjikarai", type: "PSK", rpo: "RPO Chennai" },
+    { name: "Passport Seva Kendra - Tambaram", type: "PSK", rpo: "RPO Chennai" },
+    { name: "Post Office Passport Seva Kendra - Vellore", type: "POPSK", rpo: "RPO Chennai" },
+    { name: "Passport Seva Kendra - Lalbagh Road", type: "PSK", rpo: "RPO Bengaluru" },
+    { name: "Passport Seva Kendra - Herald House, ITO", type: "PSK", rpo: "RPO Delhi" },
+    { name: "Passport Seva Kendra - Lower Parel", type: "PSK", rpo: "RPO Mumbai" },
+    { name: "Passport Seva Kendra - Begumpet", type: "PSK", rpo: "RPO Hyderabad" },
   ];
+
+  const [locations, setLocations] = useState(defaultLocations);
 
   const timeSlots = [
     { slot: "09:00 AM - 10:00 AM", available: 12, quota: "Normal & Tatkaal" },
@@ -67,27 +74,51 @@ export default function ApplicantAppointmentPage() {
     let isMounted = true;
     async function fetchAppointmentData() {
       try {
-        const res = await fetch("/api/applicant/appointment");
-        if (res.status === 401) {
+        const [appRes, centresRes] = await Promise.all([
+          fetch("/api/applicant/appointment"),
+          fetch("/api/centres").catch(() => null),
+        ]);
+
+        if (appRes.status === 401) {
           router.push("/login");
           return;
         }
-        const data = await res.json();
+
+        const data = await appRes.json();
         if (isMounted) {
           setApplicant(data.applicant);
           setApplication(data.application);
           setAppointment(data.appointment);
           setIsPaymentCompleted(data.isPaymentCompleted);
         }
+
+        if (centresRes && centresRes.ok) {
+          const centresData = await centresRes.json();
+          if (centresData.centres && centresData.centres.length > 0 && isMounted) {
+            const mapped = centresData.centres.map((c: any) => ({
+              name: c.name,
+              type: c.type,
+              rpo: c.associatedRpo,
+            }));
+            setLocations(mapped);
+
+            if (locationParam) {
+              const matched = mapped.find(
+                (m: any) => m.name.toLowerCase() === locationParam.toLowerCase() || locationParam.includes(m.name)
+              );
+              if (matched) setSelectedLocation(matched.name);
+            }
+          }
+        }
       } catch (err) {
-        console.error("Failed to load appointment:", err);
+        console.error("Failed to load appointment data:", err);
       } finally {
         if (isMounted) setLoading(false);
       }
     }
     fetchAppointmentData();
     return () => { isMounted = false; };
-  }, [router]);
+  }, [router, locationParam]);
 
   async function handleBook(e: React.FormEvent) {
     e.preventDefault();

@@ -70,7 +70,11 @@ export const ModelName = {
   LoginHistory: 'LoginHistory',
   Grievance: 'Grievance',
   AdminInvitation: 'AdminInvitation',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  Notice: 'Notice',
+  NoticeCategory: 'NoticeCategory',
+  FeeSchedule: 'FeeSchedule',
+  PassportCenter: 'PassportCenter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -438,6 +442,97 @@ export const SystemSettingScalarFieldEnum = {
 } as const
 
 export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
+export const NoticeScalarFieldEnum = {
+  id: 'id',
+  noticeId: 'noticeId',
+  slug: 'slug',
+  title: 'title',
+  summary: 'summary',
+  content: 'content',
+  category: 'category',
+  priority: 'priority',
+  status: 'status',
+  isPinned: 'isPinned',
+  isSimulated: 'isSimulated',
+  publishedAt: 'publishedAt',
+  effectiveDate: 'effectiveDate',
+  expiryDate: 'expiryDate',
+  region: 'region',
+  affectedCentre: 'affectedCentre',
+  sourceLabel: 'sourceLabel',
+  sourceUrl: 'sourceUrl',
+  attachmentName: 'attachmentName',
+  attachmentUrl: 'attachmentUrl',
+  author: 'author',
+  lastEditedBy: 'lastEditedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NoticeScalarFieldEnum = (typeof NoticeScalarFieldEnum)[keyof typeof NoticeScalarFieldEnum]
+
+
+export const NoticeCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type NoticeCategoryScalarFieldEnum = (typeof NoticeCategoryScalarFieldEnum)[keyof typeof NoticeCategoryScalarFieldEnum]
+
+
+export const FeeScheduleScalarFieldEnum = {
+  id: 'id',
+  serviceType: 'serviceType',
+  applicationCategory: 'applicationCategory',
+  bookletType: 'bookletType',
+  minAge: 'minAge',
+  maxAge: 'maxAge',
+  isLostOrDamaged: 'isLostOrDamaged',
+  normalFee: 'normalFee',
+  tatkaalFee: 'tatkaalFee',
+  discountPercentage: 'discountPercentage',
+  effectiveFrom: 'effectiveFrom',
+  gazetteReference: 'gazetteReference',
+  sourceUrl: 'sourceUrl',
+  description: 'description',
+  lastVerifiedAt: 'lastVerifiedAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeeScheduleScalarFieldEnum = (typeof FeeScheduleScalarFieldEnum)[keyof typeof FeeScheduleScalarFieldEnum]
+
+
+export const PassportCenterScalarFieldEnum = {
+  id: 'id',
+  centerCode: 'centerCode',
+  name: 'name',
+  type: 'type',
+  address: 'address',
+  locality: 'locality',
+  city: 'city',
+  district: 'district',
+  state: 'state',
+  pinCode: 'pinCode',
+  associatedRpo: 'associatedRpo',
+  operatingHours: 'operatingHours',
+  status: 'status',
+  dailyCapacity: 'dailyCapacity',
+  slotCapacity: 'slotCapacity',
+  isDemo: 'isDemo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PassportCenterScalarFieldEnum = (typeof PassportCenterScalarFieldEnum)[keyof typeof PassportCenterScalarFieldEnum]
 
 
 export const SortOrder = {

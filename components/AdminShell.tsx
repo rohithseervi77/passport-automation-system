@@ -26,6 +26,7 @@ import {
   ChevronRight,
   ShieldCheck,
   AlertTriangle,
+  MapPin,
 } from "lucide-react";
 
 interface AdminShellProps {
@@ -92,6 +93,9 @@ export default function AdminShell({
     {
       title: "OPERATIONS",
       items: [
+        { label: "News & Notices", href: "/admin/notices", icon: Bell },
+        { label: "Fee Schedules", href: "/admin/fees", icon: FileText },
+        { label: "Centres & PSKs", href: "/admin/centres", icon: MapPin },
         { label: "Grievances", href: "/admin/grievances", icon: HelpCircle },
         { label: "Notifications", href: "/admin/notifications", icon: Bell },
         { label: "System Health", href: "/admin/system", icon: Cpu },

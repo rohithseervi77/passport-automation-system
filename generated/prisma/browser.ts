@@ -117,3 +117,23 @@ export type AdminInvitation = Prisma.AdminInvitationModel
  * 
  */
 export type SystemSetting = Prisma.SystemSettingModel
+/**
+ * Model Notice
+ * 
+ */
+export type Notice = Prisma.NoticeModel
+/**
+ * Model NoticeCategory
+ * 
+ */
+export type NoticeCategory = Prisma.NoticeCategoryModel
+/**
+ * Model FeeSchedule
+ * 
+ */
+export type FeeSchedule = Prisma.FeeScheduleModel
+/**
+ * Model PassportCenter
+ * 
+ */
+export type PassportCenter = Prisma.PassportCenterModel

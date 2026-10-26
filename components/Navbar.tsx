@@ -41,6 +41,7 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
 
   const applicantLinks = [
     { href: "/applicant/dashboard", label: "Dashboard", icon: User },
+    { href: "/news", label: "News & Notices", icon: Bell },
     { href: "/services", label: "Services", icon: FileText },
     { href: "/applicant/application", label: "Apply / Edit", icon: FileText },
     { href: "/applicant/documents", label: "Documents", icon: FileCheck2 },
@@ -155,9 +156,17 @@ export default function Navbar({ role, userName, badgeLabel }: NavbarProps) {
             Fee Calculator
           </Link>
           <span className="text-slate-600 hidden md:inline">|</span>
+          <Link href="/news" className="text-slate-300 hover:text-white transition hidden md:inline">
+            News & Notices
+          </Link>
+          <span className="text-slate-600 hidden md:inline">|</span>
           <Link href="/locate-centre" className="text-slate-300 hover:text-white transition flex items-center gap-1">
             <MapPin className="w-3 h-3 text-amber-400" />
             <span>Locate Centre</span>
+          </Link>
+          <span className="text-slate-600 hidden sm:inline">|</span>
+          <Link href="/help" className="text-slate-300 hover:text-white transition hidden sm:inline">
+            Help
           </Link>
           <span className="text-slate-600 hidden sm:inline">|</span>
           <Link href="/grievance" className="text-slate-300 hover:text-white transition hidden sm:inline">

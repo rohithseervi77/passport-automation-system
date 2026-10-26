@@ -416,7 +416,11 @@ export const ModelName = {
   LoginHistory: 'LoginHistory',
   Grievance: 'Grievance',
   AdminInvitation: 'AdminInvitation',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  Notice: 'Notice',
+  NoticeCategory: 'NoticeCategory',
+  FeeSchedule: 'FeeSchedule',
+  PassportCenter: 'PassportCenter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -432,7 +436,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "appointmentHistory" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory" | "grievance" | "adminInvitation" | "systemSetting"
+    modelProps: "user" | "admin" | "applicant" | "passportOfficer" | "police" | "application" | "applicationStatusHistory" | "document" | "appointment" | "appointmentHistory" | "payment" | "policeReport" | "passport" | "notification" | "auditLog" | "passwordResetToken" | "loginHistory" | "grievance" | "adminInvitation" | "systemSetting" | "notice" | "noticeCategory" | "feeSchedule" | "passportCenter"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1916,6 +1920,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Notice: {
+      payload: Prisma.$NoticePayload<ExtArgs>
+      fields: Prisma.NoticeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NoticeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NoticeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
+        }
+        findFirst: {
+          args: Prisma.NoticeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NoticeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
+        }
+        findMany: {
+          args: Prisma.NoticeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>[]
+        }
+        create: {
+          args: Prisma.NoticeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
+        }
+        createMany: {
+          args: Prisma.NoticeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NoticeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>[]
+        }
+        delete: {
+          args: Prisma.NoticeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
+        }
+        update: {
+          args: Prisma.NoticeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
+        }
+        deleteMany: {
+          args: Prisma.NoticeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NoticeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NoticeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>[]
+        }
+        upsert: {
+          args: Prisma.NoticeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticePayload>
+        }
+        aggregate: {
+          args: Prisma.NoticeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotice>
+        }
+        groupBy: {
+          args: Prisma.NoticeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NoticeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NoticeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NoticeCountAggregateOutputType> | number
+        }
+      }
+    }
+    NoticeCategory: {
+      payload: Prisma.$NoticeCategoryPayload<ExtArgs>
+      fields: Prisma.NoticeCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NoticeCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NoticeCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.NoticeCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NoticeCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.NoticeCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.NoticeCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.NoticeCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NoticeCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.NoticeCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>
+        }
+        update: {
+          args: Prisma.NoticeCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.NoticeCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NoticeCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NoticeCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.NoticeCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NoticeCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.NoticeCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNoticeCategory>
+        }
+        groupBy: {
+          args: Prisma.NoticeCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NoticeCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NoticeCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NoticeCategoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    FeeSchedule: {
+      payload: Prisma.$FeeSchedulePayload<ExtArgs>
+      fields: Prisma.FeeScheduleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FeeScheduleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FeeScheduleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>
+        }
+        findFirst: {
+          args: Prisma.FeeScheduleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FeeScheduleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>
+        }
+        findMany: {
+          args: Prisma.FeeScheduleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>[]
+        }
+        create: {
+          args: Prisma.FeeScheduleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>
+        }
+        createMany: {
+          args: Prisma.FeeScheduleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FeeScheduleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>[]
+        }
+        delete: {
+          args: Prisma.FeeScheduleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>
+        }
+        update: {
+          args: Prisma.FeeScheduleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>
+        }
+        deleteMany: {
+          args: Prisma.FeeScheduleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FeeScheduleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FeeScheduleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>[]
+        }
+        upsert: {
+          args: Prisma.FeeScheduleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FeeSchedulePayload>
+        }
+        aggregate: {
+          args: Prisma.FeeScheduleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFeeSchedule>
+        }
+        groupBy: {
+          args: Prisma.FeeScheduleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeeScheduleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FeeScheduleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FeeScheduleCountAggregateOutputType> | number
+        }
+      }
+    }
+    PassportCenter: {
+      payload: Prisma.$PassportCenterPayload<ExtArgs>
+      fields: Prisma.PassportCenterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PassportCenterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PassportCenterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>
+        }
+        findFirst: {
+          args: Prisma.PassportCenterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PassportCenterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>
+        }
+        findMany: {
+          args: Prisma.PassportCenterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>[]
+        }
+        create: {
+          args: Prisma.PassportCenterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>
+        }
+        createMany: {
+          args: Prisma.PassportCenterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PassportCenterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>[]
+        }
+        delete: {
+          args: Prisma.PassportCenterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>
+        }
+        update: {
+          args: Prisma.PassportCenterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>
+        }
+        deleteMany: {
+          args: Prisma.PassportCenterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PassportCenterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PassportCenterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>[]
+        }
+        upsert: {
+          args: Prisma.PassportCenterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PassportCenterPayload>
+        }
+        aggregate: {
+          args: Prisma.PassportCenterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePassportCenter>
+        }
+        groupBy: {
+          args: Prisma.PassportCenterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PassportCenterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PassportCenterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PassportCenterCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2306,6 +2606,97 @@ export const SystemSettingScalarFieldEnum = {
 export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
 
 
+export const NoticeScalarFieldEnum = {
+  id: 'id',
+  noticeId: 'noticeId',
+  slug: 'slug',
+  title: 'title',
+  summary: 'summary',
+  content: 'content',
+  category: 'category',
+  priority: 'priority',
+  status: 'status',
+  isPinned: 'isPinned',
+  isSimulated: 'isSimulated',
+  publishedAt: 'publishedAt',
+  effectiveDate: 'effectiveDate',
+  expiryDate: 'expiryDate',
+  region: 'region',
+  affectedCentre: 'affectedCentre',
+  sourceLabel: 'sourceLabel',
+  sourceUrl: 'sourceUrl',
+  attachmentName: 'attachmentName',
+  attachmentUrl: 'attachmentUrl',
+  author: 'author',
+  lastEditedBy: 'lastEditedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NoticeScalarFieldEnum = (typeof NoticeScalarFieldEnum)[keyof typeof NoticeScalarFieldEnum]
+
+
+export const NoticeCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type NoticeCategoryScalarFieldEnum = (typeof NoticeCategoryScalarFieldEnum)[keyof typeof NoticeCategoryScalarFieldEnum]
+
+
+export const FeeScheduleScalarFieldEnum = {
+  id: 'id',
+  serviceType: 'serviceType',
+  applicationCategory: 'applicationCategory',
+  bookletType: 'bookletType',
+  minAge: 'minAge',
+  maxAge: 'maxAge',
+  isLostOrDamaged: 'isLostOrDamaged',
+  normalFee: 'normalFee',
+  tatkaalFee: 'tatkaalFee',
+  discountPercentage: 'discountPercentage',
+  effectiveFrom: 'effectiveFrom',
+  gazetteReference: 'gazetteReference',
+  sourceUrl: 'sourceUrl',
+  description: 'description',
+  lastVerifiedAt: 'lastVerifiedAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeeScheduleScalarFieldEnum = (typeof FeeScheduleScalarFieldEnum)[keyof typeof FeeScheduleScalarFieldEnum]
+
+
+export const PassportCenterScalarFieldEnum = {
+  id: 'id',
+  centerCode: 'centerCode',
+  name: 'name',
+  type: 'type',
+  address: 'address',
+  locality: 'locality',
+  city: 'city',
+  district: 'district',
+  state: 'state',
+  pinCode: 'pinCode',
+  associatedRpo: 'associatedRpo',
+  operatingHours: 'operatingHours',
+  status: 'status',
+  dailyCapacity: 'dailyCapacity',
+  slotCapacity: 'slotCapacity',
+  isDemo: 'isDemo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PassportCenterScalarFieldEnum = (typeof PassportCenterScalarFieldEnum)[keyof typeof PassportCenterScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2569,6 +2960,10 @@ export type GlobalOmitConfig = {
   grievance?: Prisma.GrievanceOmit
   adminInvitation?: Prisma.AdminInvitationOmit
   systemSetting?: Prisma.SystemSettingOmit
+  notice?: Prisma.NoticeOmit
+  noticeCategory?: Prisma.NoticeCategoryOmit
+  feeSchedule?: Prisma.FeeScheduleOmit
+  passportCenter?: Prisma.PassportCenterOmit
 }
 
 /* Types for Logging */

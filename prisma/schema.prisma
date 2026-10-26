@@ -511,3 +511,117 @@ model SystemSetting {
 
   @@index([key])
 }
+
+// =====================================================
+// NEWS & PUBLIC NOTICES (Feature 1)
+// =====================================================
+
+model Notice {
+  id              Int       @id @default(autoincrement())
+  noticeId        String    @unique // E.g. NOT-2026-001
+  slug            String    @unique
+  title           String
+  summary         String
+  content         String
+  category        String    // E.g. APPOINTMENT_SCHEDULE, PSK_ANNOUNCEMENT, FEE_REVISION, DOCUMENT_ADVISORY, PCC_NOTICE, SPECIAL_DRIVE, CIRCULAR, GENERAL
+  priority        String    @default("NORMAL") // NORMAL, IMPORTANT, CRITICAL
+  status          String    @default("PUBLISHED") // DRAFT, SCHEDULED, PUBLISHED, ARCHIVED
+  isPinned        Boolean   @default(false)
+  isSimulated     Boolean   @default(true) // Explicitly identifies academic simulation
+  publishedAt     DateTime  @default(now())
+  effectiveDate   DateTime?
+  expiryDate      DateTime?
+  region          String?   // E.g. "All India", "RPO Chennai", "Tamil Nadu"
+  affectedCentre  String?   // E.g. "PSK Saligramam", "All POPSKs"
+  sourceLabel     String?   @default("Passport Seva Directorate / Ministry of External Affairs")
+  sourceUrl       String?   @default("https://www.passportindia.gov.in/psp/News")
+  attachmentName  String?
+  attachmentUrl   String?
+  author          String?   @default("Admin Editorial Desk")
+  lastEditedBy    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now()) @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([priority])
+  @@index([publishedAt])
+  @@index([isPinned])
+  @@index([region])
+}
+
+model NoticeCategory {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  slug         String   @unique
+  description  String?
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+// =====================================================
+// FEE SCHEDULE (Feature 2 — July 1, 2026 GSR 516(E))
+// =====================================================
+
+model FeeSchedule {
+  id                 Int      @id @default(autoincrement())
+  serviceType        String   // FRESH, REISSUE, PCC, DIPLOMATIC, SURRENDER, MISCELLANEOUS
+  applicationCategory String  @default("NORMAL") // NORMAL, TATKAAL
+  bookletType        String   @default("36_PAGES") // 36_PAGES, 60_PAGES, NA
+  minAge             Int      @default(0)
+  maxAge             Int      @default(120)
+  isLostOrDamaged    Boolean  @default(false)
+  normalFee          Float    // Statutory baseline amount
+  tatkaalFee         Float?   // Total fee inclusive of normal fee
+  discountPercentage Float    @default(0) // 10% for fresh minors <= 8 or seniors >= 60
+  effectiveFrom      DateTime @default("2026-07-01T00:00:00Z")
+  gazetteReference   String   @default("G.S.R. 516(E) dated 25 June 2026")
+  sourceUrl          String   @default("https://www.passportindia.gov.in/psp/Notification")
+  description        String?
+  lastVerifiedAt     DateTime @default(now())
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+
+  @@index([serviceType])
+  @@index([applicationCategory])
+  @@index([bookletType])
+  @@index([isActive])
+}
+
+// =====================================================
+// PASSPORT CENTRES (Feature 6 — PSK / POPSK Locator)
+// =====================================================
+
+model PassportCenter {
+  id             Int      @id @default(autoincrement())
+  centerCode     String   @unique // E.g. PSK-CHN-01
+  name           String   // E.g. "Passport Seva Kendra - Saligramam"
+  type           String   @default("PSK") // PSK, POPSK, RPO
+  address        String
+  locality       String?
+  city           String
+  district       String
+  state          String
+  pinCode        String
+  associatedRpo  String   // E.g. "RPO Chennai"
+  operatingHours String   @default("09:00 AM - 05:00 PM (Monday to Friday)")
+  status         String   @default("ACTIVE") // ACTIVE, RELOCATED, TEMPORARILY_CLOSED
+  dailyCapacity  Int      @default(200)
+  slotCapacity   Int      @default(20) // Per 30-min slot
+  isDemo         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+
+  @@index([centerCode])
+  @@index([city])
+  @@index([state])
+  @@index([pinCode])
+  @@index([associatedRpo])
+  @@index([status])
+}
