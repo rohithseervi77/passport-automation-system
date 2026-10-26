@@ -12,6 +12,7 @@ const vars = [
   { name: "NEXT_PUBLIC_SUPABASE_ANON_KEY", val: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY },
   { name: "SUPABASE_SERVICE_ROLE_KEY", val: process.env.SUPABASE_SERVICE_ROLE_KEY },
   { name: "NEXT_PUBLIC_BASE_URL", val: "https://passport-automation-system-psi.vercel.app" },
+  { name: "APP_URL", val: "https://passport-automation-system-psi.vercel.app" },
 ];
 
 for (const v of vars) {

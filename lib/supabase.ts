@@ -1,5 +1,6 @@
 import { createClient, SupabaseClient, User as SupabaseAuthUser } from "@supabase/supabase-js";
 import crypto from "crypto";
+import { getAppUrl, getPasswordResetUrl } from "./url";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -228,13 +229,18 @@ export async function supabaseAuthSignIn(params: {
 
 /**
  * Initiates a password reset via Supabase Auth.
+ * Dispatches an official recovery email with a redirect to the production PAS reset page.
  */
-export async function supabaseAuthResetPassword(email: string): Promise<{ error?: string }> {
+export async function supabaseAuthResetPassword(
+  email: string,
+  token?: string
+): Promise<{ error?: string }> {
   const client = getSupabaseClient() || getSupabaseAdmin();
   if (client) {
     try {
+      const redirectTo = token ? getPasswordResetUrl(token) : `${getAppUrl()}/reset-password`;
       const { error } = await client.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/reset-password`,
+        redirectTo,
       });
       if (error) return { error: error.message };
     } catch (err: any) {

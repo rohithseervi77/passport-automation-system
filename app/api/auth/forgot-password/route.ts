@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { supabaseAuthResetPassword } from "@/lib/supabase";
 import { logAuditEvent } from "@/lib/audit";
+import { getPasswordResetUrl } from "@/lib/url";
 import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
@@ -33,14 +34,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Account is suspended." }, { status: 403 });
     }
 
-    // 1. Dispatch password reset via Supabase Auth
-    await supabaseAuthResetPassword(email);
-
-    // 2. Track token expiration for web flow compatibility
+    // 1. Invalidate any existing tokens for this user
     await prisma.passwordResetToken.deleteMany({
       where: { userId: user.id },
     });
 
+    // 2. Generate a secure, single-use 64-char token (expires in 1 hour)
     const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
@@ -49,8 +48,12 @@ export async function POST(request: Request) {
         token,
         userId: user.id,
         expiresAt,
+        isUsed: false,
       },
     });
+
+    // 3. Dispatch recovery email via Supabase Auth with production redirectTo
+    await supabaseAuthResetPassword(email, token);
 
     await logAuditEvent({
       userId: user.id,
@@ -62,7 +65,8 @@ export async function POST(request: Request) {
       {
         message:
           "If that email is registered in our records, a secure password reset link has been dispatched.",
-        ...(process.env.NODE_ENV !== "production" ? { simulatedToken: token } : {}),
+        resetUrl: process.env.NODE_ENV !== "production" ? getPasswordResetUrl(token) : undefined,
+        simulatedToken: process.env.NODE_ENV !== "production" ? token : undefined,
       },
       { status: 200 }
     );

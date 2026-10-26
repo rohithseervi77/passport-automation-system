@@ -4,6 +4,7 @@ import "./globals.css";
 import CookieBanner from "@/components/CookieBanner";
 import Analytics from "@/components/Analytics";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
+import { getAppUrl } from "@/lib/url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://passport-automation-system.vercel.app'),
+  metadataBase: new URL(getAppUrl()),
   title: {
     default: "Passport Automation System",
     template: "%s | Passport Automation System"

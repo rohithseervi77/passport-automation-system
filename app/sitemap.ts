@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
+import { getAppUrl } from '@/lib/url'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://passport-automation-system.vercel.app';
+  const baseUrl = getAppUrl();
 
   return [
     {
