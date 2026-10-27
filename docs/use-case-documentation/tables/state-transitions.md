@@ -1,0 +1,27 @@
+# Table: State Transitions
+
+| Source State | Trigger Event / Action | Performing Actor | Target State | Guard Condition / Rule |
+| --- | --- | --- | --- | --- |
+| DRAFT | Save Form Progress | Applicant | DRAFT | Valid partial field inputs; ARN generated |
+| DRAFT | Final Submit Application | Applicant | SUBMITTED | All mandatory sections populated; document proofs uploaded |
+| SUBMITTED | Execute Gateway Payment | Applicant | PAYMENT_COMPLETED | Payment gateway returns success status code |
+| PAYMENT_COMPLETED | Confirm PSK Appointment Slot | Applicant | APPOINTMENT_SCHEDULED | Quota available; fee payment verified |
+| APPOINTMENT_SCHEDULED | Reschedule Appointment Slot | Applicant | APPOINTMENT_SCHEDULED | Reschedule count < 3; new slot selected |
+| APPOINTMENT_SCHEDULED | Record PSK Entry / Token Issuance | Passport Officer | DOCUMENTS_UNDER_SCRUTINY | Applicant physically reports at PSK entry desk |
+| DOCUMENTS_UNDER_SCRUTINY | Complete Counter B Verification | Passport Officer | DOCUMENTS_VERIFIED | All physical originals reconcile with digital records |
+| DOCUMENTS_UNDER_SCRUTINY | Request Supplementary Documents | Passport Officer | CLARIFICATION_REQUESTED | Discrepancy identified in address/identity proofs |
+| CLARIFICATION_REQUESTED | Upload Required Clarification | Applicant | DOCUMENTS_UNDER_SCRUTINY | Applicant uploads requested supplementary documents |
+| DOCUMENTS_VERIFIED | Capture Biometrics at Counter | Passport Officer | BIOMETRICS_CAPTURED | Fingerprints and facial photo successfully registered |
+| BIOMETRICS_CAPTURED | Counter C Granting Review | Passport Officer | APPLICATION_GRANTED | Officer scrutiny complete; eligibility verified |
+| BIOMETRICS_CAPTURED | Counter C Rejection Decision | Passport Officer | APPLICATION_REFUSED | Fraudulent document or ineligibility established |
+| APPLICATION_GRANTED | Dispatch Police Verification | System / Officer | POLICE_VERIFICATION_INITIATED | Station assigned based on applicant address |
+| POLICE_VERIFICATION_INITIATED | Police Station Accepts Case | Police Authority | POLICE_VERIFICATION_IN_PROGRESS | Station IO assigned to field enquiry |
+| POLICE_VERIFICATION_IN_PROGRESS | Submit Clear PVR | Police Authority | POLICE_VERIFICATION_CLEAR | No criminal record; residential residence verified |
+| POLICE_VERIFICATION_IN_PROGRESS | Submit Adverse PVR | Police Authority | POLICE_VERIFICATION_ADVERSE | Criminal FIR/adverse intelligence flagged |
+| POLICE_VERIFICATION_IN_PROGRESS | Submit Incomplete PVR | Police Authority | POLICE_VERIFICATION_INCOMPLETE | Applicant unavailable during repeated field visits |
+| POLICE_VERIFICATION_CLEAR | Enforce Printing Batch | System / Officer | PASSPORT_PRINTING_IN_PROGRESS | Granted status confirmed; clear PVR received |
+| PASSPORT_PRINTING_IN_PROGRESS | Quality Control Passed | Passport Officer | PASSPORT_PRINTED | Print quality validated; chip integrity verified |
+| PASSPORT_PRINTED | Dispatch via Speed Post | Passport Officer | PASSPORT_DISPATCHED | Consignment tracking barcode generated with India Post |
+| PASSPORT_DISPATCHED | Speed Post Delivery Confirmed | External Logistics | PASSPORT_DELIVERED | Postal confirmation received; delivery acknowledged |
+| * | Administrative Cancellation | System Administrator | CANCELLED | Applicant request or procedural default |
+

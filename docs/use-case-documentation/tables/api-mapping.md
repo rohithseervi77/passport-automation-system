@@ -1,0 +1,39 @@
+# Table: Api Mapping
+
+| Endpoint URL | Method | Access Level | Mapped Use Case | Core Responsibility | Primary Models |
+| --- | --- | --- | --- | --- | --- |
+| /api/auth/register | POST | Public | UC-01 | Register citizen profile and generate User / Applicant models | User, Applicant |
+| /api/auth/[...nextauth] | GET/POST | Public | UC-02 | NextAuth handler for credentials auth and JWT session | User, LoginHistory |
+| /api/auth/forgot-password | POST | Public | UC-03 | Issue password reset token and send recovery email | PasswordResetToken, User |
+| /api/auth/reset-password | POST | Public | UC-03 | Validate token hash and update user password | PasswordResetToken, User |
+| /api/profile | GET/PATCH | Authenticated | UC-04 | Fetch and modify authenticated user demographic profile | User, Applicant |
+| /api/applications | GET/POST | Applicant | UC-05, UC-06, UC-07, UC-08 | List user applications or create new application with ARN | Application, Applicant |
+| /api/applications/[id] | GET/PATCH/DELETE | Applicant/Staff | UC-08, UC-11 | Fetch application details, update draft, or submit | Application, ApplicationStatusHistory |
+| /api/applications/[id]/status | PATCH | Staff/Admin | UC-29, UC-32 | Execute state transitions via lib/fsm.ts engine | Application, ApplicationStatusHistory |
+| /api/applications/[id]/documents | GET/POST | Applicant/Officer | UC-09 | Manage document upload metadata and associations | Document, Application |
+| /api/documents/[id] | GET/DELETE | Applicant/Officer | UC-09 | Retrieve document file or delete erroneous document | Document |
+| /api/digilocker/import | POST | Applicant | UC-10 | Simulate verified document retrieval via DigiLocker | Document, Application |
+| /api/payments | GET/POST | Applicant | UC-13 | Initialize transaction and verify payment gateway response | Payment, Application |
+| /api/payments/[id]/receipt | GET | Applicant | UC-14 | Generate and download verifiable PDF payment receipt | Payment, Application |
+| /api/appointments | GET/POST | Applicant | UC-16, UC-17 | Query available time slots and book appointment | Appointment, PassportCenter |
+| /api/appointments/[id] | GET/PATCH/DELETE | Applicant | UC-18, UC-19 | View, reschedule, or cancel existing appointment slot | Appointment, AppointmentHistory |
+| /api/appointments/[id]/slip | GET | Applicant | UC-20 | Generate downloadable PDF appointment pass | Appointment, Application |
+| /api/track | POST | Public | UC-21 | Public tracking endpoint querying status by ARN and DOB | Application, ApplicationStatusHistory |
+| /api/notifications | GET/PATCH | Authenticated | UC-22 | List in-app alerts and mark notifications as read | Notification |
+| /api/grievances | GET/POST | Public/Citizen | UC-23 | Submit grievance ticket with tracking code | Grievance, User |
+| /api/grievances/[id] | GET/PATCH | Citizen/Admin | UC-24, UC-46 | Track grievance progress or submit admin resolution | Grievance |
+| /api/centres | GET/POST | Public/Admin | UC-15, UC-26, UC-41 | Fetch centre catalog or manage PSK facilities | PassportCenter |
+| /api/fee-schedules | GET/POST | Public/Admin | UC-12, UC-40 | Fetch fee master rules or configure service tariffs | FeeSchedule |
+| /api/services | GET/POST | Public/Admin | UC-25 | Fetch passport service list and documentation criteria | PassportService |
+| /api/notices | GET/POST | Public/Admin | UC-27, UC-42 | Fetch public circulars or publish new advisories | Notice, NoticeCategory |
+| /api/officer/queue | GET | Officer | UC-28 | Fetch daily applicant queue for Counter B/C scrutiny | Application, Appointment |
+| /api/officer/scrutiny | POST | Officer | UC-29, UC-30, UC-31 | Record verification verdict and biometric confirmations | Document, ApplicationStatusHistory |
+| /api/officer/grant | POST | Officer | UC-32, UC-33 | Record granting verdict and dispatch police request | Application, PoliceReport |
+| /api/officer/dispatch | POST | Officer | UC-38, UC-39 | Record booklet issuance, printing, and speed post dispatch | Passport, Application |
+| /api/police/worklist | GET | Police | UC-34 | Fetch pending verification assignments for station | PoliceReport, Application |
+| /api/police/verify | POST | Police | UC-35, UC-36 | Submit criminal enquiry verdict and PVR report | PoliceReport, ApplicationStatusHistory |
+| /api/admin/users | GET/PATCH | Admin | UC-43 | Manage user accounts, roles, and security lockouts | User, Admin |
+| /api/admin/invitations | POST | Admin | UC-44 | Generate staff onboarding invitation tokens | AdminInvitation |
+| /api/admin/audit-logs | GET | Admin | UC-45 | Inspect system-wide security and operational logs | AuditLog, User |
+| /api/admin/settings | GET/POST | Admin | UC-47 | Manage global system flags and maintenance mode | SystemSetting |
+

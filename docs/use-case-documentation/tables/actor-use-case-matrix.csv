@@ -1,0 +1,49 @@
+Use Case ID,Use Case Name,Public User,Applicant,Passport Officer,Police Authority,System Admin
+UC-01,Register New Citizen Account,-,Primary,-,-,-
+UC-02,Authenticate User Session,-,Primary,Supporting,Supporting,Supporting
+UC-03,Reset Forgotten Password,-,Primary,-,-,-
+UC-04,View & Update Citizen Profile,-,Primary,-,-,-
+UC-05,Initiate Fresh Passport Application,-,Primary,-,-,-
+UC-06,Initiate Reissue / Renewal Application,-,Primary,-,-,-
+UC-07,Initiate Tatkaal Fast-Track Application,-,Primary,-,-,-
+UC-08,Save & Resume Application Draft,-,Primary,-,-,-
+UC-09,Upload Supporting Documents,-,Primary,-,-,-
+UC-10,Import Documents via DigiLocker,-,Primary,-,-,-
+UC-11,Preview & Final Submit Application,-,Primary,-,-,-
+UC-12,Calculate Applicable Passport Fees,Supporting,Primary,-,-,-
+UC-13,Process Online Application Payment,-,Primary,-,-,-
+UC-14,Download Payment Receipt,-,Primary,-,-,-
+UC-15,Search & Select Passport Seva Kendra,Supporting,Primary,-,-,-
+UC-16,Check Real-Time Slot Availability,-,Primary,-,-,-
+UC-17,Book Appointment Slot,-,Primary,-,-,-
+UC-18,Reschedule Existing Appointment,-,Primary,-,-,-
+UC-19,Cancel Booked Appointment,-,Primary,-,-,-
+UC-20,Download Appointment Confirmation Slip,-,Primary,-,-,-
+UC-21,Track Application Status (Public ARN),Supporting,Supporting,-,-,-
+UC-22,View In-App Notifications,-,Primary,Supporting,Supporting,Supporting
+UC-23,Lodge Grievance / Service Feedback,Supporting,Supporting,-,-,-
+UC-24,Track Grievance Resolution Status,Supporting,Supporting,-,-,-
+UC-25,Access Interactive Document Advisor,Primary,-,-,-,-
+UC-26,Locate PSK / POPSK Centre Directory,Primary,-,-,-,-
+UC-27,Browse Public Notices & Circulars,Primary,-,-,-,-
+UC-28,Officer Queue Management (Counter B),-,-,Primary,-,-
+UC-29,Scrutinize & Verify Physical Documents,-,-,Primary,-,-
+UC-30,Capture Applicant Biometrics & Photo,-,-,Primary,-,-
+UC-31,Request Additional Document / Mark Clarification,-,-,Primary,-,-
+UC-32,Grant / Refuse Passport Application (Counter C),-,-,Primary,-,-
+UC-33,Initiate Police Verification Dispatch,-,-,Primary,-,-
+UC-34,Police Verification Worklist Review,-,-,-,Primary,-
+UC-35,Conduct Criminal Record & CCTNS Check,-,-,-,Primary,-
+UC-36,Submit Police Verification Report (PVR),-,-,-,Primary,-
+UC-37,Queue Application for Passport Printing,-,-,Primary,-,-
+UC-38,Record Booklet Printing & Quality Check,-,-,Primary,-,-
+UC-39,Dispatch Passport & Generate Tracking,-,-,Primary,-,-
+UC-40,Manage Master Fee Schedules,-,-,-,-,Primary
+UC-41,Manage PSK / POPSK Centers & Capacities,-,-,-,-,Primary
+UC-42,Manage Public Notices & Announcements,-,-,-,-,Primary
+UC-43,User Role Management & Account Control,-,-,-,-,Primary
+UC-44,Issue Staff Onboarding Invitations,-,-,-,-,Primary
+UC-45,Review Security & Operational Audit Logs,-,-,-,-,Primary
+UC-46,Resolve Citizen Grievances & Inquiries,-,-,-,-,Primary
+UC-47,System Configuration & Maintenance Mode,-,-,-,-,Primary
+UC-48,View Operational Analytics & SLA Reports,-,-,-,-,Primary
