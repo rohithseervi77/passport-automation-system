@@ -1,40 +1,13 @@
-# CRC (Class–Responsibility–Collaborator) Indexing Cards
+# CRC (Class-Responsibility-Collaborator) Indexing Cards
 **Passport Automation System (PAS)**  
-*Project Repository:* `passport-automation-system`  
-*Live Deployment:* `https://passport-automation-system-psi.vercel.app/`  
-*Domain:* Ministry of External Affairs (MEA) Passport Seva Academic Simulation  
-*Academic Framework:* Object-Oriented Analysis and Design (OOAD) — Beck & Cunningham CRC Method  
-
----
+*Total CRC Cards:* 25  
+*Total Behavior-Oriented Responsibilities:* 115  
 
 ## 1. Introduction to CRC Modeling
 
-The **Class–Responsibility–Collaborator (CRC)** modeling technique, introduced by Kent Beck and Ward Cunningham (1989) at OOPSLA, is an informal yet powerful anthropomorphic approach to object-oriented analysis and design. Instead of viewing software systems as static data schemas, CRC modeling treats an object-oriented system as an active community of collaborating agents.
-
-### 1.1 The CRC Acronym
-CRC stands for:
-- **C — Class:** A cohesive collection of similar objects representing a distinct abstraction within the problem domain. A class acts as a template defining what an object knows and what it can do.
-- **R — Responsibility:** The behavioral obligations, contracts, and services provided by the class. In OOAD, responsibilities are categorized into:
-  - *Doing Responsibilities:* Actions an object performs (e.g., computing fees, validating state transitions, reserving appointment slots).
-  - *Knowing Responsibilities:* Knowledge encapsulated by the object (e.g., knowing its ARN, tracking previous states, maintaining proof documents).
-- **C — Collaborator:** Other classes with which a given class must communicate or interact to fulfill its responsibilities. When a class cannot fulfill a responsibility alone, it delegates part of the task to a collaborator.
-
-### 1.2 Core Questions Answered by CRC Cards
-In standard Software Engineering and OOAD practice, CRC cards directly resolve three fundamental design questions:
-1. **What objects/classes exist in the system?** (Established via Noun Phrase Analysis).
-2. **What responsibilities belong to each class?** (Ensuring high cohesion and behavioral encapsulation).
-3. **Which other classes must collaborate to complete those responsibilities?** (Ensuring loose coupling and clear message-passing contracts).
-
-### 1.3 Behavioral Responsibilities vs. Database Fields
-A common novice pitfall in OOAD is simply copying database table columns and labeling them as class responsibilities (e.g., "Stores first_name", "Stores date_of_birth"). In authentic object-oriented design:
-- Database columns represent internal storage mechanisms (state).
-- **CRC responsibilities represent observable behaviors, business logic, integrity enforcement, and service contracts.**
-
----
+CRC (Class-Responsibility-Collaborator) modeling (Beck & Cunningham, 1989) is an anthropomorphic technique where classes are treated as active collaborators fulfilling behavioral obligations. In contrast to static database tables, CRC responsibilities represent observable behaviors, business logic enforcement, and service contracts.
 
 ## 2. Complete Index of 25 CRC Indexing Cards
-
-Below are the 25 CRC Indexing Cards corresponding to the 25 canonical domain classes of the Passport Automation System. Each card strictly reflects the actual behavior implemented in the codebase:
 
 ```text
 ------------------------------------------
@@ -600,49 +573,23 @@ Collaborators:
 ------------------------------------------
 ```
 
----
-
 ## 3. CRC Collaboration Analysis
 
-To demonstrate how the 25 domain classes interact dynamically to execute complex system workflows, the table below maps core responsibilities to collaborating classes and explains why each collaboration is required:
-
-| Class | Core Responsibility | Collaborating Class | Technical Rationale for Collaboration |
+| Class | Responsibility | Collaborator | Why Collaboration Is Required |
 |:---|:---|:---|:---|
-| **User** | Enforce role-based access | `Applicant`, `PassportOfficer`, `Police`, `Admin` | User verifies security role and navigates to specialized profile entity. |
-| **Applicant** | Initiate new passport application | `Application` | Applicant delegates application state management and ARN creation to `Application`. |
-| **Application** | Maintain legal FSM transitions | `ApplicationStatusHistory` | Application delegates immutable logging of every state change and remark to `ApplicationStatusHistory`. |
-| **Application** | Validate supporting document proofs | `Document` | Application inspects linked `Document` records to ensure all mandatory proof types exist. |
-| **Application** | Ensure fee settlement prior to booking | `Payment` | Application verifies that a linked `Payment` record exists with status `SUCCESS`. |
-| **Appointment** | Reserve slot within daily capacity | `PassportCenter` | Appointment checks `PassportCenter` daily capacity and booked slots to prevent overbooking. |
-| **Appointment** | Enforce 3-reschedule limit | `AppointmentHistory` | Appointment counts prior records in `AppointmentHistory` before permitting slot modification. |
-| **Payment** | Compute exact statutory fee | `FeeSchedule` | Payment queries `FeeSchedule` rate card matching service type, booklet size, and urgency. |
-| **PassportOfficer** | Scrutinize citizen proofs at Counter B | `Document`, `Application` | Officer examines physical originals against `Document` and advances `Application` state. |
-| **PassportOfficer** | Grant application at Counter C | `Application`, `PoliceReport` | Officer adjudicates granting decision and dispatches police verification request. |
-| **Police** | Submit field verification findings | `PoliceReport`, `Application` | Police officer populates `PoliceReport` and transitions `Application` to verification state. |
-| **Passport** | Issue booklet and track delivery | `Application` | Passport generates booklet serial number and binds Speed Post consignment to `Application`. |
-| **Admin** | Onboard new staff officers | `AdminInvitation`, `User` | Admin generates cryptographic token via `AdminInvitation` to create verified staff `User`. |
-| **Grievance** | Track citizen redressal ticket | `User`, `Admin` | Grievance associates complaint with authenticated `User` and notifies `Admin` desk. |
-| **Notice** | Categorize public bulletins | `NoticeCategory` | Notice references `NoticeCategory` to structure circulars into alerts, tenders, and news. |
+| **User** | Enforce role-based access | `Applicant, PassportOfficer, Police, Admin` | User verifies role and delegates domain profile operations to specialized entities. |
+| **Applicant** | Initiate new passport application | `Application` | Applicant delegates application state management and unique ARN creation to Application. |
+| **Application** | Maintain legal FSM transitions | `ApplicationStatusHistory` | Application delegates immutable audit logging of state changes and remarks to ApplicationStatusHistory. |
+| **Application** | Validate supporting document proofs | `Document` | Application inspects linked Document records to ensure all mandatory proof categories exist. |
+| **Application** | Ensure fee settlement prior to booking | `Payment` | Application verifies that a linked Payment record exists with status SUCCESS. |
+| **Appointment** | Reserve slot within daily capacity | `PassportCenter` | Appointment checks PassportCenter daily capacity and existing bookings to prevent overbooking. |
+| **Appointment** | Enforce 3-reschedule limit | `AppointmentHistory` | Appointment counts prior records in AppointmentHistory before permitting slot modification. |
+| **Payment** | Compute exact statutory fee | `FeeSchedule` | Payment queries FeeSchedule rate card matching service type, booklet size, and urgency. |
+| **PassportOfficer** | Scrutinize citizen proofs at Counter B | `Document, Application` | Officer examines physical originals against Document records and advances Application state. |
+| **PassportOfficer** | Grant application at Counter C | `Application, PoliceReport` | Officer adjudicates granting decision and dispatches police verification request. |
+| **Police** | Submit field verification findings | `PoliceReport, Application` | Police officer populates PoliceReport and transitions Application to verification state. |
+| **Passport** | Issue booklet and track delivery | `Application` | Passport generates booklet serial number and binds Speed Post consignment to Application. |
+| **Admin** | Onboard new staff officers | `AdminInvitation, User` | Admin generates cryptographic token via AdminInvitation to create verified staff User. |
+| **Grievance** | Track citizen redressal ticket | `User, Admin` | Grievance associates complaint with authenticated User and routes issue to Admin desk. |
+| **Notice** | Categorize public bulletins | `NoticeCategory` | Notice references NoticeCategory to structure circulars into alerts, tenders, and news. |
 
----
-
-## 4. CRC Validation and Consistency Check
-
-To ensure that the CRC model satisfies strict academic software engineering standards (OOAD / UML 2.5), the model was verified against the following 10 formal consistency criteria:
-
-1. **Responsibility Ownership:** Every responsibility is allocated to the class with the information and context necessary to fulfill it (High Cohesion / Information Expert pattern).
-2. **Elimination of Redundancy:** No behavioral responsibility is duplicated across multiple classes; shared functionality is delegated via clean associations.
-3. **Justified Collaborations:** Every identified collaborator is necessary to complete a designated responsibility; no frivolous or circular couplings exist.
-4. **Behavior-Oriented Formulation:** All responsibilities represent concrete operations, validations, or state management contracts rather than static database column descriptions.
-5. **Direct Class Alignment:** All 25 CRC cards correspond 1:1 with the 25 canonical domain classes derived from Noun Phrase Analysis.
-6. **Implementation Fidelity:** Every responsibility and collaboration corresponds directly to active TypeScript functions, Prisma relational queries, and Next.js route handlers.
-7. **No UI Contamination:** Presentation elements (e.g., `Dashboard`, `Navbar`, `Modal`, `CaptchaWidget`) are strictly excluded from the domain CRC cards.
-8. **No Attribute Confusion:** Simple data fields (e.g., `dateOfBirth`, `arn`, `email`, `fee`) are modeled as encapsulated state within classes, not independent CRC cards.
-9. **Actor-Class Disambiguation:** External entities (e.g., `Payment Gateway`, `CCTNS Database`, `India Post`) are recognized as external boundary systems, while staff and citizen profiles are modeled as internal domain entities.
-10. **Use Case Consistency:** The CRC responsibilities fully cover all 48 system use cases (`UC-01` to `UC-48`), guaranteeing that the system can execute all end-to-end workflows.
-
----
-
-## 5. Conclusion
-
-The 25 CRC Indexing Cards provide a comprehensive behavioral specification of the Passport Automation System. By clearly decoupling knowing and doing responsibilities from raw persistence schemas, the CRC model bridges textual requirements with concrete object-oriented implementation, providing an academically rigorous design ready for UML class and sequence diagram realization.
